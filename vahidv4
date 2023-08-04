@@ -58,6 +58,11 @@
        { 
          "protocol": "dns", 
          "outbound": "dns-out" 
+       },
+       {
+        "geosite": "category-ir",
+        "domain_keyword": [".ir"],
+        "outbound": "direct"
        }
      ], 
      "auto_detect_interface": true 
