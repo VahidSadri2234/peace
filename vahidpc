@@ -1,44 +1,45 @@
 { 
-   "inbounds": [ 
-    {
-      "type": "mixed",
-      "listen_port": 1080,
-      "sniff": true,
-      "set_system_proxy": true
-    } 
-   ], 
-   "outbounds": [ 
-     { 
-       "type": "shadowsocks", 
-       "method": "2022-blake3-aes-128-gcm", 
-       "password": "1Bk2kIrYnxjgRp7QsQX0aQ==", 
-       "detour": "shadowtls-out", 
-       "multiplex": { 
-         "enabled": true, 
-         "max_connections": 4, 
-         "min_streams": 4 
+   "dns": { 
+     "servers": [ 
+       { 
+         "tag": "google", 
+         "address": "tls://8.8.8.8" 
        }, 
-       "udp_over_tcp":{ 
-         "enabled": true, 
-         "version": 2 
+       { 
+         "tag": "local", 
+         "address": "223.5.5.5", 
+         "detour": "direct" 
+       }, 
+       { 
+         "tag": "block", 
+         "address": "rcode://success" 
        } 
-     }, 
+     ], 
+     "rules": [ 
+       { 
+         "outbound": "any", 
+         "server": "local" 
+       } 
+     ], 
+     "strategy": "ipv4_only" 
+   }, 
+   "inbounds": [ 
      { 
-       "type": "shadowtls", 
-       "tag": "shadowtls-out", 
-       "server": "95.217.9.44", 
-       "server_port": 443, 
-       "version": 3, 
-       "password": "betterfreeall2343", 
-       "tls": { 
-         "enabled": true, 
-         "server_name": "www.speedtest.net", 
-         "utls": { 
-           "enabled": true, 
-           "fingerprint": "chrome" 
-         } 
-       } 
-     }, 
+       "type": "tun", 
+       "inet4_address": "172.19.0.1/30", 
+       "auto_route": true, 
+       "strict_route": false, 
+       "sniff": true 
+     } 
+   ], 
+    "outbounds": [
+    {
+      "type": "shadowsocks",
+      "server": "135.181.157.45",
+      "server_port": 8080,
+      "method": "2022-blake3-aes-128-gcm",
+      "password": "6vBWikBqyoj7YYnnXQW29g==:O0EIEFpm/qx/yOP5XPZqRQ=="
+    },
     { 
        "type": "direct", 
        "tag": "direct" 
@@ -52,21 +53,20 @@
        "tag": "dns-out" 
      } 
    ], 
+ "inbounds": [ 
+    {
+      "type": "mixed",
+      "listen_port": 1080,
+      "sniff": true,
+      "set_system_proxy": true
+    } 
+   ], 
    "route": { 
      "rules": [ 
        { 
          "protocol": "dns", 
          "outbound": "dns-out" 
-       },
-       {
-        "geosite": "category-ir",
-        "geoip": "ir",
-        "outbound": "direct"
-       },
-       { 
-         "domain_keyword": [".ir"], 
-         "outbound": "direct" 
-       } 
+       }
      ], 
      "auto_detect_interface": true 
    } 
