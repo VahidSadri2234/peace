@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تنظیمات استراتژی ارجاع تیکت</title>
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --card-bg: #ffffff;
+      --sub-card-bg: #f8fafc;
+      --border: #e2e8f0;
+      --accent: #3b82f6;
+      --text: #0f172a;
+      --muted: #6b7280;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 32px;
+      background: var(--bg);
+      font-family: "IRANSans", "Vazirmatn", "Segoe UI", sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      padding: 28px 32px 36px;
+    }
+
+    h1 {
+      margin: 0 0 24px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    h2 {
+      margin: 24px 0 12px;
+      padding-right: 10px;
+      border-right: 4px solid var(--accent);
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .section {
+      background: var(--sub-card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 16px;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    select, input[type="text"], input[type="number"], input[type="checkbox"], textarea {
+      font-family: inherit;
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    select[multiple] {
+      min-height: 120px;
+    }
+
+    .hint {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 24px;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .strategy-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 14px 6px;
+      background: #fff;
+      margin-bottom: 12px;
+    }
+
+    .row {
+      margin-bottom: 14px;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      margin: 8px 0;
+    }
+
+    .preview {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .preview strong {
+      color: #93c5fd;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>تنظیمات استراتژی ارجاع تیکت در این Step</h1>
+
+    <section class="section">
+      <h2>نوع استراتژی ارجاع</h2>
+      <div class="row">
+        <label for="strategy_type">انتخاب الگو</label>
+        <select id="strategy_type" name="strategy_type">
+          <option value="single">کارتابل واحد (Single)</option>
+          <option value="round_robin">چرخشی (Round Robin)</option>
+          <option value="self_service">سلف‌سرویس (Self Service)</option>
+          <option value="multi_send">ارسال همزمان به چند نفر (Multi Send)</option>
+        </select>
+        <div class="hint">تعیین می‌کند کار این استپ با چه الگویی بین افراد پخش شود.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>منبع کاندیداها</h2>
+      <div class="radio-group" role="radiogroup" aria-label="منبع کاندیداها">
+        <label class="radio-item"><input type="radio" name="candidate_source_type" value="users" checked>کاربران (Users)</label>
+        <label class="radio-item"><input type="radio" name="candidate_source_type" value="roles">نقش‌ها (Roles)</label>
+        <label class="radio-item"><input type="radio" name="candidate_source_type" value="users_and_roles">ترکیبی (Users + Roles)</label>
+      </div>
+      <div class="hint">مشخص می‌کند لیست کاندیداها از چه منبعی پر شود.</div>
+
+      <div class="grid-2">
+        <div class="row">
+          <label for="candidate_users">لیست کاربران کاندیدا</label>
+          <select id="candidate_users" name="candidate_users" multiple>
+            <option>کاربر نمونه ۱</option>
+            <option>کاربر نمونه ۲</option>
+            <option>کاربر نمونه ۳</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="candidate_roles">لیست نقش‌های کاندیدا</label>
+          <select id="candidate_roles" name="candidate_roles" multiple>
+            <option>پشتیبان فنی</option>
+            <option>کارشناس شهرسازی</option>
+            <option>کارشناس درآمد</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>تنظیمات اختصاصی بر اساس نوع استراتژی</h2>
+
+      <div class="strategy-card" data-strategy="single">
+        <h3>کارتابل واحد (Single)</h3>
+        <div class="row">
+          <label for="single_assignment_mode">روش انتخاب مسئول</label>
+          <select id="single_assignment_mode" name="single_assignment_mode">
+            <option value="fixed_user">کاربر ثابت</option>
+            <option value="first_user_in_pool">اولین کاربر لیست کاندیداها</option>
+          </select>
+          <div class="hint">مشخص می‌کند مسئول این استپ همیشه فرد مشخص باشد یا اولین نفر لیست.</div>
+        </div>
+        <div class="row">
+          <label for="single_fixed_user_id">کاربر ثابت</label>
+          <select id="single_fixed_user_id" name="single_fixed_user_id">
+            <option>کاربر نمونه ۱</option>
+            <option>کاربر نمونه ۲</option>
+          </select>
+          <div class="hint">فقط وقتی روش انتخاب = «کاربر ثابت» است استفاده می‌شود.</div>
+        </div>
+      </div>
+
+      <div class="strategy-card" data-strategy="round_robin">
+        <h3>چرخشی (Round Robin)</h3>
+        <div class="row">
+          <label for="rr_pool_users">لیست کاربران چرخشی</label>
+          <select id="rr_pool_users" name="rr_pool_users" multiple>
+            <option>کاربر نمونه ۱</option>
+            <option>کاربر نمونه ۲</option>
+            <option>کاربر نمونه ۳</option>
+          </select>
+          <div class="hint">اگر خالی باشد، از لیست کاربران کاندیدا استفاده می‌شود.</div>
+        </div>
+        <div class="row">
+          <label for="rr_order_mode">الگوریتم انتخاب نفر بعد</label>
+          <select id="rr_order_mode" name="rr_order_mode">
+            <option value="list_order">بر اساس ترتیب لیست</option>
+            <option value="least_recent">کمترین دریافت اخیر</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="strategy-card" data-strategy="self_service">
+        <h3>سلف‌سرویس (Self Service)</h3>
+        <div class="row">
+          <label for="ss_pool_users">لیست کاربران سلف‌سرویس</label>
+          <select id="ss_pool_users" name="ss_pool_users" multiple>
+            <option>کاربر نمونه ۱</option>
+            <option>کاربر نمونه ۲</option>
+            <option>کاربر نمونه ۳</option>
+          </select>
+          <div class="hint">کاربران این لیست تیکت را در کارتابل مشترک می‌بینند تا یکی آن را بردارد.</div>
+        </div>
+        <label class="checkbox">
+          <input type="checkbox" id="ss_visible_to_all" name="ss_visible_to_all">
+          <span>تیکت برای همه افراد لیست نمایش داده شود تا یکی Claim کند.</span>
+        </label>
+      </div>
+
+      <div class="strategy-card" data-strategy="multi_send">
+        <h3>ارسال همزمان به چند نفر (Multi Send)</h3>
+        <div class="row">
+          <label for="multi_pool_users">لیست کاربران دریافت‌کننده اولیه</label>
+          <select id="multi_pool_users" name="multi_pool_users" multiple>
+            <option>کاربر نمونه ۱</option>
+            <option>کاربر نمونه ۲</option>
+            <option>کاربر نمونه ۳</option>
+          </select>
+          <div class="hint">تیکت به‌صورت همزمان در کارتابل این افراد نمایش داده می‌شود.</div>
+        </div>
+        <div class="row">
+          <label for="multi_lock_mode">قانون قفل شدن تیکت</label>
+          <select id="multi_lock_mode" name="multi_lock_mode">
+            <option value="first_picker_wins">اولین دریافت‌کننده مسئول می‌شود</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>قوانین تکمیلی</h2>
+      <label class="checkbox">
+        <input type="checkbox" id="allow_manual_override" name="allow_manual_override">
+        <span>اجازه تغییر دستی مسئول در این Step فعال باشد.</span>
+      </label>
+
+      <div class="row">
+        <label for="override_allowed_roles">نقش‌های مجاز برای تغییر دستی مسئول</label>
+        <select id="override_allowed_roles" name="override_allowed_roles" multiple>
+          <option>مدیر پروژه</option>
+          <option>سرگروه پشتیبانی</option>
+        </select>
+        <div class="hint">فقط این نقش‌ها می‌توانند Assignee را در این استپ تغییر دهند.</div>
+      </div>
+
+      <div class="row">
+        <label for="on_empty_pool_action">رفتار در صورت خالی بودن لیست کاندیدا</label>
+        <select id="on_empty_pool_action" name="on_empty_pool_action">
+          <option value="keep_previous_assignee">نگه داشتن مسئول قبلی تیکت</option>
+          <option value="assign_to_project_manager">ارجاع به مدیر پروژه</option>
+          <option value="error_and_log">ثبت خطا و ارسال هشدار (بدون تغییر مسئول)</option>
+        </select>
+        <div class="hint">اگر به هر دلیل کاندیدایی برای ارجاع پیدا نشود، سیستم چه کاری انجام دهد.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>پیش‌نمایش خلاصه تنظیمات</h2>
+      <div class="preview" id="preview_box">
+        <div><strong>نوع استراتژی:</strong> -</div>
+        <div><strong>تعداد کاربران انتخاب‌شده:</strong> -</div>
+        <div><strong>امکان تغییر دستی مسئول:</strong> -</div>
+        <div><strong>رفتار در صورت خالی بودن لیست:</strong> -</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const strategySelect = document.getElementById('strategy_type');
+    const strategyCards = document.querySelectorAll('.strategy-card');
+    const previewBox = document.getElementById('preview_box');
+
+    function updateStrategyVisibility() {
+      const current = strategySelect.value;
+      strategyCards.forEach(card => {
+        card.style.display = card.dataset.strategy === current ? 'block' : 'none';
+      });
+    }
+
+    function countSelected(selectEl) {
+      return Array.from(selectEl.options).filter(opt => opt.selected).length;
+    }
+
+    function updatePreview() {
+      const strategyText = strategySelect.options[strategySelect.selectedIndex].textContent;
+      const userCount = countSelected(document.getElementById('candidate_users'));
+      const roleCount = countSelected(document.getElementById('candidate_roles'));
+      const allowOverride = document.getElementById('allow_manual_override').checked ? 'فعال' : 'غیرفعال';
+      const emptyAction = document.getElementById('on_empty_pool_action');
+      const emptyActionText = emptyAction.options[emptyAction.selectedIndex].textContent;
+      const totalCandidates = userCount + roleCount;
+
+      previewBox.innerHTML = `
+        <div><strong>نوع استراتژی:</strong> ${strategyText}</div>
+        <div><strong>تعداد کاربران انتخاب‌شده:</strong> ${totalCandidates} نفر</div>
+        <div><strong>امکان تغییر دستی مسئول:</strong> ${allowOverride}</div>
+        <div><strong>رفتار در صورت خالی بودن لیست:</strong> ${emptyActionText}</div>
+      `;
+    }
+
+    function init() {
+      updateStrategyVisibility();
+      updatePreview();
+
+      strategySelect.addEventListener('change', () => {
+        updateStrategyVisibility();
+        updatePreview();
+      });
+
+      ['candidate_users', 'candidate_roles', 'allow_manual_override', 'on_empty_pool_action'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const eventName = el.tagName.toLowerCase() === 'select' ? 'change' : 'input';
+        el.addEventListener(eventName, updatePreview);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
