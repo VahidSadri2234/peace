@@ -150,21 +150,21 @@
 
     <div class="main">
       <aside>
-        <div class="card step-list">
-          <h3>مرحله‌ها (Steps)</h3>
-          <div class="step-item" data-step="step_customer">انتخاب کارفرما</div>
-          <div class="step-item" data-step="step_service">انتخاب سرویس</div>
-          <div class="step-item" data-step="step_do">انجام کار</div>
-          <div class="step-item" data-step="step_delivery">تحویل به کارفرما</div>
-        </div>
-
         <div class="card">
           <h3>تنظیمات کلی فلو</h3>
           <div class="row">
             <label for="flow_name">نام فلو</label>
             <input type="text" id="flow_name" name="flow_name" placeholder="مثال: فلو پیش‌فرض تیکت‌های شهرداری">
-            <div class="hint">سایر تنظیمات کلی فلو بعداً اضافه می‌شوند.</div>
+            <div class="hint">سایر تنظیمات کلی فلو (SLA پیش‌فرض، سیاست بازگشایی، قوانین امتیازدهی کلی و غیره) بعداً اضافه می‌شوند.</div>
           </div>
+        </div>
+
+        <div class="card step-list">
+          <h3>مرحله‌ها (Steps)</h3>
+          <div class="step-item" data-step="step_customer">انتخاب کارفرما</div>
+          <div class="step-item" data-step="step_service">انتخاب سرویس</div>
+          <div class="step-item" data-step="step_work">انجام کار</div>
+          <div class="step-item" data-step="step_delivery">تحویل به کارفرما</div>
         </div>
       </aside>
 
@@ -199,7 +199,7 @@
 
             <div class="grid-2 row">
               <div>
-                <label for="candidate_users">کاندیدا - کاربران</label>
+                <label for="candidate_users">لیست کاربران کاندیدا</label>
                 <select id="candidate_users" name="candidate_users" multiple>
                   <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
                   <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
@@ -207,7 +207,7 @@
                 </select>
               </div>
               <div>
-                <label for="candidate_roles">کاندیدا - نقش‌ها</label>
+                <label for="candidate_roles">لیست نقش‌های کاندیدا</label>
                 <select id="candidate_roles" name="candidate_roles" multiple>
                   <option value="پشتیبان فنی">پشتیبان فنی</option>
                   <option value="کارشناس شهرسازی">کارشناس شهرسازی</option>
@@ -320,6 +320,40 @@
           </div>
 
           <div class="card placeholder" aria-disabled="true">
+            <h4>قوانین زمان‌بندی برای این استپ</h4>
+            <div>در آینده در این بخش تنظیم می‌کنیم که اگر تیکت در این مرحله باز نشود یا تعیین‌تکلیف نشود، بعد از چه مدت چه اتفاقی بیفتد (هشدار، بازگشت، ثبت تاخیر و غیره).</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>شرایط عبور مرحله</h4>
+            <div>در آینده در این بخش تعیین می‌کنیم چه فیلدها و تأییدهایی قبل از عبور به مرحله بعد حتماً باید تکمیل شده باشند.</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>وابستگی به سایر تیکت‌ها یا مراحل</h4>
+            <div>در آینده در این بخش مشخص می‌کنیم که عبور به مرحله بعد وابسته به تکمیل شدن کدام مراحل یا تیکت‌های دیگر باشد.</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>سطح دسترسی و دیدن تیکت</h4>
+            <div>در آینده در این بخش تعیین می‌کنیم که در این مرحله چه نقش‌هایی تیکت را ببینند، ویرایش کنند یا فقط وضعیت را ببینند.</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>قوانین اعلان و اطلاع‌رسانی</h4>
+            <div>در آینده در این بخش تعریف می‌کنیم روی چه رویدادهایی (ورود، خروج، تاخیر و…) چه اعلان‌هایی برای چه کسانی و از چه کانالی (نوتیف، پیامک، ایمیل) ارسال شود.</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>اقدامات خودکار</h4>
+            <div>در آینده در این بخش تعیین می‌کنیم هنگام ورود/خروج این مرحله چه کارهای خودکار انجام شود (ساخت زیرتیکت، تغییر وضعیت، وب‌هوک و غیره).</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>سیاست بازگشایی تیکت</h4>
+            <div>در آینده در این بخش مشخص می‌کنیم تیکت بعد از بازگشایی به کدام مرحله برگردد، چند بار مجاز به بازگشایی باشد و چه کسانی مجازند.</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>امتیازدهی و اولویت پویا</h4>
+            <div>در آینده در این بخش قوانین امتیازدهی بر اساس تاخیر، ارجاع، بازگشایی و… و تغییر خودکار سطح اولویت را تعریف می‌کنیم.</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>پرچم‌گذاری برای ممیزی و گزارش‌ها</h4>
+            <div>در آینده در این بخش تعریف می‌کنیم چه تیکت‌هایی بر اساس تاخیر، ارجاع زیاد، نارضایتی و… با پرچم‌های مختلف علامت‌گذاری شوند.</div>
             <h4>تنظیمات SLA / زمان‌بندی</h4>
             <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
           </div>
@@ -349,6 +383,7 @@
     const steps = [
       { id: "step_customer", name: "انتخاب کارفرما" },
       { id: "step_service", name: "انتخاب سرویس" },
+      { id: "step_work", name: "انجام کار" },
       { id: "step_do", name: "انجام کار" },
       { id: "step_delivery", name: "تحویل به کارفرما" }
     ];
