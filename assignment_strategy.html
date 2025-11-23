@@ -1039,9 +1039,71 @@
               <div class="hint">در صورت فعال‌سازی، پس از عبور از آستانه، پرچم کیفیت روی تیکت ثبت می‌شود.</div>
             </div>
           </div>
-          <div class="card placeholder" aria-disabled="true">
+          <div class="card">
             <h4>امتیازدهی و اولویت پویا</h4>
-            <div>در آینده در این بخش قوانین امتیازدهی بر اساس تاخیر، ارجاع، بازگشایی و… و تغییر خودکار سطح اولویت را تعریف می‌کنیم.</div>
+
+            <div class="section-card">
+              <h5>تنظیمات عمومی</h5>
+              <div class="checkbox"><input type="checkbox" id="priority_enabled" name="priority_enabled"><label for="priority_enabled">فعال بودن امتیازدهی پویا در این استپ</label></div>
+              <div class="row">
+                <label for="priority_base">اولویت پایه این استپ</label>
+                <select id="priority_base" name="priority_base">
+                  <option value="normal">عادی</option>
+                  <option value="important">مهم</option>
+                  <option value="critical">بحرانی / اضطراری</option>
+                </select>
+                <div class="hint">اولویتی که در ابتدا برای این استپ در نظر گرفته می‌شود.</div>
+              </div>
+              <div class="checkbox"><input type="checkbox" id="priority_auto_change" name="priority_auto_change"><label for="priority_auto_change">اجازه تغییر خودکار اولویت بر اساس امتیاز کل</label></div>
+            </div>
+
+            <div class="section-card">
+              <div class="action-header">
+                <h5>قوانین امتیازدهی</h5>
+                <button type="button" class="btn" id="priority_rule_add">افزودن قانون امتیازدهی</button>
+              </div>
+              <div class="hint">قوانین افزایش/کاهش امتیاز بر اساس تاخیر، ارجاع، بازگشایی، نوع مشتری و سایر شرایط.</div>
+              <div id="priority_rules_list"></div>
+            </div>
+
+            <div class="section-card">
+              <h5>نگاشت امتیاز به اولویت</h5>
+              <div class="grid-2">
+                <div class="row">
+                  <label for="priority_normal_max">بیشترین امتیاز برای اولویت عادی</label>
+                  <input type="number" id="priority_normal_max" name="priority_normal_max" placeholder="مثلاً 10">
+                  <div class="hint">امتیاز کمتر یا مساوی این عدد عادی محسوب می‌شود (خالی = بدون سقف مشخص).</div>
+                </div>
+                <div class="row">
+                  <label for="priority_important_min">حداقل امتیاز برای اولویت مهم</label>
+                  <input type="number" id="priority_important_min" name="priority_important_min" placeholder="مثلاً 11">
+                  <div class="hint">اگر امتیاز به این مقدار برسد یا بیشتر شود، اولویت حداقل «مهم» است.</div>
+                </div>
+                <div class="row">
+                  <label for="priority_critical_min">حداقل امتیاز برای اولویت بحرانی</label>
+                  <input type="number" id="priority_critical_min" name="priority_critical_min" placeholder="مثلاً 20">
+                  <div class="hint">امتیاز برابر یا بیشتر از این مقدار، اولویت «بحرانی / اضطراری» می‌شود.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>اعلان و لاگ تغییر اولویت</h5>
+              <div class="checkbox"><input type="checkbox" id="priority_notify_on_change" name="priority_notify_on_change"><label for="priority_notify_on_change">ارسال اعلان در صورت تغییر اولویت</label></div>
+              <div class="checkbox"><input type="checkbox" id="priority_notify_assignee" name="priority_notify_assignee"><label for="priority_notify_assignee">اطلاع به مسئول فعلی</label></div>
+              <div class="checkbox"><input type="checkbox" id="priority_notify_manager" name="priority_notify_manager"><label for="priority_notify_manager">اطلاع به مدیر پروژه / مدیر تیکت‌ها</label></div>
+              <div class="row">
+                <label for="priority_notify_roles">نقش‌های اضافی برای اطلاع‌رسانی</label>
+                <select multiple id="priority_notify_roles" name="priority_notify_roles">
+                  <option value="مدیر پروژه">مدیر پروژه</option>
+                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
+                  <option value="مسئول مالی">مسئول مالی</option>
+                  <option value="کارشناس ارشد">کارشناس ارشد</option>
+                </select>
+                <div class="hint">در صورت تغییر اولویت، این نقش‌ها هم مطلع می‌شوند.</div>
+              </div>
+              <div class="checkbox"><input type="checkbox" id="priority_log_history" name="priority_log_history"><label for="priority_log_history">ثبت تغییرات اولویت در تاریخچه تیکت</label></div>
+            </div>
           </div>
           <div class="card placeholder" aria-disabled="true">
             <h4>پرچم‌گذاری برای ممیزی و گزارش‌ها</h4>
@@ -1309,10 +1371,45 @@
       };
     }
 
+    let priorityRuleCounter = 1;
+    function createPriorityRule() {
+      return {
+        id: `pr_${priorityRuleCounter++}`,
+        title: "",
+        category: "delay",
+        description: "",
+        score_delta: 0,
+        condition_text: ""
+      };
+    }
+
+    function createDefaultPriority() {
+      return {
+        enabled: false,
+        base_priority: "normal",
+        auto_change_allowed: false,
+        scoring_rules: [],
+        score_to_priority: {
+          normal_max: null,
+          important_min: null,
+          critical_min: null
+        },
+        notifications: {
+          notify_on_change: false,
+          notify_assignee: false,
+          notify_manager: false,
+          notify_roles: []
+        },
+        logging: {
+          log_change_history: false
+        }
+      };
+    }
+
     const flowConfig = {
       flowName: "",
       selectedStepId: steps[0].id,
-      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess(), notifications: createDefaultNotifications(), autoActions: createDefaultAutoActions(), reopen: createDefaultReopen() }))
+      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess(), notifications: createDefaultNotifications(), autoActions: createDefaultAutoActions(), reopen: createDefaultReopen(), priority: createDefaultPriority() }))
     };
 
     const elements = {
@@ -1463,6 +1560,20 @@
       reopenQualityLabel: document.getElementById('reopen_quality_label'),
       reopenQualityWrap: document.getElementById('reopen_quality_wrap'),
 
+      priorityEnabled: document.getElementById('priority_enabled'),
+      priorityBase: document.getElementById('priority_base'),
+      priorityAutoChange: document.getElementById('priority_auto_change'),
+      priorityRuleAdd: document.getElementById('priority_rule_add'),
+      priorityRulesList: document.getElementById('priority_rules_list'),
+      priorityNormalMax: document.getElementById('priority_normal_max'),
+      priorityImportantMin: document.getElementById('priority_important_min'),
+      priorityCriticalMin: document.getElementById('priority_critical_min'),
+      priorityNotifyOnChange: document.getElementById('priority_notify_on_change'),
+      priorityNotifyAssignee: document.getElementById('priority_notify_assignee'),
+      priorityNotifyManager: document.getElementById('priority_notify_manager'),
+      priorityNotifyRoles: document.getElementById('priority_notify_roles'),
+      priorityLogHistory: document.getElementById('priority_log_history'),
+
       collapseToggles: document.querySelectorAll('.collapse-toggle')
     };
 
@@ -1485,6 +1596,7 @@
       fillNotificationsForm(step.notifications);
       fillAutoActionsForm(step.autoActions);
       fillReopenForm(step.reopen);
+      fillPriorityForm(step.priority);
       toggleStrategyCards(step.assignment.strategy_type);
       renderPreview();
     }
@@ -1970,6 +2082,151 @@
       renderPreview();
     }
 
+    function renderPriorityRules(priority) {
+      if (!elements.priorityRulesList) return;
+      elements.priorityRulesList.innerHTML = "";
+
+      if (!priority.scoring_rules.length) {
+        const empty = document.createElement('div');
+        empty.className = 'hint';
+        empty.textContent = 'هنوز قانونی تعریف نشده است.';
+        elements.priorityRulesList.appendChild(empty);
+        return;
+      }
+
+      priority.scoring_rules.forEach((rule, index) => {
+        const card = document.createElement('div');
+        card.className = 'section-card';
+
+        const header = document.createElement('div');
+        header.className = 'action-header';
+        const title = document.createElement('strong');
+        title.textContent = `قانون شماره ${index + 1}`;
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn secondary';
+        removeBtn.textContent = 'حذف';
+        removeBtn.addEventListener('click', () => {
+          priority.scoring_rules = priority.scoring_rules.filter(item => item.id !== rule.id);
+          renderPriorityRules(priority);
+          renderPreview();
+        });
+        header.appendChild(title);
+        header.appendChild(removeBtn);
+        card.appendChild(header);
+
+        const titleRow = document.createElement('div');
+        titleRow.className = 'row';
+        const titleLabel = document.createElement('label');
+        titleLabel.setAttribute('for', `${rule.id}_title`);
+        titleLabel.textContent = 'عنوان قانون';
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.id = `${rule.id}_title`;
+        titleInput.placeholder = 'مثال: تاخیر بیش از SLA یا تعداد ارجاع زیاد';
+        titleInput.value = rule.title || '';
+        titleInput.addEventListener('input', () => {
+          rule.title = titleInput.value;
+          renderPreview();
+        });
+        titleRow.appendChild(titleLabel);
+        titleRow.appendChild(titleInput);
+        card.appendChild(titleRow);
+
+        const metaRow = document.createElement('div');
+        metaRow.className = 'row';
+        const categoryLabel = document.createElement('label');
+        categoryLabel.textContent = 'دسته‌بندی قانون';
+        const categorySelect = document.createElement('select');
+        categorySelect.innerHTML = `
+          <option value="delay">تاخیر</option>
+          <option value="referrals">ارجاع/جابجایی مسئول</option>
+          <option value="reopen">بازگشایی</option>
+          <option value="customer_type">نوع مشتری/سرویس</option>
+          <option value="other">سایر</option>
+        `;
+        categorySelect.value = rule.category;
+        categorySelect.addEventListener('change', () => {
+          rule.category = categorySelect.value;
+          renderPreview();
+        });
+        metaRow.appendChild(categoryLabel);
+        metaRow.appendChild(categorySelect);
+        card.appendChild(metaRow);
+
+        const descRow = document.createElement('div');
+        descRow.className = 'row';
+        const descLabel = document.createElement('label');
+        descLabel.textContent = 'توضیح قانون';
+        const descTextarea = document.createElement('textarea');
+        descTextarea.rows = 2;
+        descTextarea.placeholder = 'شرح کوتاه شرط امتیازگیری';
+        descTextarea.value = rule.description || '';
+        descTextarea.addEventListener('input', () => {
+          rule.description = descTextarea.value;
+          renderPreview();
+        });
+        descRow.appendChild(descLabel);
+        descRow.appendChild(descTextarea);
+        card.appendChild(descRow);
+
+        const scoreRow = document.createElement('div');
+        scoreRow.className = 'row';
+        const scoreLabel = document.createElement('label');
+        scoreLabel.textContent = 'تغییر امتیاز (مثبت یا منفی)';
+        const scoreInput = document.createElement('input');
+        scoreInput.type = 'number';
+        scoreInput.id = `${rule.id}_score`;
+        scoreInput.value = rule.score_delta ?? 0;
+        scoreInput.addEventListener('input', () => {
+          const num = scoreInput.value === '' ? 0 : Number(scoreInput.value);
+          rule.score_delta = Number.isNaN(num) ? 0 : num;
+          renderPreview();
+        });
+        scoreRow.appendChild(scoreLabel);
+        scoreRow.appendChild(scoreInput);
+        card.appendChild(scoreRow);
+
+        const conditionRow = document.createElement('div');
+        conditionRow.className = 'row';
+        const conditionLabel = document.createElement('label');
+        conditionLabel.textContent = 'شرط اجرا (اختیاری)';
+        const conditionInput = document.createElement('textarea');
+        conditionInput.rows = 2;
+        conditionInput.placeholder = 'مثال: فقط برای مشتریان VIP یا سرویس بحرانی';
+        conditionInput.value = rule.condition_text || '';
+        conditionInput.addEventListener('input', () => {
+          rule.condition_text = conditionInput.value;
+          renderPreview();
+        });
+        conditionRow.appendChild(conditionLabel);
+        conditionRow.appendChild(conditionInput);
+        card.appendChild(conditionRow);
+
+        elements.priorityRulesList.appendChild(card);
+      });
+    }
+
+    function fillPriorityForm(priority) {
+      elements.priorityEnabled.checked = priority.enabled;
+      elements.priorityBase.value = priority.base_priority;
+      elements.priorityAutoChange.checked = priority.auto_change_allowed;
+
+      elements.priorityNormalMax.value = priority.score_to_priority.normal_max ?? "";
+      elements.priorityImportantMin.value = priority.score_to_priority.important_min ?? "";
+      elements.priorityCriticalMin.value = priority.score_to_priority.critical_min ?? "";
+
+      elements.priorityNotifyOnChange.checked = priority.notifications.notify_on_change;
+      elements.priorityNotifyAssignee.checked = priority.notifications.notify_assignee;
+      elements.priorityNotifyManager.checked = priority.notifications.notify_manager;
+      fillMultiSelect(elements.priorityNotifyRoles, priority.notifications.notify_roles);
+
+      elements.priorityLogHistory.checked = priority.logging.log_change_history;
+
+      renderPriorityRules(priority);
+      renderPreview();
+    }
+
     function updateAssignmentFromForm() {
       const step = getCurrentStep();
       const a = step.assignment;
@@ -2374,6 +2631,28 @@
       renderPreview();
     }
 
+    function updatePriorityFromForm() {
+      const step = getCurrentStep();
+      const p = step.priority;
+
+      p.enabled = elements.priorityEnabled.checked;
+      p.base_priority = elements.priorityBase.value;
+      p.auto_change_allowed = elements.priorityAutoChange.checked;
+
+      p.score_to_priority.normal_max = toNullableNumber(elements.priorityNormalMax.value);
+      p.score_to_priority.important_min = toNullableNumber(elements.priorityImportantMin.value);
+      p.score_to_priority.critical_min = toNullableNumber(elements.priorityCriticalMin.value);
+
+      p.notifications.notify_on_change = elements.priorityNotifyOnChange.checked;
+      p.notifications.notify_assignee = elements.priorityNotifyAssignee.checked;
+      p.notifications.notify_manager = elements.priorityNotifyManager.checked;
+      p.notifications.notify_roles = readMultiSelect(elements.priorityNotifyRoles);
+
+      p.logging.log_change_history = elements.priorityLogHistory.checked;
+
+      renderPreview();
+    }
+
     function renderPreview() {
       flowConfig.flowName = elements.flowName.value;
       elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
@@ -2574,6 +2853,33 @@
         const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
         el.addEventListener(evt, updateReopenFromForm);
       });
+
+      [
+        elements.priorityEnabled,
+        elements.priorityBase,
+        elements.priorityAutoChange,
+        elements.priorityNormalMax,
+        elements.priorityImportantMin,
+        elements.priorityCriticalMin,
+        elements.priorityNotifyOnChange,
+        elements.priorityNotifyAssignee,
+        elements.priorityNotifyManager,
+        elements.priorityNotifyRoles,
+        elements.priorityLogHistory
+      ].forEach(el => {
+        if (!el) return;
+        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'change';
+        el.addEventListener(evt, updatePriorityFromForm);
+      });
+
+      if (elements.priorityRuleAdd) {
+        elements.priorityRuleAdd.addEventListener('click', () => {
+          const priority = getCurrentStep().priority;
+          priority.scoring_rules.push(createPriorityRule());
+          renderPriorityRules(priority);
+          renderPreview();
+        });
+      }
 
       if (elements.autoEnterAdd) {
         elements.autoEnterAdd.addEventListener('click', () => {
