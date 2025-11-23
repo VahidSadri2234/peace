@@ -496,9 +496,33 @@
               </div>
             </div>
           </div>
-          <div class="card placeholder" aria-disabled="true">
+          <div class="card">
             <h4>وابستگی به سایر تیکت‌ها یا مراحل</h4>
-            <div>در آینده در این بخش مشخص می‌کنیم که عبور به مرحله بعد وابسته به تکمیل شدن کدام مراحل یا تیکت‌های دیگر باشد.</div>
+
+            <div class="section-card">
+              <h5>تنظیمات عمومی وابستگی</h5>
+              <div class="checkbox">
+                <input type="checkbox" id="deps_enabled" name="deps_enabled">
+                <label for="deps_enabled">فعال بودن وابستگی برای این استپ</label>
+              </div>
+              <div class="row">
+                <label for="deps_enforcement_mode">نوع رفتار سیستم در صورت تکمیل نبودن وابستگی‌ها</label>
+                <select id="deps_enforcement_mode" name="deps_enforcement_mode">
+                  <option value="block">جلوگیری کامل از عبور به مرحله بعد</option>
+                  <option value="warn_only">فقط هشدار بده ولی اجازه عبور بده</option>
+                </select>
+                <div class="hint">مشخص می‌کند اگر وابستگی‌ها کامل نباشند، عبور به مرحله بعد بلاک شود یا فقط هشدار نمایش داده شود.</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+                <h5 style="margin:0;">لیست وابستگی‌ها</h5>
+                <button id="deps_add_btn" type="button" style="padding:8px 12px; border:1px solid var(--accent); background:var(--accent-soft); color:var(--accent); border-radius:8px; cursor:pointer;">افزودن وابستگی جدید</button>
+              </div>
+              <div class="hint" style="margin-top:6px;">برای هر وابستگی مشخص کنید هدف وابستگی چیست و در چه شرایطی کامل محسوب می‌شود.</div>
+              <div id="deps_list" style="margin-top:12px; display:flex; flex-direction:column; gap:12px;"></div>
+            </div>
           </div>
           <div class="card placeholder" aria-disabled="true">
             <h4>سطح دسترسی و دیدن تیکت</h4>
@@ -618,10 +642,31 @@
       };
     }
 
+    let depCounter = 1;
+    function createDefaultDependencies() {
+      return {
+        enabled: false,
+        enforcement_mode: "block",
+        items: []
+      };
+    }
+
+    function createDependencyItem() {
+      return {
+        id: `dep_${depCounter++}`,
+        type: "step",
+        target_step_id: null,
+        target_ticket_type: "",
+        required_statuses: [],
+        completion_mode: "all",
+        required_count: null
+      };
+    }
+
     const flowConfig = {
       flowName: "",
       selectedStepId: steps[0].id,
-      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions() }))
+      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies() }))
     };
 
     const elements = {
@@ -683,7 +728,12 @@
       condOverrideAllowed: document.getElementById('cond_override_allowed'),
       condOverrideRoles: document.getElementById('cond_override_roles'),
       condOverrideRolesWrap: document.getElementById('cond_override_roles_wrap'),
-      condViolationMessage: document.getElementById('cond_violation_message')
+      condViolationMessage: document.getElementById('cond_violation_message'),
+
+      depsEnabled: document.getElementById('deps_enabled'),
+      depsEnforcementMode: document.getElementById('deps_enforcement_mode'),
+      depsAddBtn: document.getElementById('deps_add_btn'),
+      depsList: document.getElementById('deps_list')
     };
 
     function getCurrentStep() {
@@ -700,6 +750,7 @@
       fillForm(step.assignment);
       fillTimingForm(step.timing);
       fillConditionsForm(step.conditions);
+      fillDependenciesForm(step.dependencies);
       toggleStrategyCards(step.assignment.strategy_type);
       renderPreview();
     }
@@ -791,6 +842,13 @@
       renderPreview();
     }
 
+    function fillDependenciesForm(dependencies) {
+      elements.depsEnabled.checked = dependencies.enabled;
+      elements.depsEnforcementMode.value = dependencies.enforcement_mode;
+      renderDependencyItems(dependencies);
+      renderPreview();
+    }
+
     function updateAssignmentFromForm() {
       const step = getCurrentStep();
       const a = step.assignment;
@@ -820,6 +878,170 @@
     function toggleOverrideRoles(show) {
       if (!elements.condOverrideRolesWrap) return;
       elements.condOverrideRolesWrap.classList.toggle('hidden', !show);
+    }
+
+    function renderDependencyItems(dependencies) {
+      elements.depsList.innerHTML = "";
+      const currentStepId = flowConfig.selectedStepId;
+      dependencies.items.forEach((dep, index) => {
+        const card = document.createElement('div');
+        card.className = 'section-card';
+
+        const header = document.createElement('div');
+        header.style.display = 'flex';
+        header.style.justifyContent = 'space-between';
+        header.style.alignItems = 'center';
+        header.style.gap = '8px';
+        const title = document.createElement('strong');
+        title.textContent = `وابستگی شماره ${index + 1}`;
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.textContent = 'حذف';
+        removeBtn.style.padding = '6px 10px';
+        removeBtn.style.border = '1px solid #ef4444';
+        removeBtn.style.background = '#fee2e2';
+        removeBtn.style.color = '#b91c1c';
+        removeBtn.style.borderRadius = '8px';
+        removeBtn.style.cursor = 'pointer';
+        removeBtn.addEventListener('click', () => {
+          dependencies.items = dependencies.items.filter(item => item.id !== dep.id);
+          renderDependencyItems(dependencies);
+          renderPreview();
+        });
+        header.appendChild(title);
+        header.appendChild(removeBtn);
+        card.appendChild(header);
+
+        const typeRow = document.createElement('div');
+        typeRow.className = 'row';
+        const typeLabel = document.createElement('label');
+        typeLabel.textContent = 'نوع وابستگی';
+        const typeSelect = document.createElement('select');
+        typeSelect.innerHTML = `
+          <option value="step">مرحله‌ای دیگر در همین فلو</option>
+          <option value="ticket_type">تیکت‌های دیگر از نوع مشخص</option>
+          <option value="subtickets">زیرتیکت‌های همین تیکت</option>
+        `;
+        typeSelect.value = dep.type;
+        typeSelect.addEventListener('change', () => {
+          dep.type = typeSelect.value;
+          if (dep.type !== 'step') dep.target_step_id = null;
+          if (dep.type !== 'ticket_type') dep.target_ticket_type = '';
+          renderDependencyItems(dependencies);
+          renderPreview();
+        });
+        typeRow.appendChild(typeLabel);
+        typeRow.appendChild(typeSelect);
+        card.appendChild(typeRow);
+
+        const targetRow = document.createElement('div');
+        targetRow.className = 'row';
+        const targetLabel = document.createElement('label');
+        if (dep.type === 'step') {
+          targetLabel.textContent = 'مرحله هدف';
+          const targetSelect = document.createElement('select');
+          const options = steps.filter(s => s.id !== currentStepId);
+          targetSelect.innerHTML = '<option value="">انتخاب کنید</option>' + options.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+          targetSelect.value = dep.target_step_id || "";
+          targetSelect.addEventListener('change', () => {
+            dep.target_step_id = targetSelect.value || null;
+            renderPreview();
+          });
+          targetRow.appendChild(targetLabel);
+          targetRow.appendChild(targetSelect);
+        } else if (dep.type === 'ticket_type') {
+          targetLabel.textContent = 'نوع تیکت وابسته';
+          const targetInput = document.createElement('input');
+          targetInput.type = 'text';
+          targetInput.value = dep.target_ticket_type || '';
+          targetInput.placeholder = 'مثال: finance_contract';
+          targetInput.addEventListener('input', () => {
+            dep.target_ticket_type = targetInput.value;
+            renderPreview();
+          });
+          targetRow.appendChild(targetLabel);
+          targetRow.appendChild(targetInput);
+        } else {
+          targetLabel.textContent = 'هدف وابستگی';
+          const desc = document.createElement('div');
+          desc.className = 'hint';
+          desc.textContent = 'تمام زیرتیکت‌های این تیکت (تحلیل، توسعه، تست و ...)';
+          targetRow.appendChild(targetLabel);
+          targetRow.appendChild(desc);
+        }
+        card.appendChild(targetRow);
+
+        const statusRow = document.createElement('div');
+        statusRow.className = 'row';
+        const statusLabel = document.createElement('label');
+        statusLabel.textContent = 'وضعیت‌های قابل قبول برای تکمیل وابستگی';
+        const statusSelect = document.createElement('select');
+        statusSelect.multiple = true;
+        ['انجام شد', 'تایید شد', 'بسته شد'].forEach(st => {
+          const opt = document.createElement('option');
+          opt.value = st;
+          opt.textContent = st;
+          statusSelect.appendChild(opt);
+        });
+        fillMultiSelect(statusSelect, dep.required_statuses);
+        statusSelect.addEventListener('change', () => {
+          dep.required_statuses = readMultiSelect(statusSelect);
+          renderPreview();
+        });
+        const statusHint = document.createElement('div');
+        statusHint.className = 'hint';
+        statusHint.textContent = 'مثال: وابستگی فقط وقتی کامل محسوب می‌شود که تیکت/مرحله در یکی از این وضعیت‌ها باشد.';
+        statusRow.appendChild(statusLabel);
+        statusRow.appendChild(statusSelect);
+        statusRow.appendChild(statusHint);
+        card.appendChild(statusRow);
+
+        const completionRow = document.createElement('div');
+        completionRow.className = 'row';
+        const compLabel = document.createElement('label');
+        compLabel.textContent = 'شرط تکمیل وابستگی';
+        const compSelect = document.createElement('select');
+        compSelect.innerHTML = `
+          <option value="all">همه باید تکمیل شده باشند</option>
+          <option value="any">حداقل یکی کافی است</option>
+          <option value="min_count">حداقل تعداد مشخص</option>
+        `;
+        compSelect.value = dep.completion_mode;
+        compSelect.addEventListener('change', () => {
+          dep.completion_mode = compSelect.value;
+          if (dep.completion_mode !== 'min_count') dep.required_count = null;
+          renderDependencyItems(dependencies);
+          renderPreview();
+        });
+        completionRow.appendChild(compLabel);
+        completionRow.appendChild(compSelect);
+        card.appendChild(completionRow);
+
+        if (dep.completion_mode === 'min_count') {
+          const countRow = document.createElement('div');
+          countRow.className = 'row';
+          const countLabel = document.createElement('label');
+          countLabel.textContent = 'حداقل تعداد مورد نیاز';
+          const countInput = document.createElement('input');
+          countInput.type = 'number';
+          countInput.min = '0';
+          countInput.value = dep.required_count ?? '';
+          countInput.placeholder = 'مثلاً 1';
+          countInput.addEventListener('input', () => {
+            dep.required_count = toNullableNumber(countInput.value);
+            renderPreview();
+          });
+          const countHint = document.createElement('div');
+          countHint.className = 'hint';
+          countHint.textContent = 'مثال: حداقل ۱ تیکت از نوع "قرارداد مالی" باید بسته شده باشد.';
+          countRow.appendChild(countLabel);
+          countRow.appendChild(countInput);
+          countRow.appendChild(countHint);
+          card.appendChild(countRow);
+        }
+
+        elements.depsList.appendChild(card);
+      });
     }
 
     function toNullableNumber(value) {
@@ -890,6 +1112,14 @@
 
       c.violation_message = elements.condViolationMessage.value || "";
 
+      renderPreview();
+    }
+
+    function updateDependenciesGeneral() {
+      const step = getCurrentStep();
+      const d = step.dependencies;
+      d.enabled = elements.depsEnabled.checked;
+      d.enforcement_mode = elements.depsEnforcementMode.value;
       renderPreview();
     }
 
@@ -971,6 +1201,21 @@
         ].includes(el) ? updateConditionsFromForm : updateTimingFromForm;
         el.addEventListener(evt, handler);
       });
+
+      if (elements.depsEnabled) {
+        elements.depsEnabled.addEventListener('change', updateDependenciesGeneral);
+      }
+      if (elements.depsEnforcementMode) {
+        elements.depsEnforcementMode.addEventListener('change', updateDependenciesGeneral);
+      }
+      if (elements.depsAddBtn) {
+        elements.depsAddBtn.addEventListener('click', () => {
+          const step = getCurrentStep();
+          step.dependencies.items.push(createDependencyItem());
+          renderDependencyItems(step.dependencies);
+          renderPreview();
+        });
+      }
     }
 
     attachListeners();
