@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>طراحی فلو تیکت در سا۲</title>
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --border: #e0e4ea;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --placeholder: #f8fafc;
+      --shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+      background: var(--bg);
+      color: #111827;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto 32px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .main {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .card-title {
+      margin: 0 0 12px;
+      font-size: 16px;
+      border-right: 4px solid var(--accent);
+      padding-right: 8px;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 4px 0 0;
+    }
+    label { display: block; margin-bottom: 6px; font-weight: 600; }
+    select, input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      font-size: 14px;
+    }
+    select[multiple] { min-height: 120px; }
+    .radio-group { display: flex; gap: 12px; flex-wrap: wrap; }
+    .radio-group label { display: flex; align-items: center; gap: 6px; font-weight: 500; }
+    .section {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      background: #f8fafc;
+      margin-bottom: 12px;
+    }
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .strategy-block { display: none; }
+    .strategy-block.active { display: block; }
+    .placeholder {
+      background: var(--placeholder);
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .step-item {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .step-item.active {
+      border-color: var(--accent);
+      box-shadow: 0 4px 10px rgba(37,99,235,0.15);
+      background: #eef2ff;
+    }
+    .json-preview {
+      background: #0b1021;
+      color: #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: "Fira Code", monospace;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+    .divider { height: 1px; background: var(--border); margin: 12px 0; }
+    .checkbox-row { display: flex; align-items: center; gap: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>طراحی فلو تیکت در سا۲</h1>
+      <p>در این صفحه می‌توانید مرحله‌های یک فلو را تعریف و تنظیمات هر مرحله را مدیریت کنید.</p>
+    </header>
+
+    <div class="main">
+      <div class="left-column">
+        <div class="card">
+          <h3 class="card-title">تنظیمات کلی فلو</h3>
+          <label for="flow_name">نام فلو</label>
+          <input type="text" id="flow_name" name="flow_name" placeholder="مثال: فلو پیش‌فرض تیکت‌های شهرداری">
+          <p class="hint">سایر تنظیمات کلی فلو بعداً اضافه می‌شوند.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">مرحله‌ها (Steps)</h3>
+          <div class="steps-list" id="steps_list"></div>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <div class="card">
+          <h3 class="card-title">تنظیمات مرحله‌ی انتخاب‌شده</h3>
+          <p id="selected_step_label" class="hint" style="margin-top:-4px;">مرحله: -</p>
+
+          <div class="section">
+            <h4 style="margin-top:0;">استراتژی ارجاع تیکت</h4>
+
+            <div class="field-group">
+              <label for="strategy_type">نوع استراتژی ارجاع</label>
+              <select id="strategy_type" name="strategy_type">
+                <option value="single">کارتابل واحد (Single)</option>
+                <option value="round_robin">چرخشی (Round Robin)</option>
+                <option value="self_service">سلف‌سرویس (Self Service)</option>
+                <option value="multi_send">ارسال همزمان به چند نفر (Multi Send)</option>
+              </select>
+              <p class="hint">تعیین می‌کند کار این استپ با چه الگویی بین افراد پخش شود.</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="field-group">
+              <label>منبع کاندیداها</label>
+              <div class="radio-group">
+                <label><input type="radio" name="candidate_source_type" value="users" checked> کاربران (Users)</label>
+                <label><input type="radio" name="candidate_source_type" value="roles"> نقش‌ها (Roles)</label>
+                <label><input type="radio" name="candidate_source_type" value="users_and_roles"> ترکیبی (Users + Roles)</label>
+              </div>
+              <p class="hint">مشخص می‌کند لیست کاندیداها از چه منبعی پر شود.</p>
+            </div>
+
+            <div class="grid-two">
+              <div>
+                <label for="candidate_users">لیست کاربران کاندیدا</label>
+                <select multiple id="candidate_users" name="candidate_users">
+                  <option value="user1">کاربر نمونه ۱</option>
+                  <option value="user2">کاربر نمونه ۲</option>
+                  <option value="user3">کاربر نمونه ۳</option>
+                </select>
+              </div>
+              <div>
+                <label for="candidate_roles">لیست نقش‌های کاندیدا</label>
+                <select multiple id="candidate_roles" name="candidate_roles">
+                  <option value="role_support">پشتیبان فنی</option>
+                  <option value="role_city">کارشناس شهرسازی</option>
+                  <option value="role_income">کارشناس درآمد</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="strategy-block" data-strategy="single">
+              <h5 style="margin:4px 0 8px;">کارتابل واحد (Single)</h5>
+              <div class="grid-two">
+                <div>
+                  <label for="single_assignment_mode">روش انتخاب مسئول</label>
+                  <select id="single_assignment_mode" name="single_assignment_mode">
+                    <option value="fixed_user">کاربر ثابت</option>
+                    <option value="first_user_in_pool">اولین کاربر لیست کاندیداها</option>
+                  </select>
+                  <p class="hint">مشخص می‌کند مسئول این استپ همیشه فرد مشخص باشد یا اولین نفر لیست.</p>
+                </div>
+                <div>
+                  <label for="single_fixed_user_id">کاربر ثابت</label>
+                  <select id="single_fixed_user_id" name="single_fixed_user_id">
+                    <option value="user1">کاربر نمونه ۱</option>
+                    <option value="user2">کاربر نمونه ۲</option>
+                  </select>
+                  <p class="hint">فقط وقتی روش انتخاب = «کاربر ثابت» است استفاده می‌شود.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="strategy-block" data-strategy="round_robin">
+              <h5 style="margin:4px 0 8px;">چرخشی (Round Robin)</h5>
+              <div class="grid-two">
+                <div>
+                  <label for="rr_pool_users">لیست کاربران چرخشی</label>
+                  <select multiple id="rr_pool_users" name="rr_pool_users">
+                    <option value="user1">کاربر نمونه ۱</option>
+                    <option value="user2">کاربر نمونه ۲</option>
+                    <option value="user3">کاربر نمونه ۳</option>
+                  </select>
+                  <p class="hint">اگر خالی باشد، از لیست کاربران کاندیدا استفاده می‌شود.</p>
+                </div>
+                <div>
+                  <label for="rr_order_mode">الگوریتم انتخاب نفر بعد</label>
+                  <select id="rr_order_mode" name="rr_order_mode">
+                    <option value="list_order">بر اساس ترتیب لیست</option>
+                    <option value="least_recent">کمترین دریافت اخیر</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="strategy-block" data-strategy="self_service">
+              <h5 style="margin:4px 0 8px;">سلف‌سرویس (Self Service)</h5>
+              <div class="grid-two">
+                <div>
+                  <label for="ss_pool_users">لیست کاربران سلف‌سرویس</label>
+                  <select multiple id="ss_pool_users" name="ss_pool_users">
+                    <option value="user1">کاربر نمونه ۱</option>
+                    <option value="user2">کاربر نمونه ۲</option>
+                    <option value="user3">کاربر نمونه ۳</option>
+                  </select>
+                  <p class="hint">کاربران این لیست تیکت را در کارتابل مشترک می‌بینند تا یکی آن را بردارد.</p>
+                </div>
+                <div class="checkbox-row" style="margin-top:28px;">
+                  <input type="checkbox" id="ss_visible_to_all" name="ss_visible_to_all">
+                  <label for="ss_visible_to_all" style="margin:0; font-weight:500;">تیکت برای همه افراد لیست نمایش داده شود تا یکی Claim کند.</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="strategy-block" data-strategy="multi_send">
+              <h5 style="margin:4px 0 8px;">ارسال همزمان به چند نفر (Multi Send)</h5>
+              <div class="grid-two">
+                <div>
+                  <label for="multi_pool_users">لیست کاربران دریافت‌کننده اولیه</label>
+                  <select multiple id="multi_pool_users" name="multi_pool_users">
+                    <option value="user1">کاربر نمونه ۱</option>
+                    <option value="user2">کاربر نمونه ۲</option>
+                    <option value="user3">کاربر نمونه ۳</option>
+                  </select>
+                  <p class="hint">تیکت به‌صورت همزمان در کارتابل این افراد نمایش داده می‌شود.</p>
+                </div>
+                <div>
+                  <label for="multi_lock_mode">قانون قفل شدن تیکت</label>
+                  <select id="multi_lock_mode" name="multi_lock_mode">
+                    <option value="first_picker_wins">اولین دریافت‌کننده مسئول می‌شود</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section" style="background:#fff;">
+              <h5 style="margin:4px 0 8px;">قوانین تکمیلی</h5>
+              <div class="checkbox-row">
+                <input type="checkbox" id="allow_manual_override" name="allow_manual_override">
+                <label for="allow_manual_override" style="margin:0; font-weight:500;">اجازه تغییر دستی مسئول در این Step فعال باشد.</label>
+              </div>
+              <div class="grid-two" style="margin-top:10px;">
+                <div>
+                  <label for="override_allowed_roles">نقش‌های مجاز برای تغییر دستی مسئول</label>
+                  <select multiple id="override_allowed_roles" name="override_allowed_roles">
+                    <option value="manager">مدیر پروژه</option>
+                    <option value="support_lead">سرگروه پشتیبانی</option>
+                  </select>
+                  <p class="hint">فقط این نقش‌ها می‌توانند Assignee را در این استپ تغییر دهند.</p>
+                </div>
+                <div>
+                  <label for="on_empty_pool_action">رفتار در صورت خالی بودن لیست کاندیدا</label>
+                  <select id="on_empty_pool_action" name="on_empty_pool_action">
+                    <option value="keep_previous_assignee">نگه داشتن مسئول قبلی تیکت</option>
+                    <option value="assign_to_project_manager">ارجاع به مدیر پروژه</option>
+                    <option value="error_and_log">ثبت خطا و ارسال هشدار (بدون تغییر مسئول)</option>
+                  </select>
+                  <p class="hint">اگر به هر دلیل کاندیدایی برای ارجاع پیدا نشود، سیستم چه کاری انجام دهد.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px; background:#f9fafb; border-style:dashed;">
+            <h4 style="margin-top:0;">تنظیمات SLA / زمان‌بندی</h4>
+            <p class="hint">این بخش بعداً پیاده‌سازی می‌شود.</p>
+          </div>
+          <div class="card" style="margin-top:8px; background:#f9fafb; border-style:dashed;">
+            <h4 style="margin-top:0;">تنظیمات اعلان‌ها (Notifications)</h4>
+            <p class="hint">این بخش بعداً پیاده‌سازی می‌شود.</p>
+          </div>
+          <div class="card" style="margin-top:8px; background:#f9fafb; border-style:dashed;">
+            <h4 style="margin-top:0;">اقدامات خودکار (Auto Actions)</h4>
+            <p class="hint">این بخش بعداً پیاده‌سازی می‌شود.</p>
+          </div>
+          <div class="card" style="margin-top:8px; background:#f9fafb; border-style:dashed;">
+            <h4 style="margin-top:0;">دسترسی‌ها و سطح دید</h4>
+            <p class="hint">این بخش بعداً پیاده‌سازی می‌شود.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">پیش‌نمایش تنظیمات فلو (JSON)</h3>
+      <pre class="json-preview" id="json_preview"></pre>
+    </div>
+  </div>
+
+  <script>
+    const stepDefinitions = [
+      { id: 'step_customer', name: 'انتخاب کارفرما' },
+      { id: 'step_service', name: 'انتخاب سرویس' },
+      { id: 'step_do', name: 'انجام کار' },
+      { id: 'step_delivery', name: 'تحویل به کارفرما' }
+    ];
+
+    const defaultAssignment = () => ({
+      strategy_type: 'single',
+      candidate_source_type: 'users',
+      candidate_users: [],
+      candidate_roles: [],
+      single_assignment_mode: 'fixed_user',
+      single_fixed_user_id: 'user1',
+      rr_pool_users: [],
+      rr_order_mode: 'list_order',
+      ss_pool_users: [],
+      ss_visible_to_all: false,
+      multi_pool_users: [],
+      multi_lock_mode: 'first_picker_wins',
+      allow_manual_override: false,
+      override_allowed_roles: [],
+      on_empty_pool_action: 'keep_previous_assignee'
+    });
+
+    const flowConfig = {
+      flowName: '',
+      selectedStepId: stepDefinitions[0].id,
+      steps: stepDefinitions.map(step => ({
+        id: step.id,
+        name: step.name,
+        assignment: defaultAssignment()
+      }))
+    };
+
+    const elements = {
+      stepsList: document.getElementById('steps_list'),
+      selectedStepLabel: document.getElementById('selected_step_label'),
+      flowName: document.getElementById('flow_name'),
+      strategyType: document.getElementById('strategy_type'),
+      candidateSourceRadios: document.querySelectorAll('input[name="candidate_source_type"]'),
+      candidateUsers: document.getElementById('candidate_users'),
+      candidateRoles: document.getElementById('candidate_roles'),
+      singleAssignmentMode: document.getElementById('single_assignment_mode'),
+      singleFixedUser: document.getElementById('single_fixed_user_id'),
+      rrPoolUsers: document.getElementById('rr_pool_users'),
+      rrOrderMode: document.getElementById('rr_order_mode'),
+      ssPoolUsers: document.getElementById('ss_pool_users'),
+      ssVisibleToAll: document.getElementById('ss_visible_to_all'),
+      multiPoolUsers: document.getElementById('multi_pool_users'),
+      multiLockMode: document.getElementById('multi_lock_mode'),
+      allowManualOverride: document.getElementById('allow_manual_override'),
+      overrideAllowedRoles: document.getElementById('override_allowed_roles'),
+      onEmptyPoolAction: document.getElementById('on_empty_pool_action'),
+      strategyBlocks: document.querySelectorAll('.strategy-block'),
+      jsonPreview: document.getElementById('json_preview')
+    };
+
+    function renderSteps() {
+      elements.stepsList.innerHTML = '';
+      flowConfig.steps.forEach(step => {
+        const div = document.createElement('div');
+        div.className = 'step-item' + (step.id === flowConfig.selectedStepId ? ' active' : '');
+        div.textContent = step.name;
+        div.dataset.stepId = step.id;
+        div.addEventListener('click', () => selectStep(step.id));
+        elements.stepsList.appendChild(div);
+      });
+    }
+
+    function selectStep(stepId) {
+      flowConfig.selectedStepId = stepId;
+      renderSteps();
+      const step = flowConfig.steps.find(s => s.id === stepId);
+      elements.selectedStepLabel.textContent = `مرحله: ${step?.name ?? '-'}`;
+      populateAssignment(step.assignment);
+      updateStrategyVisibility(step.assignment.strategy_type);
+      updatePreview();
+    }
+
+    function populateAssignment(assign) {
+      elements.strategyType.value = assign.strategy_type;
+      elements.candidateSourceRadios.forEach(r => r.checked = r.value === assign.candidate_source_type);
+      setMultiSelect(elements.candidateUsers, assign.candidate_users);
+      setMultiSelect(elements.candidateRoles, assign.candidate_roles);
+      elements.singleAssignmentMode.value = assign.single_assignment_mode;
+      elements.singleFixedUser.value = assign.single_fixed_user_id;
+      setMultiSelect(elements.rrPoolUsers, assign.rr_pool_users);
+      elements.rrOrderMode.value = assign.rr_order_mode;
+      setMultiSelect(elements.ssPoolUsers, assign.ss_pool_users);
+      elements.ssVisibleToAll.checked = assign.ss_visible_to_all;
+      setMultiSelect(elements.multiPoolUsers, assign.multi_pool_users);
+      elements.multiLockMode.value = assign.multi_lock_mode;
+      elements.allowManualOverride.checked = assign.allow_manual_override;
+      setMultiSelect(elements.overrideAllowedRoles, assign.override_allowed_roles);
+      elements.onEmptyPoolAction.value = assign.on_empty_pool_action;
+    }
+
+    function setMultiSelect(selectEl, values) {
+      Array.from(selectEl.options).forEach(opt => {
+        opt.selected = values.includes(opt.value);
+      });
+    }
+
+    function getMultiSelectValues(selectEl) {
+      return Array.from(selectEl.selectedOptions).map(o => o.value);
+    }
+
+    function attachHandlers() {
+      elements.flowName.addEventListener('input', () => {
+        flowConfig.flowName = elements.flowName.value;
+        updatePreview();
+      });
+
+      elements.strategyType.addEventListener('change', () => {
+        const step = currentStep();
+        step.assignment.strategy_type = elements.strategyType.value;
+        updateStrategyVisibility(step.assignment.strategy_type);
+        updatePreview();
+      });
+
+      elements.candidateSourceRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          if (!radio.checked) return;
+          const step = currentStep();
+          step.assignment.candidate_source_type = radio.value;
+          updatePreview();
+        });
+      });
+
+      elements.candidateUsers.addEventListener('change', () => {
+        currentStep().assignment.candidate_users = getMultiSelectValues(elements.candidateUsers);
+        updatePreview();
+      });
+      elements.candidateRoles.addEventListener('change', () => {
+        currentStep().assignment.candidate_roles = getMultiSelectValues(elements.candidateRoles);
+        updatePreview();
+      });
+      elements.singleAssignmentMode.addEventListener('change', () => {
+        currentStep().assignment.single_assignment_mode = elements.singleAssignmentMode.value;
+        updatePreview();
+      });
+      elements.singleFixedUser.addEventListener('change', () => {
+        currentStep().assignment.single_fixed_user_id = elements.singleFixedUser.value;
+        updatePreview();
+      });
+      elements.rrPoolUsers.addEventListener('change', () => {
+        currentStep().assignment.rr_pool_users = getMultiSelectValues(elements.rrPoolUsers);
+        updatePreview();
+      });
+      elements.rrOrderMode.addEventListener('change', () => {
+        currentStep().assignment.rr_order_mode = elements.rrOrderMode.value;
+        updatePreview();
+      });
+      elements.ssPoolUsers.addEventListener('change', () => {
+        currentStep().assignment.ss_pool_users = getMultiSelectValues(elements.ssPoolUsers);
+        updatePreview();
+      });
+      elements.ssVisibleToAll.addEventListener('change', () => {
+        currentStep().assignment.ss_visible_to_all = elements.ssVisibleToAll.checked;
+        updatePreview();
+      });
+      elements.multiPoolUsers.addEventListener('change', () => {
+        currentStep().assignment.multi_pool_users = getMultiSelectValues(elements.multiPoolUsers);
+        updatePreview();
+      });
+      elements.multiLockMode.addEventListener('change', () => {
+        currentStep().assignment.multi_lock_mode = elements.multiLockMode.value;
+        updatePreview();
+      });
+      elements.allowManualOverride.addEventListener('change', () => {
+        currentStep().assignment.allow_manual_override = elements.allowManualOverride.checked;
+        updatePreview();
+      });
+      elements.overrideAllowedRoles.addEventListener('change', () => {
+        currentStep().assignment.override_allowed_roles = getMultiSelectValues(elements.overrideAllowedRoles);
+        updatePreview();
+      });
+      elements.onEmptyPoolAction.addEventListener('change', () => {
+        currentStep().assignment.on_empty_pool_action = elements.onEmptyPoolAction.value;
+        updatePreview();
+      });
+    }
+
+    function updateStrategyVisibility(strategy) {
+      elements.strategyBlocks.forEach(block => {
+        block.classList.toggle('active', block.dataset.strategy === strategy);
+      });
+    }
+
+    function currentStep() {
+      return flowConfig.steps.find(s => s.id === flowConfig.selectedStepId);
+    }
+
+    function updatePreview() {
+      elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
+    }
+
+    function init() {
+      renderSteps();
+      selectStep(flowConfig.selectedStepId);
+      attachHandlers();
+      updatePreview();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

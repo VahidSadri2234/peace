@@ -1,6 +1,19 @@
 # Viewing the Assignment Strategy Settings page
 
-This repository includes a standalone HTML page for configuring assignment strategy settings.
+This repository includes standalone HTML pages for configuring ticket flow settings.
+
+## Flow Builder (سا۲)
+1. فایل `flow_builder.html` را در پوشه‌ی اصلی مخزن پیدا کنید.
+2. روی آن دوبار کلیک کنید یا در مرورگر بکشید و رها کنید تا مستقیماً باز شود (کاملاً ایستا است).
+3. در صفحه می‌توانید:
+   - نام فلو را وارد کنید و یکی از مرحله‌های نمونه را انتخاب کنید.
+   - تنظیمات استراتژی ارجاع تیکت هر مرحله را تغییر دهید.
+   - پیش‌نمایش JSON را در پایین صفحه ببینید.
+4. برای اجرای محلی (اختیاری):
+   ```bash
+   python -m http.server 8000
+   ```
+   سپس به آدرس http://localhost:8000/flow_builder.html بروید.
 
 ## راهنمای سریع (فارسی)
 1. فایل `assignment_strategy.html` را در پوشه‌ی اصلی مخزن پیدا کنید.
