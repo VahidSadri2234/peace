@@ -53,6 +53,14 @@
       gap: 18px;
     }
 
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+    }
+
     .card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -73,6 +81,15 @@
       margin-bottom: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
+    }
+
+    .step-list .step-item.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: #1d4ed8;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+    }
+
     }
 
     .step-list .step-item.active {
@@ -319,6 +336,99 @@
             </div>
           </div>
 
+          <div class="card">
+            <h4>قوانین زمان‌بندی برای این استپ</h4>
+
+            <div class="section-card">
+              <h5>تنظیمات عمومی</h5>
+              <div class="checkbox">
+                <input type="checkbox" id="timing_enabled" name="timing_enabled">
+                <label for="timing_enabled">فعال بودن قوانین زمان‌بندی برای این استپ</label>
+              </div>
+              <div class="row">
+                <label for="timing_mode">نوع زمان‌سنجی</label>
+                <select id="timing_mode" name="timing_mode">
+                  <option value="calendar">بر اساس زمان تقویمی</option>
+                  <option value="work_hours">بر اساس ساعت کاری</option>
+                </select>
+                <div class="hint">نوع محاسبه زمان برای این مرحله.</div>
+              </div>
+              <div class="checkbox">
+                <input type="checkbox" id="timing_pause_on_hold" name="timing_pause_on_hold">
+                <label for="timing_pause_on_hold">توقف زمان‌سنجی در حالت «تیکت متوقف / در انتظار»</label>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>سناریو ۱: تیکت باز نشده (Unread)</h5>
+              <div class="checkbox">
+                <input type="checkbox" id="timing_unread_enabled" name="timing_unread_enabled">
+                <label for="timing_unread_enabled">فعال بودن این سناریو</label>
+              </div>
+
+              <div class="row">
+                <label>حداکثر زمان مجاز برای باز نکردن تیکت</label>
+                <div class="grid-2">
+                  <input type="number" id="timing_unread_threshold_value" name="timing_unread_threshold_value" min="0" placeholder="مثلاً ۳۰">
+                  <select id="timing_unread_threshold_unit" name="timing_unread_threshold_unit">
+                    <option value="minute">دقیقه</option>
+                    <option value="hour">ساعت</option>
+                    <option value="day">روز</option>
+                  </select>
+                </div>
+                <div class="hint">مثال: ۳۰ دقیقه یا ۲ ساعت.</div>
+              </div>
+
+              <div class="row">
+                <label>اقدامات در صورت عبور از زمان</label>
+                <div class="checkbox"><input type="checkbox" id="timing_unread_notify_receiver" name="timing_unread_notify_receiver"><label for="timing_unread_notify_receiver">ارسال پیامک/اعلان به دریافت‌کننده تیکت</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_unread_notify_creator" name="timing_unread_notify_creator"><label for="timing_unread_notify_creator">ارسال پیامک/اعلان به ایجادکننده تیکت</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_unread_notify_manager" name="timing_unread_notify_manager"><label for="timing_unread_notify_manager">ارسال پیامک/اعلان به مدیر تیکت‌ها / مدیر پروژه</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_unread_return_prev" name="timing_unread_return_prev"><label for="timing_unread_return_prev">بازگشت خودکار تیکت به مرحله قبل</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_unread_log_delay" name="timing_unread_log_delay"><label for="timing_unread_log_delay">ثبت این مورد در گزارش تاخیر</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_unread_auto_assign_next" name="timing_unread_auto_assign_next"><label for="timing_unread_auto_assign_next">ارسال خودکار به نفر بعدی</label></div>
+              </div>
+
+              <div class="row hidden" id="timing_unread_next_users_wrap">
+                <label for="timing_unread_next_users">لیست نفرات بعدی برای ارجاع</label>
+                <select id="timing_unread_next_users" name="timing_unread_next_users" multiple>
+                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
+                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
+                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
+                </select>
+                <div class="hint">ترتیب لیست نشان‌دهنده ترتیب پیشنهاد ارجاع است (در آینده می‌توان رفتار دقیق را پیاده کرد).</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>سناریو ۲: تیکت باز شده ولی تعیین‌تکلیف نشده</h5>
+              <div class="checkbox">
+                <input type="checkbox" id="timing_noaction_enabled" name="timing_noaction_enabled">
+                <label for="timing_noaction_enabled">فعال بودن این سناریو</label>
+              </div>
+
+              <div class="row">
+                <label>حداکثر زمان بدون تعیین‌تکلیف بعد از اولین باز شدن</label>
+                <div class="grid-2">
+                  <input type="number" id="timing_noaction_threshold_value" name="timing_noaction_threshold_value" min="0" placeholder="مثلاً ۴">
+                  <select id="timing_noaction_threshold_unit" name="timing_noaction_threshold_unit">
+                    <option value="hour">ساعت</option>
+                    <option value="day">روز</option>
+                  </select>
+                </div>
+                <div class="hint">مثال: ۴ ساعت یا ۱ روز بعد از اولین باز کردن.</div>
+              </div>
+
+              <div class="row">
+                <label>اقدامات در صورت عبور از زمان</label>
+                <div class="checkbox"><input type="checkbox" id="timing_noaction_log_delay" name="timing_noaction_log_delay"><label for="timing_noaction_log_delay">ثبت در گزارش تاخیر</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_noaction_notify_creator" name="timing_noaction_notify_creator"><label for="timing_noaction_notify_creator">ارسال پیامک/اعلان به ایجادکننده تیکت</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_noaction_notify_manager" name="timing_noaction_notify_manager"><label for="timing_noaction_notify_manager">ارسال پیامک/اعلان به مدیر تیکت‌ها / مدیر پروژه</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_other_tickets" name="timing_noaction_lock_other_tickets"><label for="timing_noaction_lock_other_tickets">قفل کردن دسترسی به سایر تیکت‌ها برای این کاربر (تا تعیین‌تکلیف)</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_mentions" name="timing_noaction_lock_mentions"><label for="timing_noaction_lock_mentions">محدودیت در منشن‌گذاری روی تیکت‌ها</label></div>
+                <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_conversation" name="timing_noaction_lock_conversation"><label for="timing_noaction_lock_conversation">محدودیت در ارسال پیام در گفتگوی تیکت</label></div>
+              </div>
+            </div>
           <div class="card placeholder" aria-disabled="true">
             <h4>قوانین زمان‌بندی برای این استپ</h4>
             <div>در آینده در این بخش تنظیم می‌کنیم که اگر تیکت در این مرحله باز نشود یا تعیین‌تکلیف نشود، بعد از چه مدت چه اتفاقی بیفتد (هشدار، بازگشت، ثبت تاخیر و غیره).</div>
@@ -406,6 +516,45 @@
       on_empty_pool_action: "keep_previous_assignee"
     });
 
+    function createDefaultTimingConfig() {
+      return {
+        enabled: false,
+        time_mode: "calendar",
+        pause_on_hold: false,
+        unread: {
+          enabled: false,
+          threshold_value: null,
+          threshold_unit: "minute",
+          actions: {
+            notify_receiver: false,
+            notify_creator: false,
+            notify_manager: false,
+            return_to_previous_step: false,
+            log_delay: false,
+            auto_assign_next: false,
+            next_users: []
+          }
+        },
+        noDecision: {
+          enabled: false,
+          threshold_value: null,
+          threshold_unit: "hour",
+          actions: {
+            log_delay: false,
+            notify_creator: false,
+            notify_manager: false,
+            lock_other_tickets: false,
+            lock_mentions: false,
+            lock_conversation: false
+          }
+        }
+      };
+    }
+
+    const flowConfig = {
+      flowName: "",
+      selectedStepId: steps[0].id,
+      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig() }))
     const flowConfig = {
       flowName: "",
       selectedStepId: steps[0].id,
@@ -432,6 +581,30 @@
       onEmptyPoolAction: document.getElementById('on_empty_pool_action'),
       strategyCards: document.querySelectorAll('[data-strategy]'),
       jsonPreview: document.getElementById('json_preview'),
+      flowName: document.getElementById('flow_name'),
+      timingEnabled: document.getElementById('timing_enabled'),
+      timingMode: document.getElementById('timing_mode'),
+      timingPauseOnHold: document.getElementById('timing_pause_on_hold'),
+      timingUnreadEnabled: document.getElementById('timing_unread_enabled'),
+      timingUnreadThresholdValue: document.getElementById('timing_unread_threshold_value'),
+      timingUnreadThresholdUnit: document.getElementById('timing_unread_threshold_unit'),
+      timingUnreadNotifyReceiver: document.getElementById('timing_unread_notify_receiver'),
+      timingUnreadNotifyCreator: document.getElementById('timing_unread_notify_creator'),
+      timingUnreadNotifyManager: document.getElementById('timing_unread_notify_manager'),
+      timingUnreadReturnPrev: document.getElementById('timing_unread_return_prev'),
+      timingUnreadLogDelay: document.getElementById('timing_unread_log_delay'),
+      timingUnreadAutoAssignNext: document.getElementById('timing_unread_auto_assign_next'),
+      timingUnreadNextUsers: document.getElementById('timing_unread_next_users'),
+      timingUnreadNextUsersWrap: document.getElementById('timing_unread_next_users_wrap'),
+      timingNoactionEnabled: document.getElementById('timing_noaction_enabled'),
+      timingNoactionThresholdValue: document.getElementById('timing_noaction_threshold_value'),
+      timingNoactionThresholdUnit: document.getElementById('timing_noaction_threshold_unit'),
+      timingNoactionLogDelay: document.getElementById('timing_noaction_log_delay'),
+      timingNoactionNotifyCreator: document.getElementById('timing_noaction_notify_creator'),
+      timingNoactionNotifyManager: document.getElementById('timing_noaction_notify_manager'),
+      timingNoactionLockOtherTickets: document.getElementById('timing_noaction_lock_other_tickets'),
+      timingNoactionLockMentions: document.getElementById('timing_noaction_lock_mentions'),
+      timingNoactionLockConversation: document.getElementById('timing_noaction_lock_conversation')
       flowName: document.getElementById('flow_name')
     };
 
@@ -447,6 +620,7 @@
       const step = getCurrentStep();
       elements.selectedLabel.textContent = `مرحله: ${step.name}`;
       fillForm(step.assignment);
+      fillTimingForm(step.timing);
       toggleStrategyCards(step.assignment.strategy_type);
       renderPreview();
     }
@@ -459,6 +633,129 @@
 
     function readMultiSelect(selectEl) {
       return Array.from(selectEl.selectedOptions).map(opt => opt.value);
+    }
+
+    function fillMultiSelect(selectEl, values) {
+      Array.from(selectEl.options).forEach(opt => {
+        opt.selected = values.includes(opt.value);
+      });
+    }
+
+    function fillForm(assign) {
+      elements.strategySelect.value = assign.strategy_type;
+      elements.candidateSourceRadios.forEach(r => { r.checked = r.value === assign.candidate_source_type; });
+      fillMultiSelect(elements.candidateUsers, assign.candidate_users);
+      fillMultiSelect(elements.candidateRoles, assign.candidate_roles);
+      elements.singleAssignmentMode.value = assign.single_assignment_mode;
+      elements.singleFixedUser.value = assign.single_fixed_user_id;
+      fillMultiSelect(elements.rrPoolUsers, assign.rr_pool_users);
+      elements.rrOrderMode.value = assign.rr_order_mode;
+      fillMultiSelect(elements.ssPoolUsers, assign.ss_pool_users);
+      elements.ssVisibleToAll.checked = assign.ss_visible_to_all;
+      fillMultiSelect(elements.multiPoolUsers, assign.multi_pool_users);
+      elements.multiLockMode.value = assign.multi_lock_mode;
+      elements.allowManualOverride.checked = assign.allow_manual_override;
+      fillMultiSelect(elements.overrideAllowedRoles, assign.override_allowed_roles);
+      elements.onEmptyPoolAction.value = assign.on_empty_pool_action;
+    }
+
+    function fillTimingForm(timing) {
+      elements.timingEnabled.checked = timing.enabled;
+      elements.timingMode.value = timing.time_mode;
+      elements.timingPauseOnHold.checked = timing.pause_on_hold;
+
+      elements.timingUnreadEnabled.checked = timing.unread.enabled;
+      elements.timingUnreadThresholdValue.value = timing.unread.threshold_value ?? "";
+      elements.timingUnreadThresholdUnit.value = timing.unread.threshold_unit;
+      elements.timingUnreadNotifyReceiver.checked = timing.unread.actions.notify_receiver;
+      elements.timingUnreadNotifyCreator.checked = timing.unread.actions.notify_creator;
+      elements.timingUnreadNotifyManager.checked = timing.unread.actions.notify_manager;
+      elements.timingUnreadReturnPrev.checked = timing.unread.actions.return_to_previous_step;
+      elements.timingUnreadLogDelay.checked = timing.unread.actions.log_delay;
+      elements.timingUnreadAutoAssignNext.checked = timing.unread.actions.auto_assign_next;
+      fillMultiSelect(elements.timingUnreadNextUsers, timing.unread.actions.next_users);
+      toggleUnreadNextUsers(timing.unread.actions.auto_assign_next);
+
+      elements.timingNoactionEnabled.checked = timing.noDecision.enabled;
+      elements.timingNoactionThresholdValue.value = timing.noDecision.threshold_value ?? "";
+      elements.timingNoactionThresholdUnit.value = timing.noDecision.threshold_unit;
+      elements.timingNoactionLogDelay.checked = timing.noDecision.actions.log_delay;
+      elements.timingNoactionNotifyCreator.checked = timing.noDecision.actions.notify_creator;
+      elements.timingNoactionNotifyManager.checked = timing.noDecision.actions.notify_manager;
+      elements.timingNoactionLockOtherTickets.checked = timing.noDecision.actions.lock_other_tickets;
+      elements.timingNoactionLockMentions.checked = timing.noDecision.actions.lock_mentions;
+      elements.timingNoactionLockConversation.checked = timing.noDecision.actions.lock_conversation;
+    }
+
+    function updateAssignmentFromForm() {
+      const step = getCurrentStep();
+      const a = step.assignment;
+      a.strategy_type = elements.strategySelect.value;
+      a.candidate_source_type = document.querySelector('input[name="candidate_source_type"]:checked')?.value || "users";
+      a.candidate_users = readMultiSelect(elements.candidateUsers);
+      a.candidate_roles = readMultiSelect(elements.candidateRoles);
+      a.single_assignment_mode = elements.singleAssignmentMode.value;
+      a.single_fixed_user_id = elements.singleFixedUser.value;
+      a.rr_pool_users = readMultiSelect(elements.rrPoolUsers);
+      a.rr_order_mode = elements.rrOrderMode.value;
+      a.ss_pool_users = readMultiSelect(elements.ssPoolUsers);
+      a.ss_visible_to_all = elements.ssVisibleToAll.checked;
+      a.multi_pool_users = readMultiSelect(elements.multiPoolUsers);
+      a.multi_lock_mode = elements.multiLockMode.value;
+      a.allow_manual_override = elements.allowManualOverride.checked;
+      a.override_allowed_roles = readMultiSelect(elements.overrideAllowedRoles);
+      a.on_empty_pool_action = elements.onEmptyPoolAction.value;
+      toggleStrategyCards(a.strategy_type);
+      renderPreview();
+    }
+
+    function toggleUnreadNextUsers(show) {
+      elements.timingUnreadNextUsersWrap.classList.toggle('hidden', !show);
+    }
+
+    function toNullableNumber(value) {
+      if (value === "" || value === null || value === undefined) return null;
+      const num = Number(value);
+      return Number.isNaN(num) ? null : num;
+    }
+
+    function updateTimingFromForm() {
+      const step = getCurrentStep();
+      const t = step.timing;
+      t.enabled = elements.timingEnabled.checked;
+      t.time_mode = elements.timingMode.value;
+      t.pause_on_hold = elements.timingPauseOnHold.checked;
+
+      t.unread.enabled = elements.timingUnreadEnabled.checked;
+      t.unread.threshold_value = toNullableNumber(elements.timingUnreadThresholdValue.value);
+      t.unread.threshold_unit = elements.timingUnreadThresholdUnit.value;
+      t.unread.actions.notify_receiver = elements.timingUnreadNotifyReceiver.checked;
+      t.unread.actions.notify_creator = elements.timingUnreadNotifyCreator.checked;
+      t.unread.actions.notify_manager = elements.timingUnreadNotifyManager.checked;
+      t.unread.actions.return_to_previous_step = elements.timingUnreadReturnPrev.checked;
+      t.unread.actions.log_delay = elements.timingUnreadLogDelay.checked;
+      t.unread.actions.auto_assign_next = elements.timingUnreadAutoAssignNext.checked;
+      t.unread.actions.next_users = t.unread.actions.auto_assign_next ? readMultiSelect(elements.timingUnreadNextUsers) : [];
+      toggleUnreadNextUsers(t.unread.actions.auto_assign_next);
+
+      t.noDecision.enabled = elements.timingNoactionEnabled.checked;
+      t.noDecision.threshold_value = toNullableNumber(elements.timingNoactionThresholdValue.value);
+      t.noDecision.threshold_unit = elements.timingNoactionThresholdUnit.value;
+      t.noDecision.actions.log_delay = elements.timingNoactionLogDelay.checked;
+      t.noDecision.actions.notify_creator = elements.timingNoactionNotifyCreator.checked;
+      t.noDecision.actions.notify_manager = elements.timingNoactionNotifyManager.checked;
+      t.noDecision.actions.lock_other_tickets = elements.timingNoactionLockOtherTickets.checked;
+      t.noDecision.actions.lock_mentions = elements.timingNoactionLockMentions.checked;
+      t.noDecision.actions.lock_conversation = elements.timingNoactionLockConversation.checked;
+
+      renderPreview();
+    }
+
+    function renderPreview() {
+      flowConfig.flowName = elements.flowName.value;
+      elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
+    }
+
     }
 
     function fillMultiSelect(selectEl, values) {
@@ -521,6 +818,38 @@
       elements.candidateSourceRadios.forEach(r => r.addEventListener('change', updateAssignmentFromForm));
       [elements.candidateUsers, elements.candidateRoles, elements.rrPoolUsers, elements.ssPoolUsers, elements.multiPoolUsers, elements.overrideAllowedRoles].forEach(sel => {
         sel.addEventListener('change', updateAssignmentFromForm);
+      });
+      [elements.singleAssignmentMode, elements.singleFixedUser, elements.rrOrderMode, elements.multiLockMode, elements.onEmptyPoolAction].forEach(sel => sel.addEventListener('change', updateAssignmentFromForm));
+      [elements.ssVisibleToAll, elements.allowManualOverride].forEach(chk => chk.addEventListener('change', updateAssignmentFromForm));
+      elements.flowName.addEventListener('input', renderPreview);
+
+      [
+        elements.timingEnabled,
+        elements.timingMode,
+        elements.timingPauseOnHold,
+        elements.timingUnreadEnabled,
+        elements.timingUnreadThresholdValue,
+        elements.timingUnreadThresholdUnit,
+        elements.timingUnreadNotifyReceiver,
+        elements.timingUnreadNotifyCreator,
+        elements.timingUnreadNotifyManager,
+        elements.timingUnreadReturnPrev,
+        elements.timingUnreadLogDelay,
+        elements.timingUnreadAutoAssignNext,
+        elements.timingUnreadNextUsers,
+        elements.timingNoactionEnabled,
+        elements.timingNoactionThresholdValue,
+        elements.timingNoactionThresholdUnit,
+        elements.timingNoactionLogDelay,
+        elements.timingNoactionNotifyCreator,
+        elements.timingNoactionNotifyManager,
+        elements.timingNoactionLockOtherTickets,
+        elements.timingNoactionLockMentions,
+        elements.timingNoactionLockConversation
+      ].forEach(el => {
+        if (!el) return;
+        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'change';
+        el.addEventListener(evt, updateTimingFromForm);
       });
       [elements.singleAssignmentMode, elements.singleFixedUser, elements.rrOrderMode, elements.multiLockMode, elements.onEmptyPoolAction].forEach(sel => sel.addEventListener('change', updateAssignmentFromForm));
       [elements.ssVisibleToAll, elements.allowManualOverride].forEach(chk => chk.addEventListener('change', updateAssignmentFromForm));
