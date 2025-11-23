@@ -172,6 +172,42 @@
       overflow: auto;
     }
 
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    .btn.secondary {
+      background: #e2e8f0;
+      color: #0f172a;
+      border: 1px solid var(--border);
+    }
+
+    .action-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .inline-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
     @media (max-width: 1000px) {
       .main { grid-template-columns: 1fr; }
     }
@@ -839,9 +875,63 @@
               <div class="hint">در صورت نیاز می‌توانید پیام و گیرندگان ویژه برای تصعید اعلان‌ها تعریف کنید.</div>
             </div>
           </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>اقدامات خودکار</h4>
-            <div>در آینده در این بخش تعیین می‌کنیم هنگام ورود/خروج این مرحله چه کارهای خودکار انجام شود (ساخت زیرتیکت، تغییر وضعیت، وب‌هوک و غیره).</div>
+          <div class="card">
+            <h4>اقدامات خودکار هنگام ورود/خروج استپ</h4>
+
+            <div class="section-card">
+              <h5>تنظیمات عمومی</h5>
+              <div class="checkbox">
+                <input type="checkbox" id="auto_enabled" name="auto_enabled">
+                <label for="auto_enabled">فعال بودن اقدامات خودکار برای این استپ</label>
+              </div>
+              <div class="row">
+                <label for="auto_on_error">رفتار در صورت خطا در اجرای اقدامات</label>
+                <select id="auto_on_error" name="auto_on_error">
+                  <option value="continue">ادامه زنجیره و صرف‌نظر از خطا</option>
+                  <option value="stop_chain">توقف زنجیره اقدامات در اولین خطا</option>
+                </select>
+                <div class="hint">مشخص می‌کند اگر یکی از اقدامات خطا داد، بقیه اجرا شوند یا خیر.</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>اقدامات هنگام ورود به این مرحله</h5>
+              <div class="inline-actions">
+                <div class="checkbox">
+                  <input type="checkbox" id="auto_enter_enabled" name="auto_enter_enabled">
+                  <label for="auto_enter_enabled">فعال بودن اقدامات ورود</label>
+                </div>
+                <button type="button" class="btn secondary" id="auto_enter_add">افزودن اقدام جدید</button>
+              </div>
+              <div class="hint">پس از ورود تیکت به این استپ، اقدامات زیر به ترتیب اجرا می‌شوند.</div>
+              <div id="auto_enter_list"></div>
+            </div>
+
+            <div class="section-card">
+              <h5>اقدامات هنگام خروج از این مرحله</h5>
+              <div class="inline-actions">
+                <div class="checkbox">
+                  <input type="checkbox" id="auto_exit_enabled" name="auto_exit_enabled">
+                  <label for="auto_exit_enabled">فعال بودن اقدامات خروج</label>
+                </div>
+                <button type="button" class="btn secondary" id="auto_exit_add">افزودن اقدام جدید</button>
+              </div>
+              <div class="hint">پیش از عبور تیکت به مرحله بعد، اقدامات زیر اجرا می‌شوند.</div>
+              <div id="auto_exit_list"></div>
+            </div>
+
+            <div class="section-card">
+              <h5>اقدامات هنگام تغییر وضعیت درون این مرحله</h5>
+              <div class="inline-actions">
+                <div class="checkbox">
+                  <input type="checkbox" id="auto_status_enabled" name="auto_status_enabled">
+                  <label for="auto_status_enabled">فعال بودن اقدامات تغییر وضعیت</label>
+                </div>
+                <button type="button" class="btn secondary" id="auto_status_add">افزودن اقدام جدید</button>
+              </div>
+              <div class="hint">در صورت تغییر وضعیت تیکت داخل همین استپ، اقدامات زیر اجرا می‌شوند.</div>
+              <div id="auto_status_list"></div>
+            </div>
           </div>
           <div class="card placeholder" aria-disabled="true">
             <h4>سیاست بازگشایی تیکت</h4>
@@ -1045,10 +1135,47 @@
       };
     }
 
+    function createDefaultAutoActionTrigger() {
+      return {
+        enabled: false,
+        actions: []
+      };
+    }
+
+    let autoActionIdCounter = 1;
+
+    function createAutoAction() {
+      return {
+        id: `action_${autoActionIdCounter++}`,
+        type: "subticket",
+        title: "",
+        subticket_type: "",
+        target_step_id: null,
+        field_key: "",
+        field_value: "",
+        message_text: "",
+        webhook_url: "",
+        webhook_payload: "",
+        condition_text: ""
+      };
+    }
+
+    function createDefaultAutoActions() {
+      return {
+        enabled: false,
+        on_error: "continue",
+        triggers: {
+          on_enter_step: createDefaultAutoActionTrigger(),
+          on_exit_step: createDefaultAutoActionTrigger(),
+          on_status_change: createDefaultAutoActionTrigger()
+        }
+      };
+    }
+
     const flowConfig = {
       flowName: "",
       selectedStepId: steps[0].id,
-      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess(), notifications: createDefaultNotifications() }))
+      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess(), notifications: createDefaultNotifications(), autoActions: createDefaultAutoActions() }))
     };
 
     const elements = {
@@ -1166,6 +1293,18 @@
       notifEscalationMessage: document.getElementById('notif_escalation_message'),
       notifEscalationMessageWrap: document.getElementById('notif_escalation_message_wrap'),
 
+      autoEnabled: document.getElementById('auto_enabled'),
+      autoOnError: document.getElementById('auto_on_error'),
+      autoEnterEnabled: document.getElementById('auto_enter_enabled'),
+      autoEnterAdd: document.getElementById('auto_enter_add'),
+      autoEnterList: document.getElementById('auto_enter_list'),
+      autoExitEnabled: document.getElementById('auto_exit_enabled'),
+      autoExitAdd: document.getElementById('auto_exit_add'),
+      autoExitList: document.getElementById('auto_exit_list'),
+      autoStatusEnabled: document.getElementById('auto_status_enabled'),
+      autoStatusAdd: document.getElementById('auto_status_add'),
+      autoStatusList: document.getElementById('auto_status_list'),
+
       collapseToggles: document.querySelectorAll('.collapse-toggle')
     };
 
@@ -1186,6 +1325,7 @@
       fillDependenciesForm(step.dependencies);
       fillAccessForm(step.access);
       fillNotificationsForm(step.notifications);
+      fillAutoActionsForm(step.autoActions);
       toggleStrategyCards(step.assignment.strategy_type);
       renderPreview();
     }
@@ -1365,6 +1505,255 @@
       fillMultiSelect(elements.notifEscalationUsers, notif.escalation.users);
       elements.notifEscalationMessage.value = notif.escalation.message || "";
       toggleNotificationEscalation(notif.escalation.enabled);
+
+      renderPreview();
+    }
+
+    function getTriggerMap(autoActions) {
+      return [
+        { key: 'on_enter_step', enabledEl: elements.autoEnterEnabled, listEl: elements.autoEnterList },
+        { key: 'on_exit_step', enabledEl: elements.autoExitEnabled, listEl: elements.autoExitList },
+        { key: 'on_status_change', enabledEl: elements.autoStatusEnabled, listEl: elements.autoStatusList }
+      ].map(item => ({ ...item, trigger: autoActions.triggers[item.key] }));
+    }
+
+    function renderAutoActionTrigger(triggerKey, listEl) {
+      if (!listEl) return;
+      const trigger = getCurrentStep().autoActions.triggers[triggerKey];
+      listEl.innerHTML = '';
+
+      trigger.actions.forEach((action, idx) => {
+        const card = document.createElement('div');
+        card.className = 'section-card';
+
+        const header = document.createElement('div');
+        header.className = 'action-header';
+        const title = document.createElement('strong');
+        title.textContent = `اقدام شماره ${idx + 1}`;
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn secondary';
+        removeBtn.textContent = 'حذف';
+        removeBtn.addEventListener('click', () => {
+          trigger.actions.splice(idx, 1);
+          renderAutoActionTrigger(triggerKey, listEl);
+          renderPreview();
+        });
+        header.appendChild(title);
+        header.appendChild(removeBtn);
+        card.appendChild(header);
+
+        const typeRow = document.createElement('div');
+        typeRow.className = 'row';
+        const typeLabel = document.createElement('label');
+        const typeId = `${action.id}_type`;
+        typeLabel.setAttribute('for', typeId);
+        typeLabel.textContent = 'نوع اقدام';
+        const typeSelect = document.createElement('select');
+        typeSelect.id = typeId;
+        typeSelect.innerHTML = `
+          <option value="subticket">ایجاد زیرتیکت/تیکت مرتبط</option>
+          <option value="update_field">به‌روزرسانی فیلد تیکت</option>
+          <option value="internal_message">پیام/کامنت داخلی</option>
+          <option value="customer_message">پیام به کارفرما</option>
+          <option value="invoice_draft">ایجاد پیش‌فاکتور/ثبت مالی</option>
+          <option value="webhook">فراخوانی وب‌هوک/یکپارچه‌سازی</option>
+        `;
+        typeSelect.value = action.type;
+        typeSelect.addEventListener('change', () => {
+          action.type = typeSelect.value;
+          action.subticket_type = '';
+          action.target_step_id = null;
+          action.field_key = '';
+          action.field_value = '';
+          action.message_text = '';
+          action.webhook_url = '';
+          action.webhook_payload = '';
+          renderAutoActionTrigger(triggerKey, listEl);
+          renderPreview();
+        });
+        typeRow.appendChild(typeLabel);
+        typeRow.appendChild(typeSelect);
+        card.appendChild(typeRow);
+
+        const titleRow = document.createElement('div');
+        titleRow.className = 'row';
+        const titleLabel = document.createElement('label');
+        const titleId = `${action.id}_title`;
+        titleLabel.setAttribute('for', titleId);
+        titleLabel.textContent = 'عنوان/توضیح کوتاه اقدام';
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.id = titleId;
+        titleInput.value = action.title || '';
+        titleInput.placeholder = 'مثال: ساخت زیرتیکت تحلیل یا ارسال پیام خوشامد';
+        titleInput.addEventListener('input', () => {
+          action.title = titleInput.value;
+          renderPreview();
+        });
+        titleRow.appendChild(titleLabel);
+        titleRow.appendChild(titleInput);
+        card.appendChild(titleRow);
+
+        const conditionalWrapper = document.createElement('div');
+        conditionalWrapper.className = 'row';
+        const conditionalLabel = document.createElement('label');
+        conditionalLabel.textContent = 'شرط اجرای این اقدام (اختیاری)';
+        const conditionalTextarea = document.createElement('textarea');
+        conditionalTextarea.rows = 2;
+        conditionalTextarea.value = action.condition_text || '';
+        conditionalTextarea.placeholder = 'مثال: فقط برای اولویت بالا یا مشتری VIP';
+        conditionalTextarea.addEventListener('input', () => {
+          action.condition_text = conditionalTextarea.value;
+          renderPreview();
+        });
+        conditionalWrapper.appendChild(conditionalLabel);
+        conditionalWrapper.appendChild(conditionalTextarea);
+        card.appendChild(conditionalWrapper);
+
+        if (action.type === 'subticket') {
+          const subRow = document.createElement('div');
+          subRow.className = 'row';
+          const subLabel = document.createElement('label');
+          subLabel.textContent = 'نوع زیرتیکت/تیکت مرتبط';
+          const subInput = document.createElement('input');
+          subInput.type = 'text';
+          subInput.value = action.subticket_type || '';
+          subInput.placeholder = 'مثال: تحلیل نیازمندی‌ها، آموزش کاربر';
+          subInput.addEventListener('input', () => {
+            action.subticket_type = subInput.value;
+            renderPreview();
+          });
+          subRow.appendChild(subLabel);
+          subRow.appendChild(subInput);
+          card.appendChild(subRow);
+
+          const targetRow = document.createElement('div');
+          targetRow.className = 'row';
+          const targetLabel = document.createElement('label');
+          targetLabel.textContent = 'مرحله هدف (اختیاری)';
+          const targetSelect = document.createElement('select');
+          targetSelect.innerHTML = '<option value="">انتخاب مرحله</option>';
+          steps.filter(s => s.id !== getCurrentStep().id).forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.name;
+            targetSelect.appendChild(opt);
+          });
+          targetSelect.value = action.target_step_id || '';
+          targetSelect.addEventListener('change', () => {
+            action.target_step_id = targetSelect.value || null;
+            renderPreview();
+          });
+          targetRow.appendChild(targetLabel);
+          targetRow.appendChild(targetSelect);
+          card.appendChild(targetRow);
+        }
+
+        if (action.type === 'update_field') {
+          const fieldRow = document.createElement('div');
+          fieldRow.className = 'row';
+          const grid = document.createElement('div');
+          grid.className = 'grid-2';
+
+          const keyWrap = document.createElement('div');
+          const keyLabel = document.createElement('label');
+          keyLabel.textContent = 'کلید فیلد/نام فیلد';
+          const keyInput = document.createElement('input');
+          keyInput.type = 'text';
+          keyInput.value = action.field_key || '';
+          keyInput.placeholder = 'مثال: priority یا tags';
+          keyInput.addEventListener('input', () => {
+            action.field_key = keyInput.value;
+            renderPreview();
+          });
+          keyWrap.appendChild(keyLabel);
+          keyWrap.appendChild(keyInput);
+
+          const valueWrap = document.createElement('div');
+          const valueLabel = document.createElement('label');
+          valueLabel.textContent = 'مقدار جدید';
+          const valueInput = document.createElement('input');
+          valueInput.type = 'text';
+          valueInput.value = action.field_value || '';
+          valueInput.placeholder = 'مثال: high یا 50%';
+          valueInput.addEventListener('input', () => {
+            action.field_value = valueInput.value;
+            renderPreview();
+          });
+          valueWrap.appendChild(valueLabel);
+          valueWrap.appendChild(valueInput);
+
+          grid.appendChild(keyWrap);
+          grid.appendChild(valueWrap);
+          fieldRow.appendChild(grid);
+          card.appendChild(fieldRow);
+        }
+
+        if (action.type === 'internal_message' || action.type === 'customer_message' || action.type === 'invoice_draft') {
+          const msgRow = document.createElement('div');
+          msgRow.className = 'row';
+          const msgLabel = document.createElement('label');
+          msgLabel.textContent = action.type === 'invoice_draft' ? 'توضیحات پیش‌فاکتور/ثبت مالی' : 'متن پیام';
+          const msgTextarea = document.createElement('textarea');
+          msgTextarea.rows = 3;
+          msgTextarea.value = action.message_text || '';
+          msgTextarea.placeholder = action.type === 'invoice_draft' ? 'مثال: پیش‌فاکتور اولیه برای خدمات پشتیبانی' : 'متن پیام را وارد کنید';
+          msgTextarea.addEventListener('input', () => {
+            action.message_text = msgTextarea.value;
+            renderPreview();
+          });
+          msgRow.appendChild(msgLabel);
+          msgRow.appendChild(msgTextarea);
+          card.appendChild(msgRow);
+        }
+
+        if (action.type === 'webhook') {
+          const urlRow = document.createElement('div');
+          urlRow.className = 'row';
+          const urlLabel = document.createElement('label');
+          urlLabel.textContent = 'آدرس وب‌هوک';
+          const urlInput = document.createElement('input');
+          urlInput.type = 'text';
+          urlInput.value = action.webhook_url || '';
+          urlInput.placeholder = 'https://example.com/webhook';
+          urlInput.addEventListener('input', () => {
+            action.webhook_url = urlInput.value;
+            renderPreview();
+          });
+          urlRow.appendChild(urlLabel);
+          urlRow.appendChild(urlInput);
+          card.appendChild(urlRow);
+
+          const payloadRow = document.createElement('div');
+          payloadRow.className = 'row';
+          const payloadLabel = document.createElement('label');
+          payloadLabel.textContent = 'توضیح/Payload وب‌هوک';
+          const payloadTextarea = document.createElement('textarea');
+          payloadTextarea.rows = 3;
+          payloadTextarea.value = action.webhook_payload || '';
+          payloadTextarea.placeholder = 'مثال: {"ticketId":123, "status":"done"}';
+          payloadTextarea.addEventListener('input', () => {
+            action.webhook_payload = payloadTextarea.value;
+            renderPreview();
+          });
+          payloadRow.appendChild(payloadLabel);
+          payloadRow.appendChild(payloadTextarea);
+          card.appendChild(payloadRow);
+        }
+
+        listEl.appendChild(card);
+      });
+    }
+
+    function fillAutoActionsForm(autoActions) {
+      elements.autoEnabled.checked = autoActions.enabled;
+      elements.autoOnError.value = autoActions.on_error;
+
+      getTriggerMap(autoActions).forEach(({ trigger, enabledEl, listEl, key }) => {
+        if (enabledEl) enabledEl.checked = trigger.enabled;
+        renderAutoActionTrigger(key, listEl);
+      });
 
       renderPreview();
     }
@@ -1717,6 +2106,19 @@
       renderPreview();
     }
 
+    function updateAutoActionsGeneral() {
+      const step = getCurrentStep();
+      const a = step.autoActions;
+
+      a.enabled = elements.autoEnabled.checked;
+      a.on_error = elements.autoOnError.value;
+      a.triggers.on_enter_step.enabled = elements.autoEnterEnabled.checked;
+      a.triggers.on_exit_step.enabled = elements.autoExitEnabled.checked;
+      a.triggers.on_status_change.enabled = elements.autoStatusEnabled.checked;
+
+      renderPreview();
+    }
+
     function renderPreview() {
       flowConfig.flowName = elements.flowName.value;
       elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
@@ -1877,6 +2279,45 @@
           const step = getCurrentStep();
           step.dependencies.items.push(createDependencyItem());
           renderDependencyItems(step.dependencies);
+          renderPreview();
+        });
+      }
+
+      [
+        elements.autoEnabled,
+        elements.autoOnError,
+        elements.autoEnterEnabled,
+        elements.autoExitEnabled,
+        elements.autoStatusEnabled
+      ].forEach(el => {
+        if (!el) return;
+        const evt = el.tagName === 'SELECT' ? 'change' : 'change';
+        el.addEventListener(evt, updateAutoActionsGeneral);
+      });
+
+      if (elements.autoEnterAdd) {
+        elements.autoEnterAdd.addEventListener('click', () => {
+          const trigger = getCurrentStep().autoActions.triggers.on_enter_step;
+          trigger.actions.push(createAutoAction());
+          renderAutoActionTrigger('on_enter_step', elements.autoEnterList);
+          renderPreview();
+        });
+      }
+
+      if (elements.autoExitAdd) {
+        elements.autoExitAdd.addEventListener('click', () => {
+          const trigger = getCurrentStep().autoActions.triggers.on_exit_step;
+          trigger.actions.push(createAutoAction());
+          renderAutoActionTrigger('on_exit_step', elements.autoExitList);
+          renderPreview();
+        });
+      }
+
+      if (elements.autoStatusAdd) {
+        elements.autoStatusAdd.addEventListener('click', () => {
+          const trigger = getCurrentStep().autoActions.triggers.on_status_change;
+          trigger.actions.push(createAutoAction());
+          renderAutoActionTrigger('on_status_change', elements.autoStatusList);
           renderPreview();
         });
       }
