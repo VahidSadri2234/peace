@@ -21,7 +21,7 @@
       margin: 0;
       padding: 32px;
       background: var(--bg);
-      font-family: "Vazirmatn", "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: #0f172a;
     }
 
@@ -125,6 +125,42 @@
       background: var(--disabled);
       border: 1px dashed var(--border);
       color: var(--muted);
+    }
+
+    .collapsible {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .collapse-toggle {
+      width: 100%;
+      text-align: right;
+      background: #f8fafc;
+      border: none;
+      padding: 10px 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      color: #0f172a;
+    }
+
+    .collapse-toggle::after {
+      content: '⌄';
+      transition: transform 0.2s ease;
+    }
+
+    .collapse-toggle.collapsed::after {
+      transform: rotate(180deg);
+    }
+
+    .collapse-content {
+      padding: 12px;
+      background: #fff;
+      border-top: 1px solid var(--border);
     }
 
     .preview {
@@ -524,9 +560,170 @@
               <div id="deps_list" style="margin-top:12px; display:flex; flex-direction:column; gap:12px;"></div>
             </div>
           </div>
-          <div class="card placeholder" aria-disabled="true">
+          <div class="card" id="access_card">
             <h4>سطح دسترسی و دیدن تیکت</h4>
-            <div>در آینده در این بخش تعیین می‌کنیم که در این مرحله چه نقش‌هایی تیکت را ببینند، ویرایش کنند یا فقط وضعیت را ببینند.</div>
+            <div class="section-card">
+              <div class="collapsible">
+                <button class="collapse-toggle" type="button" data-target="access_general">تنظیمات عمومی دسترسی</button>
+                <div class="collapse-content" id="access_general">
+                  <div class="checkbox">
+                    <input type="checkbox" id="access_enabled" name="access_enabled">
+                    <label for="access_enabled">فعال بودن کنترل دسترسی در این استپ</label>
+                  </div>
+                  <div class="row">
+                    <label for="access_enforcement_mode">نوع رفتار سیستم در صورت عدم مجوز</label>
+                    <select id="access_enforcement_mode" name="access_enforcement_mode">
+                      <option value="block">جلوگیری کامل از مشاهده/ویرایش</option>
+                      <option value="warn_only">فقط هشدار بده ولی اجازه ادامه بده</option>
+                    </select>
+                    <div class="hint">مشخص می‌کند در صورت نبود دسترسی کافی عبور یا مشاهده بلاک شود یا فقط اخطار نمایش داده شود.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="collapsible">
+                <button class="collapse-toggle" type="button" data-target="access_visibility">سطح دید و ویرایش</button>
+                <div class="collapse-content" id="access_visibility">
+                  <div class="grid-2 row">
+                    <div>
+                      <label for="access_view_roles">نقش‌های مجاز برای مشاهده</label>
+                      <select id="access_view_roles" name="access_view_roles" multiple>
+                        <option value="پشتیبان فنی">پشتیبان فنی</option>
+                        <option value="کارشناس شهرسازی">کارشناس شهرسازی</option>
+                        <option value="کارشناس درآمد">کارشناس درآمد</option>
+                        <option value="مدیر پروژه">مدیر پروژه</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label for="access_edit_roles">نقش‌های مجاز برای ویرایش</label>
+                      <select id="access_edit_roles" name="access_edit_roles" multiple>
+                        <option value="پشتیبان فنی">پشتیبان فنی</option>
+                        <option value="کارشناس شهرسازی">کارشناس شهرسازی</option>
+                        <option value="کارشناس درآمد">کارشناس درآمد</option>
+                        <option value="مدیر پروژه">مدیر پروژه</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="access_readonly_roles">نقش‌های فقط-خواندنی</label>
+                    <select id="access_readonly_roles" name="access_readonly_roles" multiple>
+                      <option value="مهمان سازمان">مهمان سازمان</option>
+                      <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
+                      <option value="مدیر پروژه">مدیر پروژه</option>
+                    </select>
+                    <div class="hint">این نقش‌ها می‌توانند جزئیات را ببینند ولی امکان ویرایش ندارند.</div>
+                  </div>
+                  <div class="checkbox">
+                    <input type="checkbox" id="access_allow_customer_view" name="access_allow_customer_view">
+                    <label for="access_allow_customer_view">نمایش تیکت برای کارفرما در این استپ مجاز باشد</label>
+                  </div>
+                  <div class="checkbox">
+                    <input type="checkbox" id="access_restrict_internal_notes" name="access_restrict_internal_notes">
+                    <label for="access_restrict_internal_notes">نمایش یادداشت‌های داخلی فقط برای نقش‌های ویرایش محدود شود</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="collapsible">
+                <button class="collapse-toggle" type="button" data-target="access_actions">محدودیت‌های اقدام و ویرایش</button>
+                <div class="collapse-content" id="access_actions">
+                  <div class="checkbox">
+                    <input type="checkbox" id="access_allow_comment" name="access_allow_comment">
+                    <label for="access_allow_comment">امکان ثبت کامنت / پیام در این استپ</label>
+                  </div>
+                  <div class="checkbox">
+                    <input type="checkbox" id="access_allow_attachment" name="access_allow_attachment">
+                    <label for="access_allow_attachment">امکان بارگذاری فایل و پیوست</label>
+                  </div>
+                  <div class="checkbox">
+                    <input type="checkbox" id="access_allow_status_change" name="access_allow_status_change">
+                    <label for="access_allow_status_change">اجازه تغییر وضعیت تیکت در این استپ</label>
+                  </div>
+                  <div class="row">
+                    <label for="access_restricted_fields">فیلدهای محدود برای ویرایش</label>
+                    <select id="access_restricted_fields" name="access_restricted_fields" multiple>
+                      <option value="گزارش انجام کار">گزارش انجام کار</option>
+                      <option value="توضیحات داخلی">توضیحات داخلی</option>
+                      <option value="فایل‌های محرمانه">فایل‌های محرمانه</option>
+                    </select>
+                    <div class="hint">این فیلدها فقط برای نقش‌های مجاز به ویرایش فعال خواهند بود.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="collapsible">
+                <button class="collapse-toggle" type="button" data-target="access_confidentiality">محرمانگی و ماسک‌گذاری</button>
+                <div class="collapse-content" id="access_confidentiality">
+                  <div class="row">
+                    <label for="access_sensitivity_level">سطح حساسیت اطلاعات</label>
+                    <select id="access_sensitivity_level" name="access_sensitivity_level">
+                      <option value="normal">عادی</option>
+                      <option value="confidential">محرمانه</option>
+                      <option value="secret">حساس/ویژه</option>
+                    </select>
+                  </div>
+                  <div class="row">
+                    <label for="access_mask_fields">فیلدهای ماسک‌شونده در نمای کارفرما</label>
+                    <select id="access_mask_fields" name="access_mask_fields" multiple>
+                      <option value="اطلاعات تماس کارفرما">اطلاعات تماس کارفرما</option>
+                      <option value="مبلغ قرارداد">مبلغ قرارداد</option>
+                      <option value="ضمیمه‌های مالی">ضمیمه‌های مالی</option>
+                    </select>
+                    <div class="hint">در سطح محرمانگی بالا این فیلدها مخفی یا ماسک می‌شوند (ذخیره فقط در تنظیمات).</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="collapsible">
+                <button class="collapse-toggle" type="button" data-target="access_watchers">مشاهده‌کنندگان و ناظرها</button>
+                <div class="collapse-content" id="access_watchers">
+                  <div class="grid-2 row">
+                    <div>
+                      <label for="access_watcher_roles">نقش‌های اضافه‌شونده به لیست ناظر</label>
+                      <select id="access_watcher_roles" name="access_watcher_roles" multiple>
+                        <option value="مدیر پروژه">مدیر پروژه</option>
+                        <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
+                        <option value="کارشناس درآمد">کارشناس درآمد</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label for="access_watcher_users">کاربران ناظر پیشنهادی</label>
+                      <select id="access_watcher_users" name="access_watcher_users" multiple>
+                        <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
+                        <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
+                        <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="checkbox">
+                    <input type="checkbox" id="access_allow_manual_watchers" name="access_allow_manual_watchers">
+                    <label for="access_allow_manual_watchers">اجازه افزودن دستی ناظر توسط نقش‌های ویرایش</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="collapsible">
+                <button class="collapse-toggle" type="button" data-target="access_overrides">استثناءها و پیام</button>
+                <div class="collapse-content" id="access_overrides">
+                  <div class="checkbox">
+                    <input type="checkbox" id="access_override_allowed" name="access_override_allowed">
+                    <label for="access_override_allowed">اجازه عبور/مشاهده با وجود نقص دسترسی برای برخی نقش‌ها</label>
+                  </div>
+                  <div class="row" id="access_override_roles_wrap">
+                    <label for="access_override_roles">نقش‌های مجاز برای عبور با وجود نقص دسترسی</label>
+                    <select id="access_override_roles" name="access_override_roles" multiple>
+                      <option value="مدیر پروژه">مدیر پروژه</option>
+                      <option value="مدیرعامل">مدیرعامل</option>
+                      <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
+                    </select>
+                  </div>
+                  <div class="row">
+                    <label for="access_message">متن پیام در صورت عدم دسترسی</label>
+                    <textarea id="access_message" name="access_message" rows="3" placeholder="مثال: دسترسی به ویرایش این مرحله فقط برای نقش‌های مشخص فعال است."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="card placeholder" aria-disabled="true">
             <h4>قوانین اعلان و اطلاع‌رسانی</h4>
@@ -663,10 +860,44 @@
       };
     }
 
+    function createDefaultAccess() {
+      return {
+        enabled: false,
+        enforcement_mode: "block",
+        visibility: {
+          view_roles: [],
+          edit_roles: [],
+          readonly_roles: [],
+          allow_customer_view: false,
+          restrict_internal_notes: false
+        },
+        actions: {
+          allow_comment: true,
+          allow_attachment: true,
+          allow_status_change: true,
+          restricted_fields: []
+        },
+        confidentiality: {
+          sensitivity_level: "normal",
+          mask_fields: []
+        },
+        watchers: {
+          auto_add_roles: [],
+          auto_add_users: [],
+          allow_manual_watchers: true
+        },
+        overrides: {
+          allowed: false,
+          roles: []
+        },
+        message: ""
+      };
+    }
+
     const flowConfig = {
       flowName: "",
       selectedStepId: steps[0].id,
-      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies() }))
+      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess() }))
     };
 
     const elements = {
@@ -733,7 +964,30 @@
       depsEnabled: document.getElementById('deps_enabled'),
       depsEnforcementMode: document.getElementById('deps_enforcement_mode'),
       depsAddBtn: document.getElementById('deps_add_btn'),
-      depsList: document.getElementById('deps_list')
+      depsList: document.getElementById('deps_list'),
+
+      accessEnabled: document.getElementById('access_enabled'),
+      accessEnforcementMode: document.getElementById('access_enforcement_mode'),
+      accessViewRoles: document.getElementById('access_view_roles'),
+      accessEditRoles: document.getElementById('access_edit_roles'),
+      accessReadonlyRoles: document.getElementById('access_readonly_roles'),
+      accessAllowCustomerView: document.getElementById('access_allow_customer_view'),
+      accessRestrictInternalNotes: document.getElementById('access_restrict_internal_notes'),
+      accessAllowComment: document.getElementById('access_allow_comment'),
+      accessAllowAttachment: document.getElementById('access_allow_attachment'),
+      accessAllowStatusChange: document.getElementById('access_allow_status_change'),
+      accessRestrictedFields: document.getElementById('access_restricted_fields'),
+      accessSensitivityLevel: document.getElementById('access_sensitivity_level'),
+      accessMaskFields: document.getElementById('access_mask_fields'),
+      accessWatcherRoles: document.getElementById('access_watcher_roles'),
+      accessWatcherUsers: document.getElementById('access_watcher_users'),
+      accessAllowManualWatchers: document.getElementById('access_allow_manual_watchers'),
+      accessOverrideAllowed: document.getElementById('access_override_allowed'),
+      accessOverrideRoles: document.getElementById('access_override_roles'),
+      accessOverrideRolesWrap: document.getElementById('access_override_roles_wrap'),
+      accessMessage: document.getElementById('access_message'),
+
+      collapseToggles: document.querySelectorAll('.collapse-toggle')
     };
 
     function getCurrentStep() {
@@ -751,6 +1005,7 @@
       fillTimingForm(step.timing);
       fillConditionsForm(step.conditions);
       fillDependenciesForm(step.dependencies);
+      fillAccessForm(step.access);
       toggleStrategyCards(step.assignment.strategy_type);
       renderPreview();
     }
@@ -846,6 +1101,42 @@
       elements.depsEnabled.checked = dependencies.enabled;
       elements.depsEnforcementMode.value = dependencies.enforcement_mode;
       renderDependencyItems(dependencies);
+      renderPreview();
+    }
+
+    function toggleAccessOverrideRoles(show) {
+      if (!elements.accessOverrideRolesWrap) return;
+      elements.accessOverrideRolesWrap.classList.toggle('hidden', !show);
+    }
+
+    function fillAccessForm(access) {
+      elements.accessEnabled.checked = access.enabled;
+      elements.accessEnforcementMode.value = access.enforcement_mode;
+
+      fillMultiSelect(elements.accessViewRoles, access.visibility.view_roles);
+      fillMultiSelect(elements.accessEditRoles, access.visibility.edit_roles);
+      fillMultiSelect(elements.accessReadonlyRoles, access.visibility.readonly_roles);
+      elements.accessAllowCustomerView.checked = access.visibility.allow_customer_view;
+      elements.accessRestrictInternalNotes.checked = access.visibility.restrict_internal_notes;
+
+      elements.accessAllowComment.checked = access.actions.allow_comment;
+      elements.accessAllowAttachment.checked = access.actions.allow_attachment;
+      elements.accessAllowStatusChange.checked = access.actions.allow_status_change;
+      fillMultiSelect(elements.accessRestrictedFields, access.actions.restricted_fields);
+
+      elements.accessSensitivityLevel.value = access.confidentiality.sensitivity_level;
+      fillMultiSelect(elements.accessMaskFields, access.confidentiality.mask_fields);
+
+      fillMultiSelect(elements.accessWatcherRoles, access.watchers.auto_add_roles);
+      fillMultiSelect(elements.accessWatcherUsers, access.watchers.auto_add_users);
+      elements.accessAllowManualWatchers.checked = access.watchers.allow_manual_watchers;
+
+      elements.accessOverrideAllowed.checked = access.overrides.allowed;
+      fillMultiSelect(elements.accessOverrideRoles, access.overrides.roles);
+      toggleAccessOverrideRoles(access.overrides.allowed);
+
+      elements.accessMessage.value = access.message || "";
+
       renderPreview();
     }
 
@@ -1123,12 +1414,59 @@
       renderPreview();
     }
 
+    function updateAccessFromForm() {
+      const step = getCurrentStep();
+      const a = step.access;
+
+      a.enabled = elements.accessEnabled.checked;
+      a.enforcement_mode = elements.accessEnforcementMode.value;
+
+      a.visibility.view_roles = readMultiSelect(elements.accessViewRoles);
+      a.visibility.edit_roles = readMultiSelect(elements.accessEditRoles);
+      a.visibility.readonly_roles = readMultiSelect(elements.accessReadonlyRoles);
+      a.visibility.allow_customer_view = elements.accessAllowCustomerView.checked;
+      a.visibility.restrict_internal_notes = elements.accessRestrictInternalNotes.checked;
+
+      a.actions.allow_comment = elements.accessAllowComment.checked;
+      a.actions.allow_attachment = elements.accessAllowAttachment.checked;
+      a.actions.allow_status_change = elements.accessAllowStatusChange.checked;
+      a.actions.restricted_fields = readMultiSelect(elements.accessRestrictedFields);
+
+      a.confidentiality.sensitivity_level = elements.accessSensitivityLevel.value;
+      a.confidentiality.mask_fields = readMultiSelect(elements.accessMaskFields);
+
+      a.watchers.auto_add_roles = readMultiSelect(elements.accessWatcherRoles);
+      a.watchers.auto_add_users = readMultiSelect(elements.accessWatcherUsers);
+      a.watchers.allow_manual_watchers = elements.accessAllowManualWatchers.checked;
+
+      a.overrides.allowed = elements.accessOverrideAllowed.checked;
+      a.overrides.roles = a.overrides.allowed ? readMultiSelect(elements.accessOverrideRoles) : [];
+      toggleAccessOverrideRoles(a.overrides.allowed);
+
+      a.message = elements.accessMessage.value || "";
+
+      renderPreview();
+    }
+
     function renderPreview() {
       flowConfig.flowName = elements.flowName.value;
       elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
     }
 
+    function setupCollapsibles() {
+      elements.collapseToggles.forEach(btn => {
+        const targetId = btn.dataset.target;
+        const content = document.getElementById(targetId);
+        if (!content) return;
+        btn.addEventListener('click', () => {
+          const nowHidden = content.classList.toggle('hidden');
+          btn.classList.toggle('collapsed', nowHidden);
+        });
+      });
+    }
+
     function attachListeners() {
+      setupCollapsibles();
       elements.stepItems.forEach(item => {
         item.addEventListener('click', () => setActiveStep(item.dataset.step));
       });
@@ -1200,6 +1538,32 @@
           elements.condViolationMessage
         ].includes(el) ? updateConditionsFromForm : updateTimingFromForm;
         el.addEventListener(evt, handler);
+      });
+
+      [
+        elements.accessEnabled,
+        elements.accessEnforcementMode,
+        elements.accessViewRoles,
+        elements.accessEditRoles,
+        elements.accessReadonlyRoles,
+        elements.accessAllowCustomerView,
+        elements.accessRestrictInternalNotes,
+        elements.accessAllowComment,
+        elements.accessAllowAttachment,
+        elements.accessAllowStatusChange,
+        elements.accessRestrictedFields,
+        elements.accessSensitivityLevel,
+        elements.accessMaskFields,
+        elements.accessWatcherRoles,
+        elements.accessWatcherUsers,
+        elements.accessAllowManualWatchers,
+        elements.accessOverrideAllowed,
+        elements.accessOverrideRoles,
+        elements.accessMessage
+      ].forEach(el => {
+        if (!el) return;
+        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
+        el.addEventListener(evt, updateAccessFromForm);
       });
 
       if (elements.depsEnabled) {
