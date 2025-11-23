@@ -933,9 +933,111 @@
               <div id="auto_status_list"></div>
             </div>
           </div>
-          <div class="card placeholder" aria-disabled="true">
+          <div class="card">
             <h4>سیاست بازگشایی تیکت</h4>
-            <div>در آینده در این بخش مشخص می‌کنیم تیکت بعد از بازگشایی به کدام مرحله برگردد، چند بار مجاز به بازگشایی باشد و چه کسانی مجازند.</div>
+            <div class="section-card">
+              <h5>تنظیمات عمومی بازگشایی</h5>
+              <div class="checkbox">
+                <input type="checkbox" id="reopen_enabled" name="reopen_enabled">
+                <label for="reopen_enabled">فعال بودن امکان بازگشایی در این استپ</label>
+              </div>
+              <div class="row">
+                <label for="reopen_routing_mode">مسیر بازگشت تیکت بعد از بازگشایی</label>
+                <select id="reopen_routing_mode" name="reopen_routing_mode">
+                  <option value="previous_step">بازگشت به مرحله قبل</option>
+                  <option value="specific_step">ارسال به یک مرحله مشخص</option>
+                  <option value="last_work_step">بازگشت به آخرین مرحله کاری</option>
+                </select>
+                <div class="hint">مشخص می‌کند تیکت بعد از بازگشایی به کدام مرحله هدایت شود.</div>
+              </div>
+              <div class="row hidden" id="reopen_target_wrap">
+                <label for="reopen_target_step">انتخاب مرحله مقصد در حالت مرحله مشخص</label>
+                <select id="reopen_target_step" name="reopen_target_step"></select>
+                <div class="hint">فقط زمانی استفاده می‌شود که مسیر «ارسال به یک مرحله مشخص» انتخاب شده باشد.</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>مجوز و نقش‌های مجاز</h5>
+              <div class="checkbox"><input type="checkbox" id="reopen_allow_customer" name="reopen_allow_customer"><label for="reopen_allow_customer">امکان بازگشایی توسط کارفرما</label></div>
+              <div class="checkbox"><input type="checkbox" id="reopen_allow_internal" name="reopen_allow_internal"><label for="reopen_allow_internal">امکان بازگشایی توسط کاربران داخلی</label></div>
+              <div class="row">
+                <label for="reopen_allowed_roles">نقش‌های مجاز برای بازگشایی</label>
+                <select multiple id="reopen_allowed_roles" name="reopen_allowed_roles">
+                  <option value="مدیر پروژه">مدیر پروژه</option>
+                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
+                  <option value="کارشناس ارشد">کارشناس ارشد</option>
+                  <option value="مدیرعامل">مدیرعامل</option>
+                </select>
+                <div class="hint">در صورت نیاز می‌توان بازگشایی را فقط برای برخی نقش‌های داخلی مجاز کرد.</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>محدودیت‌ها</h5>
+              <div class="grid-2">
+                <div class="row">
+                  <label for="reopen_max_reopens">حداکثر دفعات مجاز بازگشایی</label>
+                  <input type="number" id="reopen_max_reopens" name="reopen_max_reopens" min="0" placeholder="مثلاً 2">
+                  <div class="hint">عدد خالی به معنای بدون محدودیت است.</div>
+                </div>
+                <div class="row">
+                  <label for="reopen_min_interval_hours">حداقل فاصله زمانی بین دو بازگشایی (ساعت)</label>
+                  <input type="number" id="reopen_min_interval_hours" name="reopen_min_interval_hours" min="0" placeholder="مثلاً 24">
+                  <div class="hint">اگر مقداری وارد نشود، محدودیت فاصله زمانی اعمال نمی‌شود.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>دلیل بازگشایی</h5>
+              <div class="checkbox"><input type="checkbox" id="reopen_require_reason" name="reopen_require_reason"><label for="reopen_require_reason">الزام ثبت دلیل بازگشایی</label></div>
+              <div class="row">
+                <label for="reopen_reason_types">دسته‌بندی دلایل</label>
+                <select multiple id="reopen_reason_types" name="reopen_reason_types">
+                  <option value="مشکل فنی">مشکل فنی</option>
+                  <option value="نارضایتی کارفرما">نارضایتی کارفرما</option>
+                  <option value="تغییر نیازمندی">تغییر نیازمندی</option>
+                  <option value="خطای داده">خطای داده</option>
+                  <option value="درخواست ویژگی">درخواست ویژگی</option>
+                </select>
+                <div class="hint">فهرست برچسب‌های رایج برای دلایل بازگشایی.</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>اعلان‌ها هنگام بازگشایی</h5>
+              <div class="checkbox"><input type="checkbox" id="reopen_notify_creator" name="reopen_notify_creator"><label for="reopen_notify_creator">اطلاع به ایجادکننده تیکت</label></div>
+              <div class="checkbox"><input type="checkbox" id="reopen_notify_assignee" name="reopen_notify_assignee"><label for="reopen_notify_assignee">اطلاع به مسئول فعلی</label></div>
+              <div class="checkbox"><input type="checkbox" id="reopen_notify_manager" name="reopen_notify_manager"><label for="reopen_notify_manager">اطلاع به مدیر پروژه</label></div>
+              <div class="checkbox"><input type="checkbox" id="reopen_notify_customer" name="reopen_notify_customer"><label for="reopen_notify_customer">اطلاع به کارفرما</label></div>
+              <div class="row">
+                <label for="reopen_notify_roles">نقش‌های اضافی برای اطلاع‌رسانی</label>
+                <select multiple id="reopen_notify_roles" name="reopen_notify_roles">
+                  <option value="مدیر پروژه">مدیر پروژه</option>
+                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
+                  <option value="کارشناس ارشد">کارشناس ارشد</option>
+                  <option value="مسئول مالی">مسئول مالی</option>
+                </select>
+                <div class="hint">اعلان‌ها برای نقش‌های انتخاب‌شده نیز ارسال می‌شود.</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>پرچم کیفیت</h5>
+              <div class="checkbox"><input type="checkbox" id="reopen_quality_enable_flag" name="reopen_quality_enable_flag"><label for="reopen_quality_enable_flag">ثبت پرچم کیفیت در صورت بازگشایی بیش از حد</label></div>
+              <div id="reopen_quality_wrap" class="grid-2 hidden">
+                <div class="row">
+                  <label for="reopen_quality_threshold">آستانه تعداد بازگشایی برای پرچم</label>
+                  <input type="number" id="reopen_quality_threshold" name="reopen_quality_threshold" min="0" placeholder="مثلاً 3">
+                </div>
+                <div class="row">
+                  <label for="reopen_quality_label">عنوان پرچم کیفیت</label>
+                  <input type="text" id="reopen_quality_label" name="reopen_quality_label" placeholder="مثلاً نیاز به ممیزی کیفیت">
+                </div>
+              </div>
+              <div class="hint">در صورت فعال‌سازی، پس از عبور از آستانه، پرچم کیفیت روی تیکت ثبت می‌شود.</div>
+            </div>
           </div>
           <div class="card placeholder" aria-disabled="true">
             <h4>امتیازدهی و اولویت پویا</h4>
@@ -1172,10 +1274,45 @@
       };
     }
 
+    function createDefaultReopen() {
+      return {
+        enabled: false,
+        permissions: {
+          allow_customer: false,
+          allow_internal: false,
+          allowed_roles: []
+        },
+        routing: {
+          mode: "previous_step",
+          target_step_id: null
+        },
+        limits: {
+          max_reopens: null,
+          min_interval_hours: null
+        },
+        reason: {
+          require_reason: false,
+          reason_types: []
+        },
+        notifications: {
+          notify_creator: false,
+          notify_assignee: false,
+          notify_manager: false,
+          notify_roles: [],
+          notify_customer: false
+        },
+        quality_flag: {
+          enable_flag_on_excess: false,
+          threshold: null,
+          flag_label: ""
+        }
+      };
+    }
+
     const flowConfig = {
       flowName: "",
       selectedStepId: steps[0].id,
-      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess(), notifications: createDefaultNotifications(), autoActions: createDefaultAutoActions() }))
+      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess(), notifications: createDefaultNotifications(), autoActions: createDefaultAutoActions(), reopen: createDefaultReopen() }))
     };
 
     const elements = {
@@ -1305,6 +1442,27 @@
       autoStatusAdd: document.getElementById('auto_status_add'),
       autoStatusList: document.getElementById('auto_status_list'),
 
+      reopenEnabled: document.getElementById('reopen_enabled'),
+      reopenRoutingMode: document.getElementById('reopen_routing_mode'),
+      reopenTargetWrap: document.getElementById('reopen_target_wrap'),
+      reopenTargetStep: document.getElementById('reopen_target_step'),
+      reopenAllowCustomer: document.getElementById('reopen_allow_customer'),
+      reopenAllowInternal: document.getElementById('reopen_allow_internal'),
+      reopenAllowedRoles: document.getElementById('reopen_allowed_roles'),
+      reopenMaxReopens: document.getElementById('reopen_max_reopens'),
+      reopenMinIntervalHours: document.getElementById('reopen_min_interval_hours'),
+      reopenRequireReason: document.getElementById('reopen_require_reason'),
+      reopenReasonTypes: document.getElementById('reopen_reason_types'),
+      reopenNotifyCreator: document.getElementById('reopen_notify_creator'),
+      reopenNotifyAssignee: document.getElementById('reopen_notify_assignee'),
+      reopenNotifyManager: document.getElementById('reopen_notify_manager'),
+      reopenNotifyCustomer: document.getElementById('reopen_notify_customer'),
+      reopenNotifyRoles: document.getElementById('reopen_notify_roles'),
+      reopenQualityEnableFlag: document.getElementById('reopen_quality_enable_flag'),
+      reopenQualityThreshold: document.getElementById('reopen_quality_threshold'),
+      reopenQualityLabel: document.getElementById('reopen_quality_label'),
+      reopenQualityWrap: document.getElementById('reopen_quality_wrap'),
+
       collapseToggles: document.querySelectorAll('.collapse-toggle')
     };
 
@@ -1326,6 +1484,7 @@
       fillAccessForm(step.access);
       fillNotificationsForm(step.notifications);
       fillAutoActionsForm(step.autoActions);
+      fillReopenForm(step.reopen);
       toggleStrategyCards(step.assignment.strategy_type);
       renderPreview();
     }
@@ -1758,6 +1917,59 @@
       renderPreview();
     }
 
+    function populateReopenTargetSteps(currentStepId, selectedValue) {
+      if (!elements.reopenTargetStep) return;
+      elements.reopenTargetStep.innerHTML = '<option value="">انتخاب مرحله</option>';
+      steps.forEach(step => {
+        if (step.id === currentStepId) return;
+        const opt = document.createElement('option');
+        opt.value = step.id;
+        opt.textContent = step.name;
+        elements.reopenTargetStep.appendChild(opt);
+      });
+      if (selectedValue) {
+        elements.reopenTargetStep.value = selectedValue;
+      }
+    }
+
+    function toggleReopenTarget(show) {
+      if (elements.reopenTargetWrap) elements.reopenTargetWrap.classList.toggle('hidden', !show);
+    }
+
+    function toggleQualityFlagFields(show) {
+      if (elements.reopenQualityWrap) elements.reopenQualityWrap.classList.toggle('hidden', !show);
+    }
+
+    function fillReopenForm(reopen) {
+      elements.reopenEnabled.checked = reopen.enabled;
+      elements.reopenRoutingMode.value = reopen.routing.mode;
+      populateReopenTargetSteps(flowConfig.selectedStepId, reopen.routing.target_step_id || "");
+      toggleReopenTarget(reopen.routing.mode === 'specific_step');
+
+      elements.reopenAllowCustomer.checked = reopen.permissions.allow_customer;
+      elements.reopenAllowInternal.checked = reopen.permissions.allow_internal;
+      fillMultiSelect(elements.reopenAllowedRoles, reopen.permissions.allowed_roles);
+
+      elements.reopenMaxReopens.value = reopen.limits.max_reopens ?? "";
+      elements.reopenMinIntervalHours.value = reopen.limits.min_interval_hours ?? "";
+
+      elements.reopenRequireReason.checked = reopen.reason.require_reason;
+      fillMultiSelect(elements.reopenReasonTypes, reopen.reason.reason_types);
+
+      elements.reopenNotifyCreator.checked = reopen.notifications.notify_creator;
+      elements.reopenNotifyAssignee.checked = reopen.notifications.notify_assignee;
+      elements.reopenNotifyManager.checked = reopen.notifications.notify_manager;
+      elements.reopenNotifyCustomer.checked = reopen.notifications.notify_customer;
+      fillMultiSelect(elements.reopenNotifyRoles, reopen.notifications.notify_roles);
+
+      elements.reopenQualityEnableFlag.checked = reopen.quality_flag.enable_flag_on_excess;
+      elements.reopenQualityThreshold.value = reopen.quality_flag.threshold ?? "";
+      elements.reopenQualityLabel.value = reopen.quality_flag.flag_label || "";
+      toggleQualityFlagFields(reopen.quality_flag.enable_flag_on_excess);
+
+      renderPreview();
+    }
+
     function updateAssignmentFromForm() {
       const step = getCurrentStep();
       const a = step.assignment;
@@ -2119,6 +2331,49 @@
       renderPreview();
     }
 
+    function updateReopenFromForm() {
+      const step = getCurrentStep();
+      const r = step.reopen;
+
+      r.enabled = elements.reopenEnabled.checked;
+      r.routing.mode = elements.reopenRoutingMode.value;
+      populateReopenTargetSteps(flowConfig.selectedStepId, r.routing.target_step_id || "");
+      if (r.routing.mode === 'specific_step') {
+        r.routing.target_step_id = elements.reopenTargetStep.value || null;
+      } else {
+        r.routing.target_step_id = null;
+      }
+      toggleReopenTarget(r.routing.mode === 'specific_step');
+
+      r.permissions.allow_customer = elements.reopenAllowCustomer.checked;
+      r.permissions.allow_internal = elements.reopenAllowInternal.checked;
+      r.permissions.allowed_roles = readMultiSelect(elements.reopenAllowedRoles);
+
+      r.limits.max_reopens = toNullableNumber(elements.reopenMaxReopens.value);
+      r.limits.min_interval_hours = toNullableNumber(elements.reopenMinIntervalHours.value);
+
+      r.reason.require_reason = elements.reopenRequireReason.checked;
+      r.reason.reason_types = readMultiSelect(elements.reopenReasonTypes);
+
+      r.notifications.notify_creator = elements.reopenNotifyCreator.checked;
+      r.notifications.notify_assignee = elements.reopenNotifyAssignee.checked;
+      r.notifications.notify_manager = elements.reopenNotifyManager.checked;
+      r.notifications.notify_customer = elements.reopenNotifyCustomer.checked;
+      r.notifications.notify_roles = readMultiSelect(elements.reopenNotifyRoles);
+
+      r.quality_flag.enable_flag_on_excess = elements.reopenQualityEnableFlag.checked;
+      if (r.quality_flag.enable_flag_on_excess) {
+        r.quality_flag.threshold = toNullableNumber(elements.reopenQualityThreshold.value);
+        r.quality_flag.flag_label = elements.reopenQualityLabel.value;
+      } else {
+        r.quality_flag.threshold = null;
+        r.quality_flag.flag_label = "";
+      }
+      toggleQualityFlagFields(r.quality_flag.enable_flag_on_excess);
+
+      renderPreview();
+    }
+
     function renderPreview() {
       flowConfig.flowName = elements.flowName.value;
       elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
@@ -2293,6 +2548,31 @@
         if (!el) return;
         const evt = el.tagName === 'SELECT' ? 'change' : 'change';
         el.addEventListener(evt, updateAutoActionsGeneral);
+      });
+
+      [
+        elements.reopenEnabled,
+        elements.reopenRoutingMode,
+        elements.reopenTargetStep,
+        elements.reopenAllowCustomer,
+        elements.reopenAllowInternal,
+        elements.reopenAllowedRoles,
+        elements.reopenMaxReopens,
+        elements.reopenMinIntervalHours,
+        elements.reopenRequireReason,
+        elements.reopenReasonTypes,
+        elements.reopenNotifyCreator,
+        elements.reopenNotifyAssignee,
+        elements.reopenNotifyManager,
+        elements.reopenNotifyCustomer,
+        elements.reopenNotifyRoles,
+        elements.reopenQualityEnableFlag,
+        elements.reopenQualityThreshold,
+        elements.reopenQualityLabel
+      ].forEach(el => {
+        if (!el) return;
+        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
+        el.addEventListener(evt, updateReopenFromForm);
       });
 
       if (elements.autoEnterAdd) {
