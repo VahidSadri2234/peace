@@ -725,9 +725,119 @@
               </div>
             </div>
           </div>
-          <div class="card placeholder" aria-disabled="true">
+          <div class="card">
             <h4>قوانین اعلان و اطلاع‌رسانی</h4>
-            <div>در آینده در این بخش تعریف می‌کنیم روی چه رویدادهایی (ورود، خروج، تاخیر و…) چه اعلان‌هایی برای چه کسانی و از چه کانالی (نوتیف، پیامک، ایمیل) ارسال شود.</div>
+
+            <div class="section-card">
+              <h5>تنظیمات عمومی</h5>
+              <div class="checkbox">
+                <input type="checkbox" id="notif_enabled" name="notif_enabled">
+                <label for="notif_enabled">فعال بودن اعلان‌ها برای این استپ</label>
+              </div>
+              <div class="row">
+                <label>کانال‌های ارسال</label>
+                <div class="checkbox"><input type="checkbox" id="notif_channel_inapp" name="notif_channel_inapp"><label for="notif_channel_inapp">اعلان درون سیستم</label></div>
+                <div class="checkbox"><input type="checkbox" id="notif_channel_sms" name="notif_channel_sms"><label for="notif_channel_sms">پیامک</label></div>
+                <div class="checkbox"><input type="checkbox" id="notif_channel_email" name="notif_channel_email"><label for="notif_channel_email">ایمیل</label></div>
+                <div class="hint">انتخاب کنید اعلان‌ها از چه کانال‌هایی ارسال شوند.</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>رویدادهای محرک ارسال اعلان</h5>
+              <div class="checkbox"><input type="checkbox" id="notif_trigger_enter" name="notif_trigger_enter"><label for="notif_trigger_enter">ورود تیکت به این مرحله</label></div>
+              <div class="checkbox"><input type="checkbox" id="notif_trigger_exit" name="notif_trigger_exit"><label for="notif_trigger_exit">خروج تیکت از این مرحله</label></div>
+              <div class="checkbox"><input type="checkbox" id="notif_trigger_delay" name="notif_trigger_delay"><label for="notif_trigger_delay">وقوع تاخیر/نقض SLA در این مرحله</label></div>
+              <div class="checkbox"><input type="checkbox" id="notif_trigger_reopen" name="notif_trigger_reopen"><label for="notif_trigger_reopen">بازگشایی تیکت</label></div>
+              <div class="checkbox"><input type="checkbox" id="notif_trigger_assignment" name="notif_trigger_assignment"><label for="notif_trigger_assignment">تغییر مسئول/ارجاع</label></div>
+              <div class="checkbox"><input type="checkbox" id="notif_trigger_status" name="notif_trigger_status"><label for="notif_trigger_status">تغییر وضعیت درون این مرحله</label></div>
+            </div>
+
+            <div class="section-card">
+              <h5>دریافت‌کنندگان اعلان</h5>
+              <div class="row">
+                <label for="notif_roles">نقش‌های دریافت‌کننده</label>
+                <select id="notif_roles" name="notif_roles" multiple>
+                  <option value="مدیر پروژه">مدیر پروژه</option>
+                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
+                  <option value="کارشناس درآمد">کارشناس درآمد</option>
+                </select>
+              </div>
+              <div class="row">
+                <label for="notif_users">کاربران دریافت‌کننده</label>
+                <select id="notif_users" name="notif_users" multiple>
+                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
+                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
+                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
+                </select>
+              </div>
+              <div class="checkbox"><input type="checkbox" id="notif_include_assignee" name="notif_include_assignee"><label for="notif_include_assignee">ارسال به مسئول فعلی تیکت</label></div>
+              <div class="checkbox"><input type="checkbox" id="notif_include_creator" name="notif_include_creator"><label for="notif_include_creator">ارسال به ایجادکننده تیکت</label></div>
+              <div class="checkbox"><input type="checkbox" id="notif_include_watchers" name="notif_include_watchers"><label for="notif_include_watchers">ارسال به ناظرها (Watchers)</label></div>
+              <div class="hint">دریافت‌کنندگان می‌توانند ترکیبی از نقش‌ها، کاربران مشخص و مسئول/ایجادکننده باشند.</div>
+            </div>
+
+            <div class="section-card">
+              <h5>متن و قالب اعلان</h5>
+              <div class="row">
+                <label for="notif_title">عنوان اعلان</label>
+                <input type="text" id="notif_title" name="notif_title" placeholder="مثال: تیکت جدید در مرحله انجام کار">
+              </div>
+              <div class="row">
+                <label for="notif_message">متن اعلان</label>
+                <textarea id="notif_message" name="notif_message" rows="3" placeholder="متن اعلان را وارد کنید"></textarea>
+                <div class="hint">می‌توانید بعداً الگوهای پویا و متغیرهای سیستمی اضافه کنید.</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>محدودیت ارسال و تکرار</h5>
+              <div class="checkbox">
+                <input type="checkbox" id="notif_throttle_enabled" name="notif_throttle_enabled">
+                <label for="notif_throttle_enabled">محدود کردن تعداد ارسال در بازه زمانی</label>
+              </div>
+              <div class="row hidden" id="notif_throttle_wrap">
+                <label>بازه زمانی تکرار</label>
+                <div class="grid-2">
+                  <input type="number" id="notif_throttle_value" name="notif_throttle_value" min="0" placeholder="مثلاً ۳۰">
+                  <select id="notif_throttle_unit" name="notif_throttle_unit">
+                    <option value="minute">دقیقه</option>
+                    <option value="hour">ساعت</option>
+                    <option value="day">روز</option>
+                  </select>
+                </div>
+                <div class="hint">برای جلوگیری از ارسال پشت‌سرهم، یک بازه زمانی تعیین کنید.</div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <h5>تصعید/ارسال به مدیران</h5>
+              <div class="checkbox">
+                <input type="checkbox" id="notif_escalation_enabled" name="notif_escalation_enabled">
+                <label for="notif_escalation_enabled">فعال‌سازی ارسال تصعیدی</label>
+              </div>
+              <div class="row hidden" id="notif_escalation_targets">
+                <label for="notif_escalation_roles">نقش‌های دریافت‌کننده تصعیدی</label>
+                <select id="notif_escalation_roles" name="notif_escalation_roles" multiple>
+                  <option value="مدیر پروژه">مدیر پروژه</option>
+                  <option value="مدیرعامل">مدیرعامل</option>
+                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
+                </select>
+              </div>
+              <div class="row hidden" id="notif_escalation_users_wrap">
+                <label for="notif_escalation_users">کاربران دریافت‌کننده تصعیدی</label>
+                <select id="notif_escalation_users" name="notif_escalation_users" multiple>
+                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
+                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
+                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
+                </select>
+              </div>
+              <div class="row hidden" id="notif_escalation_message_wrap">
+                <label for="notif_escalation_message">متن پیام تصعیدی</label>
+                <textarea id="notif_escalation_message" name="notif_escalation_message" rows="2" placeholder="مثال: تیکت پس از تاخیر به مدیر اطلاع داده شود"></textarea>
+              </div>
+              <div class="hint">در صورت نیاز می‌توانید پیام و گیرندگان ویژه برای تصعید اعلان‌ها تعریف کنید.</div>
+            </div>
           </div>
           <div class="card placeholder" aria-disabled="true">
             <h4>اقدامات خودکار</h4>
@@ -894,10 +1004,51 @@
       };
     }
 
+    function createDefaultNotifications() {
+      return {
+        enabled: false,
+        channels: {
+          in_app: true,
+          sms: false,
+          email: false
+        },
+        triggers: {
+          on_enter: false,
+          on_exit: false,
+          on_delay: false,
+          on_reopen: false,
+          on_assignment_change: false,
+          on_status_change: false
+        },
+        recipients: {
+          roles: [],
+          users: [],
+          include_assignee: true,
+          include_creator: false,
+          include_watchers: true
+        },
+        template: {
+          title: "",
+          message: ""
+        },
+        throttling: {
+          enabled: false,
+          interval_value: null,
+          interval_unit: "minute"
+        },
+        escalation: {
+          enabled: false,
+          roles: [],
+          users: [],
+          message: ""
+        }
+      };
+    }
+
     const flowConfig = {
       flowName: "",
       selectedStepId: steps[0].id,
-      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess() }))
+      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess(), notifications: createDefaultNotifications() }))
     };
 
     const elements = {
@@ -986,6 +1137,34 @@
       accessOverrideRoles: document.getElementById('access_override_roles'),
       accessOverrideRolesWrap: document.getElementById('access_override_roles_wrap'),
       accessMessage: document.getElementById('access_message'),
+      notifEnabled: document.getElementById('notif_enabled'),
+      notifChannelInapp: document.getElementById('notif_channel_inapp'),
+      notifChannelSms: document.getElementById('notif_channel_sms'),
+      notifChannelEmail: document.getElementById('notif_channel_email'),
+      notifTriggerEnter: document.getElementById('notif_trigger_enter'),
+      notifTriggerExit: document.getElementById('notif_trigger_exit'),
+      notifTriggerDelay: document.getElementById('notif_trigger_delay'),
+      notifTriggerReopen: document.getElementById('notif_trigger_reopen'),
+      notifTriggerAssignment: document.getElementById('notif_trigger_assignment'),
+      notifTriggerStatus: document.getElementById('notif_trigger_status'),
+      notifRoles: document.getElementById('notif_roles'),
+      notifUsers: document.getElementById('notif_users'),
+      notifIncludeAssignee: document.getElementById('notif_include_assignee'),
+      notifIncludeCreator: document.getElementById('notif_include_creator'),
+      notifIncludeWatchers: document.getElementById('notif_include_watchers'),
+      notifTitle: document.getElementById('notif_title'),
+      notifMessage: document.getElementById('notif_message'),
+      notifThrottleEnabled: document.getElementById('notif_throttle_enabled'),
+      notifThrottleWrap: document.getElementById('notif_throttle_wrap'),
+      notifThrottleValue: document.getElementById('notif_throttle_value'),
+      notifThrottleUnit: document.getElementById('notif_throttle_unit'),
+      notifEscalationEnabled: document.getElementById('notif_escalation_enabled'),
+      notifEscalationTargets: document.getElementById('notif_escalation_targets'),
+      notifEscalationRoles: document.getElementById('notif_escalation_roles'),
+      notifEscalationUsers: document.getElementById('notif_escalation_users'),
+      notifEscalationUsersWrap: document.getElementById('notif_escalation_users_wrap'),
+      notifEscalationMessage: document.getElementById('notif_escalation_message'),
+      notifEscalationMessageWrap: document.getElementById('notif_escalation_message_wrap'),
 
       collapseToggles: document.querySelectorAll('.collapse-toggle')
     };
@@ -1006,6 +1185,7 @@
       fillConditionsForm(step.conditions);
       fillDependenciesForm(step.dependencies);
       fillAccessForm(step.access);
+      fillNotificationsForm(step.notifications);
       toggleStrategyCards(step.assignment.strategy_type);
       renderPreview();
     }
@@ -1136,6 +1316,55 @@
       toggleAccessOverrideRoles(access.overrides.allowed);
 
       elements.accessMessage.value = access.message || "";
+
+      renderPreview();
+    }
+
+    function toggleNotificationThrottle(show) {
+      if (elements.notifThrottleWrap) {
+        elements.notifThrottleWrap.classList.toggle('hidden', !show);
+      }
+    }
+
+    function toggleNotificationEscalation(show) {
+      if (elements.notifEscalationTargets) elements.notifEscalationTargets.classList.toggle('hidden', !show);
+      if (elements.notifEscalationUsersWrap) elements.notifEscalationUsersWrap.classList.toggle('hidden', !show);
+      if (elements.notifEscalationMessageWrap) elements.notifEscalationMessageWrap.classList.toggle('hidden', !show);
+    }
+
+    function fillNotificationsForm(notif) {
+      elements.notifEnabled.checked = notif.enabled;
+
+      elements.notifChannelInapp.checked = notif.channels.in_app;
+      elements.notifChannelSms.checked = notif.channels.sms;
+      elements.notifChannelEmail.checked = notif.channels.email;
+
+      elements.notifTriggerEnter.checked = notif.triggers.on_enter;
+      elements.notifTriggerExit.checked = notif.triggers.on_exit;
+      elements.notifTriggerDelay.checked = notif.triggers.on_delay;
+      elements.notifTriggerReopen.checked = notif.triggers.on_reopen;
+      elements.notifTriggerAssignment.checked = notif.triggers.on_assignment_change;
+      elements.notifTriggerStatus.checked = notif.triggers.on_status_change;
+
+      fillMultiSelect(elements.notifRoles, notif.recipients.roles);
+      fillMultiSelect(elements.notifUsers, notif.recipients.users);
+      elements.notifIncludeAssignee.checked = notif.recipients.include_assignee;
+      elements.notifIncludeCreator.checked = notif.recipients.include_creator;
+      elements.notifIncludeWatchers.checked = notif.recipients.include_watchers;
+
+      elements.notifTitle.value = notif.template.title || "";
+      elements.notifMessage.value = notif.template.message || "";
+
+      elements.notifThrottleEnabled.checked = notif.throttling.enabled;
+      elements.notifThrottleValue.value = notif.throttling.interval_value ?? "";
+      elements.notifThrottleUnit.value = notif.throttling.interval_unit;
+      toggleNotificationThrottle(notif.throttling.enabled);
+
+      elements.notifEscalationEnabled.checked = notif.escalation.enabled;
+      fillMultiSelect(elements.notifEscalationRoles, notif.escalation.roles);
+      fillMultiSelect(elements.notifEscalationUsers, notif.escalation.users);
+      elements.notifEscalationMessage.value = notif.escalation.message || "";
+      toggleNotificationEscalation(notif.escalation.enabled);
 
       renderPreview();
     }
@@ -1448,6 +1677,46 @@
       renderPreview();
     }
 
+    function updateNotificationsFromForm() {
+      const step = getCurrentStep();
+      const n = step.notifications;
+
+      n.enabled = elements.notifEnabled.checked;
+
+      n.channels.in_app = elements.notifChannelInapp.checked;
+      n.channels.sms = elements.notifChannelSms.checked;
+      n.channels.email = elements.notifChannelEmail.checked;
+
+      n.triggers.on_enter = elements.notifTriggerEnter.checked;
+      n.triggers.on_exit = elements.notifTriggerExit.checked;
+      n.triggers.on_delay = elements.notifTriggerDelay.checked;
+      n.triggers.on_reopen = elements.notifTriggerReopen.checked;
+      n.triggers.on_assignment_change = elements.notifTriggerAssignment.checked;
+      n.triggers.on_status_change = elements.notifTriggerStatus.checked;
+
+      n.recipients.roles = readMultiSelect(elements.notifRoles);
+      n.recipients.users = readMultiSelect(elements.notifUsers);
+      n.recipients.include_assignee = elements.notifIncludeAssignee.checked;
+      n.recipients.include_creator = elements.notifIncludeCreator.checked;
+      n.recipients.include_watchers = elements.notifIncludeWatchers.checked;
+
+      n.template.title = elements.notifTitle.value;
+      n.template.message = elements.notifMessage.value;
+
+      n.throttling.enabled = elements.notifThrottleEnabled.checked;
+      n.throttling.interval_value = n.throttling.enabled ? toNullableNumber(elements.notifThrottleValue.value) : null;
+      n.throttling.interval_unit = elements.notifThrottleUnit.value;
+      toggleNotificationThrottle(n.throttling.enabled);
+
+      n.escalation.enabled = elements.notifEscalationEnabled.checked;
+      n.escalation.roles = n.escalation.enabled ? readMultiSelect(elements.notifEscalationRoles) : [];
+      n.escalation.users = n.escalation.enabled ? readMultiSelect(elements.notifEscalationUsers) : [];
+      n.escalation.message = n.escalation.enabled ? elements.notifEscalationMessage.value : "";
+      toggleNotificationEscalation(n.escalation.enabled);
+
+      renderPreview();
+    }
+
     function renderPreview() {
       flowConfig.flowName = elements.flowName.value;
       elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
@@ -1564,6 +1833,37 @@
         if (!el) return;
         const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
         el.addEventListener(evt, updateAccessFromForm);
+      });
+
+      [
+        elements.notifEnabled,
+        elements.notifChannelInapp,
+        elements.notifChannelSms,
+        elements.notifChannelEmail,
+        elements.notifTriggerEnter,
+        elements.notifTriggerExit,
+        elements.notifTriggerDelay,
+        elements.notifTriggerReopen,
+        elements.notifTriggerAssignment,
+        elements.notifTriggerStatus,
+        elements.notifRoles,
+        elements.notifUsers,
+        elements.notifIncludeAssignee,
+        elements.notifIncludeCreator,
+        elements.notifIncludeWatchers,
+        elements.notifTitle,
+        elements.notifMessage,
+        elements.notifThrottleEnabled,
+        elements.notifThrottleValue,
+        elements.notifThrottleUnit,
+        elements.notifEscalationEnabled,
+        elements.notifEscalationRoles,
+        elements.notifEscalationUsers,
+        elements.notifEscalationMessage
+      ].forEach(el => {
+        if (!el) return;
+        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
+        el.addEventListener(evt, updateNotificationsFromForm);
       });
 
       if (elements.depsEnabled) {
