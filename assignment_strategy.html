@@ -53,6 +53,14 @@
       gap: 18px;
     }
 
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+    }
+
     .card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -73,6 +81,15 @@
       margin-bottom: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
+    }
+
+    .step-list .step-item.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: #1d4ed8;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+    }
+
     }
 
     .step-list .step-item.active {
@@ -412,6 +429,9 @@
                 <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_conversation" name="timing_noaction_lock_conversation"><label for="timing_noaction_lock_conversation">محدودیت در ارسال پیام در گفتگوی تیکت</label></div>
               </div>
             </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>قوانین زمان‌بندی برای این استپ</h4>
+            <div>در آینده در این بخش تنظیم می‌کنیم که اگر تیکت در این مرحله باز نشود یا تعیین‌تکلیف نشود، بعد از چه مدت چه اتفاقی بیفتد (هشدار، بازگشت، ثبت تاخیر و غیره).</div>
           </div>
           <div class="card placeholder" aria-disabled="true">
             <h4>شرایط عبور مرحله</h4>
@@ -444,6 +464,20 @@
           <div class="card placeholder" aria-disabled="true">
             <h4>پرچم‌گذاری برای ممیزی و گزارش‌ها</h4>
             <div>در آینده در این بخش تعریف می‌کنیم چه تیکت‌هایی بر اساس تاخیر، ارجاع زیاد، نارضایتی و… با پرچم‌های مختلف علامت‌گذاری شوند.</div>
+            <h4>تنظیمات SLA / زمان‌بندی</h4>
+            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>تنظیمات اعلان‌ها (Notifications)</h4>
+            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>اقدامات خودکار (Auto Actions)</h4>
+            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
+          </div>
+          <div class="card placeholder" aria-disabled="true">
+            <h4>دسترسی‌ها و سطح دید</h4>
+            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
           </div>
         </div>
       </section>
@@ -460,6 +494,7 @@
       { id: "step_customer", name: "انتخاب کارفرما" },
       { id: "step_service", name: "انتخاب سرویس" },
       { id: "step_work", name: "انجام کار" },
+      { id: "step_do", name: "انجام کار" },
       { id: "step_delivery", name: "تحویل به کارفرما" }
     ];
 
@@ -520,6 +555,10 @@
       flowName: "",
       selectedStepId: steps[0].id,
       steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig() }))
+    const flowConfig = {
+      flowName: "",
+      selectedStepId: steps[0].id,
+      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment() }))
     };
 
     const elements = {
@@ -566,6 +605,7 @@
       timingNoactionLockOtherTickets: document.getElementById('timing_noaction_lock_other_tickets'),
       timingNoactionLockMentions: document.getElementById('timing_noaction_lock_mentions'),
       timingNoactionLockConversation: document.getElementById('timing_noaction_lock_conversation')
+      flowName: document.getElementById('flow_name')
     };
 
     function getCurrentStep() {
@@ -716,6 +756,59 @@
       elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
     }
 
+    }
+
+    function fillMultiSelect(selectEl, values) {
+      Array.from(selectEl.options).forEach(opt => {
+        opt.selected = values.includes(opt.value);
+      });
+    }
+
+    function fillForm(assign) {
+      elements.strategySelect.value = assign.strategy_type;
+      elements.candidateSourceRadios.forEach(r => { r.checked = r.value === assign.candidate_source_type; });
+      fillMultiSelect(elements.candidateUsers, assign.candidate_users);
+      fillMultiSelect(elements.candidateRoles, assign.candidate_roles);
+      elements.singleAssignmentMode.value = assign.single_assignment_mode;
+      elements.singleFixedUser.value = assign.single_fixed_user_id;
+      fillMultiSelect(elements.rrPoolUsers, assign.rr_pool_users);
+      elements.rrOrderMode.value = assign.rr_order_mode;
+      fillMultiSelect(elements.ssPoolUsers, assign.ss_pool_users);
+      elements.ssVisibleToAll.checked = assign.ss_visible_to_all;
+      fillMultiSelect(elements.multiPoolUsers, assign.multi_pool_users);
+      elements.multiLockMode.value = assign.multi_lock_mode;
+      elements.allowManualOverride.checked = assign.allow_manual_override;
+      fillMultiSelect(elements.overrideAllowedRoles, assign.override_allowed_roles);
+      elements.onEmptyPoolAction.value = assign.on_empty_pool_action;
+    }
+
+    function updateAssignmentFromForm() {
+      const step = getCurrentStep();
+      const a = step.assignment;
+      a.strategy_type = elements.strategySelect.value;
+      a.candidate_source_type = document.querySelector('input[name="candidate_source_type"]:checked')?.value || "users";
+      a.candidate_users = readMultiSelect(elements.candidateUsers);
+      a.candidate_roles = readMultiSelect(elements.candidateRoles);
+      a.single_assignment_mode = elements.singleAssignmentMode.value;
+      a.single_fixed_user_id = elements.singleFixedUser.value;
+      a.rr_pool_users = readMultiSelect(elements.rrPoolUsers);
+      a.rr_order_mode = elements.rrOrderMode.value;
+      a.ss_pool_users = readMultiSelect(elements.ssPoolUsers);
+      a.ss_visible_to_all = elements.ssVisibleToAll.checked;
+      a.multi_pool_users = readMultiSelect(elements.multiPoolUsers);
+      a.multi_lock_mode = elements.multiLockMode.value;
+      a.allow_manual_override = elements.allowManualOverride.checked;
+      a.override_allowed_roles = readMultiSelect(elements.overrideAllowedRoles);
+      a.on_empty_pool_action = elements.onEmptyPoolAction.value;
+      toggleStrategyCards(a.strategy_type);
+      renderPreview();
+    }
+
+    function renderPreview() {
+      flowConfig.flowName = elements.flowName.value;
+      elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
+    }
+
     function attachListeners() {
       elements.stepItems.forEach(item => {
         item.addEventListener('click', () => setActiveStep(item.dataset.step));
@@ -758,6 +851,9 @@
         const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'change';
         el.addEventListener(evt, updateTimingFromForm);
       });
+      [elements.singleAssignmentMode, elements.singleFixedUser, elements.rrOrderMode, elements.multiLockMode, elements.onEmptyPoolAction].forEach(sel => sel.addEventListener('change', updateAssignmentFromForm));
+      [elements.ssVisibleToAll, elements.allowManualOverride].forEach(chk => chk.addEventListener('change', updateAssignmentFromForm));
+      elements.flowName.addEventListener('input', renderPreview);
     }
 
     attachListeners();
