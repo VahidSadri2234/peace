@@ -67,6 +67,14 @@
       font-size: 16px;
     }
 
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
     .step-list .step-item {
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -348,11 +356,15 @@
       </aside>
 
       <section>
-        <div class="card">
-          <h3>تنظیمات مرحله‌ی انتخاب‌شده</h3>
-          <div class="muted" id="selected_step_label">مرحله: انتخاب کارفرما</div>
+        <div class="card collapsible-card" data-collapsible-card="assignment">
+          <div class="card-header">
+            <h3 style="margin:0;">تنظیمات مرحله‌ی انتخاب‌شده</h3>
+            <button class="collapse-toggle" type="button" data-target="assignment_content">باز/بسته کردن</button>
+          </div>
+          <div class="collapse-content" id="assignment_content">
+            <div class="muted" id="selected_step_label">مرحله: انتخاب کارفرما</div>
 
-          <div class="section-card">
+            <div class="section-card">
             <h4>استراتژی ارجاع تیکت</h4>
 
             <div class="row">
@@ -497,10 +509,15 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="card">
-            <h4>قوانین زمان‌بندی برای این استپ</h4>
+        <div class="card collapsible-card" data-collapsible-card="timing">
+          <div class="card-header">
+            <h4 style="margin:0;">قوانین زمان‌بندی برای این استپ</h4>
+            <button class="collapse-toggle collapsed" type="button" data-target="timing_content">باز/بسته کردن</button>
+          </div>
 
+          <div class="collapse-content hidden" id="timing_content">
             <div class="section-card">
               <h5>تنظیمات عمومی</h5>
               <div class="checkbox">
@@ -592,8 +609,14 @@
               </div>
             </div>
           </div>
-          <div class="card">
-            <h4>شرایط عبور مرحله</h4>
+        </div>
+
+        <div class="card collapsible-card" data-collapsible-card="conditions">
+          <div class="card-header">
+            <h4 style="margin:0;">شرایط عبور مرحله</h4>
+            <button class="collapse-toggle collapsed" type="button" data-target="conditions_content">باز/بسته کردن</button>
+          </div>
+          <div class="collapse-content hidden" id="conditions_content">
             <div class="section-card">
               <h5>تنظیمات عمومی شرایط عبور</h5>
               <div class="checkbox">
@@ -675,9 +698,15 @@
               </div>
             </div>
           </div>
-          <div class="card">
-            <h4>وابستگی به سایر تیکت‌ها یا مراحل</h4>
+        </div>
 
+        <div class="card collapsible-card" data-collapsible-card="dependencies">
+          <div class="card-header">
+            <h4 style="margin:0;">وابستگی به سایر تیکت‌ها یا مراحل</h4>
+            <button class="collapse-toggle collapsed" type="button" data-target="dependencies_content">باز/بسته کردن</button>
+          </div>
+
+          <div class="collapse-content hidden" id="dependencies_content">
             <div class="section-card">
               <h5>تنظیمات عمومی وابستگی</h5>
               <div class="checkbox">
@@ -703,8 +732,14 @@
               <div id="deps_list" style="margin-top:12px; display:flex; flex-direction:column; gap:12px;"></div>
             </div>
           </div>
-          <div class="card" id="access_card">
-            <h4>سطح دسترسی و دیدن تیکت</h4>
+        </div>
+
+        <div class="card collapsible-card" data-collapsible-card="access" id="access_card">
+          <div class="card-header">
+            <h4 style="margin:0;">سطح دسترسی و دیدن تیکت</h4>
+            <button class="collapse-toggle collapsed" type="button" data-target="access_content">باز/بسته کردن</button>
+          </div>
+          <div class="collapse-content hidden" id="access_content">
             <div class="section-card">
               <div class="collapsible">
                 <button class="collapse-toggle" type="button" data-target="access_general">تنظیمات عمومی دسترسی</button>
@@ -868,8 +903,15 @@
               </div>
             </div>
           </div>
-          <div class="card">
-            <h4>قوانین اعلان و اطلاع‌رسانی</h4>
+        </div>
+
+        <div class="card collapsible-card" data-collapsible-card="notifications">
+          <div class="card-header">
+            <h4 style="margin:0;">قوانین اعلان و اطلاع‌رسانی</h4>
+            <button class="collapse-toggle collapsed" type="button" data-target="notifications_content">باز/بسته کردن</button>
+          </div>
+
+          <div class="collapse-content hidden" id="notifications_content">
 
             <div class="section-card">
               <h5>تنظیمات عمومی</h5>
@@ -982,9 +1024,15 @@
               <div class="hint">در صورت نیاز می‌توانید پیام و گیرندگان ویژه برای تصعید اعلان‌ها تعریف کنید.</div>
             </div>
           </div>
-          <div class="card">
-            <h4>اقدامات خودکار هنگام ورود/خروج استپ</h4>
+        </div>
 
+        <div class="card collapsible-card" data-collapsible-card="auto_actions">
+          <div class="card-header">
+            <h4 style="margin:0;">اقدامات خودکار هنگام ورود/خروج استپ</h4>
+            <button class="collapse-toggle collapsed" type="button" data-target="auto_actions_content">باز/بسته کردن</button>
+          </div>
+
+          <div class="collapse-content hidden" id="auto_actions_content">
             <div class="section-card">
               <h5>تنظیمات عمومی</h5>
               <div class="checkbox">
@@ -1040,8 +1088,14 @@
               <div id="auto_status_list"></div>
             </div>
           </div>
-          <div class="card">
-            <h4>سیاست بازگشایی تیکت</h4>
+        </div>
+
+        <div class="card collapsible-card" data-collapsible-card="reopen">
+          <div class="card-header">
+            <h4 style="margin:0;">سیاست بازگشایی تیکت</h4>
+            <button class="collapse-toggle collapsed" type="button" data-target="reopen_content">باز/بسته کردن</button>
+          </div>
+          <div class="collapse-content hidden" id="reopen_content">
             <div class="section-card">
               <h5>تنظیمات عمومی بازگشایی</h5>
               <div class="checkbox">
@@ -1142,14 +1196,20 @@
                   <label for="reopen_quality_label">عنوان پرچم کیفیت</label>
                   <input type="text" id="reopen_quality_label" name="reopen_quality_label" placeholder="مثلاً نیاز به ممیزی کیفیت">
                 </div>
+                </div>
+                <div class="hint">در صورت فعال‌سازی، پس از عبور از آستانه، پرچم کیفیت روی تیکت ثبت می‌شود.</div>
               </div>
-              <div class="hint">در صورت فعال‌سازی، پس از عبور از آستانه، پرچم کیفیت روی تیکت ثبت می‌شود.</div>
             </div>
           </div>
-          <div class="card">
-            <h4>امتیازدهی و اولویت پویا</h4>
 
-            <div class="section-card">
+        <div class="card collapsible-card" data-collapsible-card="priority">
+          <div class="card-header">
+            <h4 style="margin:0;">امتیازدهی و اولویت پویا</h4>
+            <button class="collapse-toggle collapsed" type="button" data-target="priority_content">باز/بسته کردن</button>
+          </div>
+
+          <div class="collapse-content hidden" id="priority_content">
+              <div class="section-card">
               <h5>تنظیمات عمومی</h5>
               <div class="checkbox"><input type="checkbox" id="priority_enabled" name="priority_enabled"><label for="priority_enabled">فعال بودن امتیازدهی پویا در این استپ</label></div>
               <div class="row">
@@ -1211,55 +1271,6 @@
               </div>
               <div class="checkbox"><input type="checkbox" id="priority_log_history" name="priority_log_history"><label for="priority_log_history">ثبت تغییرات اولویت در تاریخچه تیکت</label></div>
             </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>قوانین زمان‌بندی برای این استپ</h4>
-            <div>در آینده در این بخش تنظیم می‌کنیم که اگر تیکت در این مرحله باز نشود یا تعیین‌تکلیف نشود، بعد از چه مدت چه اتفاقی بیفتد (هشدار، بازگشت، ثبت تاخیر و غیره).</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>شرایط عبور مرحله</h4>
-            <div>در آینده در این بخش تعیین می‌کنیم چه فیلدها و تأییدهایی قبل از عبور به مرحله بعد حتماً باید تکمیل شده باشند.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>وابستگی به سایر تیکت‌ها یا مراحل</h4>
-            <div>در آینده در این بخش مشخص می‌کنیم که عبور به مرحله بعد وابسته به تکمیل شدن کدام مراحل یا تیکت‌های دیگر باشد.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>سطح دسترسی و دیدن تیکت</h4>
-            <div>در آینده در این بخش تعیین می‌کنیم که در این مرحله چه نقش‌هایی تیکت را ببینند، ویرایش کنند یا فقط وضعیت را ببینند.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>قوانین اعلان و اطلاع‌رسانی</h4>
-            <div>در آینده در این بخش تعریف می‌کنیم روی چه رویدادهایی (ورود، خروج، تاخیر و…) چه اعلان‌هایی برای چه کسانی و از چه کانالی (نوتیف، پیامک، ایمیل) ارسال شود.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>اقدامات خودکار</h4>
-            <div>در آینده در این بخش تعیین می‌کنیم هنگام ورود/خروج این مرحله چه کارهای خودکار انجام شود (ساخت زیرتیکت، تغییر وضعیت، وب‌هوک و غیره).</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>سیاست بازگشایی تیکت</h4>
-            <div>در آینده در این بخش مشخص می‌کنیم تیکت بعد از بازگشایی به کدام مرحله برگردد، چند بار مجاز به بازگشایی باشد و چه کسانی مجازند.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>امتیازدهی و اولویت پویا</h4>
-            <div>در آینده در این بخش قوانین امتیازدهی بر اساس تاخیر، ارجاع، بازگشایی و… و تغییر خودکار سطح اولویت را تعریف می‌کنیم.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>پرچم‌گذاری برای ممیزی و گزارش‌ها</h4>
-            <div>در آینده در این بخش تعریف می‌کنیم چه تیکت‌هایی بر اساس تاخیر، ارجاع زیاد، نارضایتی و… با پرچم‌های مختلف علامت‌گذاری شوند.</div>
-            <h4>تنظیمات SLA / زمان‌بندی</h4>
-            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>تنظیمات اعلان‌ها (Notifications)</h4>
-            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>اقدامات خودکار (Auto Actions)</h4>
-            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>دسترسی‌ها و سطح دید</h4>
-            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
           </div>
         </div>
       </section>
@@ -1735,8 +1746,8 @@
       priorityNotifyRoles: document.getElementById('priority_notify_roles'),
       priorityLogHistory: document.getElementById('priority_log_history'),
 
-      collapseToggles: document.querySelectorAll('.collapse-toggle')
-      timingNoactionLockConversation: document.getElementById('timing_noaction_lock_conversation')
+      collapseToggles: document.querySelectorAll('.collapse-toggle'),
+      timingNoactionLockConversation: document.getElementById('timing_noaction_lock_conversation'),
       flowName: document.getElementById('flow_name')
     };
 
@@ -2971,7 +2982,6 @@
 
     function attachListeners() {
       setupCollapsibles();
-    function attachListeners() {
       elements.stepItems.forEach(item => {
         item.addEventListener('click', () => setActiveStep(item.dataset.step));
       });
