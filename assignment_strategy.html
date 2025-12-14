@@ -3235,15 +3235,6 @@
           renderPreview();
         });
       }
-        elements.timingNoactionLockConversation
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'change';
-        el.addEventListener(evt, updateTimingFromForm);
-      });
-      [elements.singleAssignmentMode, elements.singleFixedUser, elements.rrOrderMode, elements.multiLockMode, elements.onEmptyPoolAction].forEach(sel => sel.addEventListener('change', updateAssignmentFromForm));
-      [elements.ssVisibleToAll, elements.allowManualOverride].forEach(chk => chk.addEventListener('change', updateAssignmentFromForm));
-      elements.flowName.addEventListener('input', renderPreview);
     }
 
     attachListeners();
