@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>طراحی فلو تیکت در سا۲</title>
+  <title>طراحی فلو تیکت</title>
   <style>
     :root {
-      --bg: #f4f6f9;
+      --bg: #f5f7fb;
       --card: #ffffff;
+      --ink: #0f172a;
       --muted: #6b7280;
       --border: #e5e7eb;
       --accent: #2563eb;
-      --accent-soft: #e0ebff;
-      --disabled: #f1f5f9;
+      --accent-ink: #1d4ed8;
+      --accent-soft: #e7edff;
+      --shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+      --radius: 14px;
     }
 
     * { box-sizing: border-box; }
@@ -21,301 +24,121 @@
       margin: 0;
       padding: 32px;
       background: var(--bg);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-family: "Vazirmatn", "Segoe UI", sans-serif;
-      color: #0f172a;
+      color: var(--ink);
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
       background: var(--card);
-      border-radius: 16px;
-      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.08);
-      padding: 28px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 26px 28px;
       display: flex;
       flex-direction: column;
       gap: 24px;
     }
 
-    .header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+    .header h1 { margin: 0; font-size: 24px; }
+    .header p { margin: 8px 0 0; color: var(--muted); line-height: 1.6; }
 
-    .header p {
-      margin: 6px 0 0;
-      color: var(--muted);
-    }
-
-    .main {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 18px;
-    }
+    .main { display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
 
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+      border-radius: var(--radius);
+      padding: 16px 16px 14px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
     }
 
-    .card h3 {
-      margin: 0 0 12px;
-      font-size: 16px;
-    }
-
-    .step-list .step-item {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .step-list .step-item.active {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-      color: #1d4ed8;
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
-    }
-
+    .card h3 { margin: 0 0 10px; font-size: 16px; }
     .muted { color: var(--muted); font-size: 13px; }
-
-    label { font-weight: 600; display: block; margin-bottom: 6px; }
+    label { display: block; font-weight: 700; margin-bottom: 6px; }
 
     input[type="text"], select, textarea {
       width: 100%;
       padding: 10px 12px;
-      border-radius: 8px;
       border: 1px solid var(--border);
+      border-radius: 10px;
       font-family: inherit;
       font-size: 14px;
+      background: #f9fafb;
     }
 
-    select[multiple] { min-height: 120px; }
+    textarea { resize: vertical; }
 
     .row { margin-bottom: 14px; }
 
-    .hint { color: var(--muted); font-size: 13px; margin-top: 6px; }
-
-    .radio-group { display: flex; gap: 16px; flex-wrap: wrap; }
-
-    .radio-item { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-
-    .section-card {
+    .step-item {
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      margin-top: 10px;
-      background: #f8fafc;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #f9fafb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
     }
 
-    .strategy-card { margin-top: 12px; }
+    .step-item small { color: var(--muted); font-weight: 500; }
 
-    .hidden { display: none; }
-
-    .checkbox { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-
-    .placeholder {
-      background: var(--disabled);
-      border: 1px dashed var(--border);
-      color: var(--muted);
+    .step-item.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent-ink);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
     }
 
-    .collapsible {
+    details.panel {
       border: 1px solid var(--border);
-      border-radius: 10px;
-      margin-top: 10px;
+      border-radius: var(--radius);
       overflow: hidden;
+      background: #fafbff;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .collapse-toggle {
-      width: 100%;
-      text-align: right;
-      background: #f8fafc;
-      border: none;
-      padding: 10px 12px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    details.panel[open] { border-color: var(--accent); box-shadow: 0 10px 26px rgba(37, 99, 235, 0.12); }
+
+    summary.panel-title {
+      list-style: none;
       cursor: pointer;
-      color: #0f172a;
-    }
-
-    .collapse-toggle::after {
-      content: '⌄';
-      transition: transform 0.2s ease;
-    }
-
-    .collapse-toggle.collapsed::after {
-      transform: rotate(180deg);
-    }
-
-    .collapse-content {
-      padding: 12px;
-      background: #fff;
-      border-top: 1px solid var(--border);
-    }
-
-    .preview {
-      background: #0f172a;
-      color: #e2e8f0;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 13px;
-      overflow: auto;
-    }
-
-    .btn {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: background 0.2s ease;
-    }
-
-    .btn:hover {
-      background: #1d4ed8;
-    }
-
-    .btn.secondary {
-      background: #e2e8f0;
-      color: #0f172a;
-      border: 1px solid var(--border);
-    }
-
-    .action-header {
+      padding: 14px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      margin-bottom: 8px;
+      font-weight: 800;
+      position: relative;
     }
 
-    .inline-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
+    summary.panel-title::-webkit-details-marker { display: none; }
 
-    .main {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 18px;
-    }
+    .chevron { transition: transform 0.2s ease; font-size: 18px; }
+    details[open] .chevron { transform: rotate(180deg); }
 
-    }
+    .panel-body { padding: 0 16px 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .panel-body.full { grid-template-columns: 1fr; }
 
-    .main {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 18px;
-    }
+    .section { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+    .section h4 { margin: 0 0 8px; font-size: 15px; }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
-    }
+    .inline { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .pill { background: #eef2ff; color: #4338ca; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
 
-    .card h3 {
-      margin: 0 0 12px;
-      font-size: 16px;
-    }
-
-    .step-list .step-item {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .step-list .step-item.active {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-      color: #1d4ed8;
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
-    }
-
-    }
-
-    .step-list .step-item.active {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-      color: #1d4ed8;
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
-    }
-
-    .muted { color: var(--muted); font-size: 13px; }
-
-    label { font-weight: 600; display: block; margin-bottom: 6px; }
-
-    input[type="text"], select, textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-family: inherit;
-      font-size: 14px;
-    }
-
-    select[multiple] { min-height: 120px; }
-
-    .row { margin-bottom: 14px; }
-
-    .hint { color: var(--muted); font-size: 13px; margin-top: 6px; }
-
-    .radio-group { display: flex; gap: 16px; flex-wrap: wrap; }
-
-    .radio-item { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-
-    .section-card {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      margin-top: 10px;
-      background: #f8fafc;
-    }
-
-    .strategy-card { margin-top: 12px; }
-
-    .hidden { display: none; }
+    .switch-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .switch-row label { margin: 0; }
 
     .checkbox { display: flex; align-items: center; gap: 8px; font-weight: 600; }
 
-    .placeholder {
-      background: var(--disabled);
-      border: 1px dashed var(--border);
-      color: var(--muted);
-    }
-
-    .preview {
-      background: #0f172a;
-      color: #e2e8f0;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 13px;
-      overflow: auto;
-    }
-
-    @media (max-width: 1000px) {
+    @media (max-width: 1080px) {
+      body { padding: 18px; }
       .main { grid-template-columns: 1fr; }
     }
   </style>
@@ -323,2904 +146,269 @@
 <body>
   <div class="container">
     <header class="header">
-      <h1>طراحی فلو تیکت در سا۲</h1>
-      <p>در این صفحه می‌توانید مرحله‌های یک فلو را تعریف و تنظیمات هر مرحله را مدیریت کنید.</p>
+      <h1>طراحی فلو تیکت</h1>
+      <p>یک رابط مینیمال برای تعریف فلو، مدیریت مراحل و تنظیمات هر مرحله. روی هر عنوان کلیک کنید تا بخش باز یا بسته شود.</p>
     </header>
 
     <div class="main">
       <aside>
         <div class="card">
-          <h3>تنظیمات کلی فلو</h3>
+          <h3>اطلاعات کلی فلو</h3>
           <div class="row">
             <label for="flow_name">نام فلو</label>
-            <input type="text" id="flow_name" name="flow_name" placeholder="مثال: فلو پیش‌فرض تیکت‌های شهرداری">
-            <div class="hint">سایر تنظیمات کلی فلو (SLA پیش‌فرض، سیاست بازگشایی، قوانین امتیازدهی کلی و غیره) بعداً اضافه می‌شوند.</div>
+            <input id="flow_name" type="text" placeholder="مثال: رسیدگی به درخواست شهروندان">
+            <div class="muted" style="margin-top:6px;">در ادامه می‌توانید SLA، اعلان‌ها و سیاست بازگشایی را برای هر مرحله تنظیم کنید.</div>
           </div>
         </div>
 
-        <div class="card step-list">
-          <h3>مرحله‌ها (Steps)</h3>
-          <div class="step-item" data-step="step_customer">انتخاب کارفرما</div>
-          <div class="step-item" data-step="step_service">انتخاب سرویس</div>
-          <div class="step-item" data-step="step_work">انجام کار</div>
-          <div class="step-item" data-step="step_delivery">تحویل به کارفرما</div>
+        <div class="card">
+          <h3>مرحله‌ها</h3>
+          <div id="steps">
+            <div class="step-item active" data-step="customer">انتخاب کارفرما <small>مرحله ۱</small></div>
+            <div class="step-item" data-step="service">انتخاب سرویس <small>مرحله ۲</small></div>
+            <div class="step-item" data-step="work">انجام کار <small>مرحله ۳</small></div>
+            <div class="step-item" data-step="delivery">تحویل به کارفرما <small>مرحله ۴</small></div>
+          </div>
         </div>
       </aside>
 
       <section>
-        <div class="card">
-          <h3>تنظیمات مرحله‌ی انتخاب‌شده</h3>
-          <div class="muted" id="selected_step_label">مرحله: انتخاب کارفرما</div>
-
-          <div class="section-card">
-            <h4>استراتژی ارجاع تیکت</h4>
-
-            <div class="row">
-              <label for="strategy_type">نوع استراتژی ارجاع</label>
-              <select id="strategy_type" name="strategy_type">
-                <option value="single">کارتابل واحد (Single)</option>
-                <option value="round_robin">چرخشی (Round Robin)</option>
-                <option value="self_service">سلف‌سرویس (Self Service)</option>
-                <option value="multi_send">ارسال همزمان به چند نفر (Multi Send)</option>
-              </select>
-              <div class="hint">تعیین می‌کند کار این استپ با چه الگویی بین افراد پخش شود.</div>
+        <div class="card" style="padding:18px;">
+          <div class="inline" style="margin-bottom:10px;">
+            <div>
+              <div class="muted" style="font-weight:700;">مرحله انتخاب‌شده</div>
+              <div id="selected-step" style="font-size:18px; font-weight:800;">انتخاب کارفرما</div>
             </div>
-
-            <div class="row">
-              <label>منبع کاندیداها</label>
-              <div class="radio-group" id="candidate_source_group">
-                <label class="radio-item"><input type="radio" name="candidate_source_type" value="users" checked> کاربران (Users)</label>
-                <label class="radio-item"><input type="radio" name="candidate_source_type" value="roles"> نقش‌ها (Roles)</label>
-                <label class="radio-item"><input type="radio" name="candidate_source_type" value="users_and_roles"> ترکیبی (Users + Roles)</label>
-              </div>
-              <div class="hint">مشخص می‌کند لیست کاندیداها از چه منبعی پر شود.</div>
-            </div>
-
-            <div class="grid-2 row">
-              <div>
-                <label for="candidate_users">لیست کاربران کاندیدا</label>
-                <select id="candidate_users" name="candidate_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
-              </div>
-              <div>
-                <label for="candidate_roles">لیست نقش‌های کاندیدا</label>
-                <select id="candidate_roles" name="candidate_roles" multiple>
-                  <option value="پشتیبان فنی">پشتیبان فنی</option>
-                  <option value="کارشناس شهرسازی">کارشناس شهرسازی</option>
-                  <option value="کارشناس درآمد">کارشناس درآمد</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="strategy-card" data-strategy="single">
-              <h4>تنظیمات کارتابل واحد (Single)</h4>
-              <div class="row">
-                <label for="single_assignment_mode">روش انتخاب مسئول</label>
-                <select id="single_assignment_mode" name="single_assignment_mode">
-                  <option value="fixed_user">کاربر ثابت</option>
-                  <option value="first_user_in_pool">اولین کاربر لیست کاندیداها</option>
-                </select>
-                <div class="hint">مشخص می‌کند مسئول این استپ همیشه فرد مشخص باشد یا اولین نفر لیست.</div>
-              </div>
-              <div class="row">
-                <label for="single_fixed_user_id">کاربر ثابت</label>
-                <select id="single_fixed_user_id" name="single_fixed_user_id">
-                  <option value="">انتخاب کنید</option>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                </select>
-                <div class="hint">فقط وقتی روش انتخاب = «کاربر ثابت» است استفاده می‌شود.</div>
-              </div>
-            </div>
-
-            <div class="strategy-card hidden" data-strategy="round_robin">
-              <h4>تنظیمات چرخشی (Round Robin)</h4>
-              <div class="row">
-                <label for="rr_pool_users">لیست کاربران چرخشی</label>
-                <select id="rr_pool_users" name="rr_pool_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
-                <div class="hint">اگر خالی باشد، از لیست کاربران کاندیدا استفاده می‌شود.</div>
-              </div>
-              <div class="row">
-                <label for="rr_order_mode">الگوریتم انتخاب نفر بعد</label>
-                <select id="rr_order_mode" name="rr_order_mode">
-                  <option value="list_order">بر اساس ترتیب لیست</option>
-                  <option value="least_recent">کمترین دریافت اخیر</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="strategy-card hidden" data-strategy="self_service">
-              <h4>تنظیمات سلف‌سرویس</h4>
-              <div class="row">
-                <label for="ss_pool_users">لیست کاربران سلف‌سرویس</label>
-                <select id="ss_pool_users" name="ss_pool_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
-                <div class="hint">کاربران این لیست تیکت را در کارتابل مشترک می‌بینند تا یکی آن را بردارد.</div>
-              </div>
-              <div class="checkbox">
-                <input type="checkbox" id="ss_visible_to_all" name="ss_visible_to_all">
-                <label for="ss_visible_to_all">تیکت برای همه افراد لیست نمایش داده شود تا یکی Claim کند.</label>
-              </div>
-            </div>
-
-            <div class="strategy-card hidden" data-strategy="multi_send">
-              <h4>تنظیمات ارسال همزمان</h4>
-              <div class="row">
-                <label for="multi_pool_users">لیست کاربران دریافت‌کننده اولیه</label>
-                <select id="multi_pool_users" name="multi_pool_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
-                <div class="hint">تیکت به‌صورت همزمان در کارتابل این افراد نمایش داده می‌شود.</div>
-              </div>
-              <div class="row">
-                <label for="multi_lock_mode">قانون قفل شدن تیکت</label>
-                <select id="multi_lock_mode" name="multi_lock_mode">
-                  <option value="first_picker_wins">اولین دریافت‌کننده مسئول می‌شود</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h4>قوانین تکمیلی</h4>
-              <div class="checkbox">
-                <input type="checkbox" id="allow_manual_override" name="allow_manual_override">
-                <label for="allow_manual_override">اجازه تغییر دستی مسئول در این Step فعال باشد.</label>
-              </div>
-              <div class="row">
-                <label for="override_allowed_roles">نقش‌های مجاز برای تغییر دستی مسئول</label>
-                <select id="override_allowed_roles" name="override_allowed_roles" multiple>
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                </select>
-                <div class="hint">فقط این نقش‌ها می‌توانند Assignee را در این استپ تغییر دهند.</div>
-              </div>
-              <div class="row">
-                <label for="on_empty_pool_action">رفتار در صورت خالی بودن لیست کاندیدا</label>
-                <select id="on_empty_pool_action" name="on_empty_pool_action">
-                  <option value="keep_previous_assignee">نگه داشتن مسئول قبلی تیکت</option>
-                  <option value="assign_to_project_manager">ارجاع به مدیر پروژه</option>
-                  <option value="error_and_log">ثبت خطا و ارسال هشدار (بدون تغییر مسئول)</option>
-                </select>
-                <div class="hint">اگر به هر دلیل کاندیدایی برای ارجاع پیدا نشود، سیستم چه کاری انجام دهد.</div>
-              </div>
-            </div>
+            <span class="pill">قابل تنظیم</span>
           </div>
 
-          <div class="card">
-            <h4>قوانین زمان‌بندی برای این استپ</h4>
-
-            <div class="section-card">
-              <h5>تنظیمات عمومی</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="timing_enabled" name="timing_enabled">
-                <label for="timing_enabled">فعال بودن قوانین زمان‌بندی برای این استپ</label>
-              </div>
-              <div class="row">
-                <label for="timing_mode">نوع زمان‌سنجی</label>
-                <select id="timing_mode" name="timing_mode">
-                  <option value="calendar">بر اساس زمان تقویمی</option>
-                  <option value="work_hours">بر اساس ساعت کاری</option>
-                </select>
-                <div class="hint">نوع محاسبه زمان برای این مرحله.</div>
-              </div>
-              <div class="checkbox">
-                <input type="checkbox" id="timing_pause_on_hold" name="timing_pause_on_hold">
-                <label for="timing_pause_on_hold">توقف زمان‌سنجی در حالت «تیکت متوقف / در انتظار»</label>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>سناریو ۱: تیکت باز نشده (Unread)</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="timing_unread_enabled" name="timing_unread_enabled">
-                <label for="timing_unread_enabled">فعال بودن این سناریو</label>
-              </div>
-
-              <div class="row">
-                <label>حداکثر زمان مجاز برای باز نکردن تیکت</label>
-                <div class="grid-2">
-                  <input type="number" id="timing_unread_threshold_value" name="timing_unread_threshold_value" min="0" placeholder="مثلاً ۳۰">
-                  <select id="timing_unread_threshold_unit" name="timing_unread_threshold_unit">
-                    <option value="minute">دقیقه</option>
-                    <option value="hour">ساعت</option>
-                    <option value="day">روز</option>
+          <details class="panel" open>
+            <summary class="panel-title">استراتژی ارجاع تیکت <span class="chevron">⌄</span></summary>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>روش توزیع</h4>
+                <div class="row">
+                  <label for="strategy_type">انتخاب الگوریتم</label>
+                  <select id="strategy_type">
+                    <option value="single">کارتابل واحد</option>
+                    <option value="round">چرخشی (Round Robin)</option>
+                    <option value="self">سلف‌سرویس</option>
+                    <option value="multi">ارسال همزمان</option>
                   </select>
                 </div>
-                <div class="hint">مثال: ۳۰ دقیقه یا ۲ ساعت.</div>
+                <div class="row">
+                  <label for="candidates">کاندیداها</label>
+                  <select id="candidates" multiple>
+                    <option>کاربر نمونه ۱</option>
+                    <option>کاربر نمونه ۲</option>
+                    <option>کاربر نمونه ۳</option>
+                    <option>کارشناس شهرسازی</option>
+                    <option>پشتیبان فنی</option>
+                  </select>
+                  <div class="muted" style="margin-top:6px;">می‌توانید نقش‌ها یا کاربران مشخص را به عنوان دریافت‌کننده‌های این مرحله تعیین کنید.</div>
+                </div>
+                <div class="switch-row">
+                  <label for="manual_override">اجازه تغییر دستی مسئول</label>
+                  <input id="manual_override" type="checkbox">
+                </div>
               </div>
-
-              <div class="row">
-                <label>اقدامات در صورت عبور از زمان</label>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_notify_receiver" name="timing_unread_notify_receiver"><label for="timing_unread_notify_receiver">ارسال پیامک/اعلان به دریافت‌کننده تیکت</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_notify_creator" name="timing_unread_notify_creator"><label for="timing_unread_notify_creator">ارسال پیامک/اعلان به ایجادکننده تیکت</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_notify_manager" name="timing_unread_notify_manager"><label for="timing_unread_notify_manager">ارسال پیامک/اعلان به مدیر تیکت‌ها / مدیر پروژه</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_return_prev" name="timing_unread_return_prev"><label for="timing_unread_return_prev">بازگشت خودکار تیکت به مرحله قبل</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_log_delay" name="timing_unread_log_delay"><label for="timing_unread_log_delay">ثبت این مورد در گزارش تاخیر</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_auto_assign_next" name="timing_unread_auto_assign_next"><label for="timing_unread_auto_assign_next">ارسال خودکار به نفر بعدی</label></div>
-              </div>
-
-              <div class="row hidden" id="timing_unread_next_users_wrap">
-                <label for="timing_unread_next_users">لیست نفرات بعدی برای ارجاع</label>
-                <select id="timing_unread_next_users" name="timing_unread_next_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
-                <div class="hint">ترتیب لیست نشان‌دهنده ترتیب پیشنهاد ارجاع است (در آینده می‌توان رفتار دقیق را پیاده کرد).</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>سناریو ۲: تیکت باز شده ولی تعیین‌تکلیف نشده</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="timing_noaction_enabled" name="timing_noaction_enabled">
-                <label for="timing_noaction_enabled">فعال بودن این سناریو</label>
-              </div>
-
-              <div class="row">
-                <label>حداکثر زمان بدون تعیین‌تکلیف بعد از اولین باز شدن</label>
-                <div class="grid-2">
-                  <input type="number" id="timing_noaction_threshold_value" name="timing_noaction_threshold_value" min="0" placeholder="مثلاً ۴">
-                  <select id="timing_noaction_threshold_unit" name="timing_noaction_threshold_unit">
-                    <option value="hour">ساعت</option>
-                    <option value="day">روز</option>
+              <div class="section">
+                <h4>قوانین زمان‌بندی</h4>
+                <div class="row">
+                  <label for="due_hours">مهلت انجام (ساعت)</label>
+                  <input id="due_hours" type="text" placeholder="مثال: 48">
+                </div>
+                <div class="row">
+                  <label for="reminder">اعلان هشدار</label>
+                  <select id="reminder">
+                    <option>بدون هشدار</option>
+                    <option>۴ ساعت قبل از مهلت</option>
+                    <option>۱۲ ساعت قبل از مهلت</option>
+                    <option>۲۴ ساعت قبل از مهلت</option>
                   </select>
                 </div>
-                <div class="hint">مثال: ۴ ساعت یا ۱ روز بعد از اولین باز کردن.</div>
-              </div>
-
-              <div class="row">
-                <label>اقدامات در صورت عبور از زمان</label>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_log_delay" name="timing_noaction_log_delay"><label for="timing_noaction_log_delay">ثبت در گزارش تاخیر</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_notify_creator" name="timing_noaction_notify_creator"><label for="timing_noaction_notify_creator">ارسال پیامک/اعلان به ایجادکننده تیکت</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_notify_manager" name="timing_noaction_notify_manager"><label for="timing_noaction_notify_manager">ارسال پیامک/اعلان به مدیر تیکت‌ها / مدیر پروژه</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_other_tickets" name="timing_noaction_lock_other_tickets"><label for="timing_noaction_lock_other_tickets">قفل کردن دسترسی به سایر تیکت‌ها برای این کاربر (تا تعیین‌تکلیف)</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_mentions" name="timing_noaction_lock_mentions"><label for="timing_noaction_lock_mentions">محدودیت در منشن‌گذاری روی تیکت‌ها</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_conversation" name="timing_noaction_lock_conversation"><label for="timing_noaction_lock_conversation">محدودیت در ارسال پیام در گفتگوی تیکت</label></div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <h4>شرایط عبور مرحله</h4>
-            <div class="section-card">
-              <h5>تنظیمات عمومی شرایط عبور</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="cond_enabled" name="cond_enabled">
-                <label for="cond_enabled">فعال بودن کنترل شرایط عبور برای این استپ</label>
-              </div>
-              <div class="row">
-                <label for="cond_enforcement_mode">نوع رفتار سیستم در صورت برآورده نشدن شرط‌ها</label>
-                <select id="cond_enforcement_mode" name="cond_enforcement_mode">
-                  <option value="block">جلوگیری کامل از عبور به مرحله بعد</option>
-                  <option value="warn_only">فقط هشدار بده ولی اجازه عبور بده</option>
-                </select>
-                <div class="hint">مشخص می‌کند سیستم در صورت ناقص بودن شرط‌ها عبور را بلاک کند یا فقط هشدار نمایش دهد.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>الزامات فرم و چک‌لیست قبل از عبور</h5>
-              <div class="row">
-                <label for="cond_required_fields">فیلدهای اجباری قبل از عبور</label>
-                <select id="cond_required_fields" name="cond_required_fields" multiple>
-                  <option value="گزارش انجام کار">گزارش انجام کار</option>
-                  <option value="زمان تحویل">زمان تحویل</option>
-                  <option value="نوع سرویس">نوع سرویس</option>
-                  <option value="پیوست مستندات">پیوست مستندات</option>
-                </select>
-                <div class="hint">تا زمانی که این فیلدها خالی باشند، عبور به مرحله بعد مجاز نیست (یا فقط هشدار داده می‌شود).</div>
-              </div>
-              <div class="row">
-                <label for="cond_checklist_items">موارد چک‌لیست قبل از عبور</label>
-                <textarea id="cond_checklist_items" name="cond_checklist_items" rows="3" placeholder="هر آیتم در یک خط"></textarea>
-                <div class="hint">هر آیتم یک خط جداگانه. مثال: "محاسبات کنترل شد" ، "با کارفرما هماهنگ شد".</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>الزامات وضعیت و اقدام قبل از عبور</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="cond_status_restrict" name="cond_status_restrict">
-                <label for="cond_status_restrict">محدود کردن عبور به وضعیت‌های مشخص</label>
-              </div>
-              <div class="row">
-                <label for="cond_allowed_statuses">وضعیت‌های مجاز برای عبور</label>
-                <select id="cond_allowed_statuses" name="cond_allowed_statuses" multiple>
-                  <option value="در حال انجام">در حال انجام</option>
-                  <option value="بررسی شد">بررسی شد</option>
-                  <option value="تایید شد">تایید شد</option>
-                  <option value="تکمیل شد">تکمیل شد</option>
-                </select>
-                <div class="hint">اگر این گزینه فعال باشد، تیکت فقط در این وضعیت‌ها اجازه عبور دارد.</div>
-              </div>
-              <div class="checkbox"><input type="checkbox" id="cond_require_action_log" name="cond_require_action_log"><label for="cond_require_action_log">حداقل یک اقدام (لاگ) در این مرحله ثبت شده باشد</label></div>
-              <div class="checkbox"><input type="checkbox" id="cond_require_customer_message" name="cond_require_customer_message"><label for="cond_require_customer_message">حداقل یک پیام برای کارفرما ثبت شده باشد</label></div>
-            </div>
-
-            <div class="section-card">
-              <h5>تاییدها و استثناء‌ها</h5>
-              <div class="checkbox"><input type="checkbox" id="cond_require_manager_approval" name="cond_require_manager_approval"><label for="cond_require_manager_approval">نیاز به تایید مدیر پروژه</label></div>
-              <div class="checkbox"><input type="checkbox" id="cond_require_finance_approval" name="cond_require_finance_approval"><label for="cond_require_finance_approval">نیاز به تایید واحد مالی</label></div>
-              <div class="checkbox"><input type="checkbox" id="cond_require_customer_approval" name="cond_require_customer_approval"><label for="cond_require_customer_approval">نیاز به تایید کارفرما</label></div>
-
-              <div class="checkbox" style="margin-top:8px;">
-                <input type="checkbox" id="cond_override_allowed" name="cond_override_allowed">
-                <label for="cond_override_allowed">امکان عبور با وجود نقص شرط‌ها برای برخی نقش‌ها</label>
-              </div>
-              <div class="hint" style="margin-top:-4px; margin-bottom:6px;">اگر فعال باشد، نقش‌های مشخص می‌توانند با وجود هشدار/خطا تیکت را عبور دهند.</div>
-              <div class="row" id="cond_override_roles_wrap">
-                <label for="cond_override_roles">نقش‌های مجاز برای عبور با وجود نقص شرط‌ها</label>
-                <select id="cond_override_roles" name="cond_override_roles" multiple>
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="مدیرعامل">مدیرعامل</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                </select>
-              </div>
-              <div class="row">
-                <label for="cond_violation_message">متن پیام برای کاربر در صورت برآورده نشدن شرط‌ها</label>
-                <textarea id="cond_violation_message" name="cond_violation_message" rows="3" placeholder="مثال: قبل از عبور به مرحله بعد، تکمیل فیلد گزارش انجام کار و تایید مدیر پروژه الزامی است."></textarea>
-                <div class="hint">مثال: "قبل از عبور به مرحله بعد، تکمیل فیلد گزارش انجام کار و تایید مدیر پروژه الزامی است."</div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <h4>وابستگی به سایر تیکت‌ها یا مراحل</h4>
-
-            <div class="section-card">
-              <h5>تنظیمات عمومی وابستگی</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="deps_enabled" name="deps_enabled">
-                <label for="deps_enabled">فعال بودن وابستگی برای این استپ</label>
-              </div>
-              <div class="row">
-                <label for="deps_enforcement_mode">نوع رفتار سیستم در صورت تکمیل نبودن وابستگی‌ها</label>
-                <select id="deps_enforcement_mode" name="deps_enforcement_mode">
-                  <option value="block">جلوگیری کامل از عبور به مرحله بعد</option>
-                  <option value="warn_only">فقط هشدار بده ولی اجازه عبور بده</option>
-                </select>
-                <div class="hint">مشخص می‌کند اگر وابستگی‌ها کامل نباشند، عبور به مرحله بعد بلاک شود یا فقط هشدار نمایش داده شود.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-                <h5 style="margin:0;">لیست وابستگی‌ها</h5>
-                <button id="deps_add_btn" type="button" style="padding:8px 12px; border:1px solid var(--accent); background:var(--accent-soft); color:var(--accent); border-radius:8px; cursor:pointer;">افزودن وابستگی جدید</button>
-              </div>
-              <div class="hint" style="margin-top:6px;">برای هر وابستگی مشخص کنید هدف وابستگی چیست و در چه شرایطی کامل محسوب می‌شود.</div>
-              <div id="deps_list" style="margin-top:12px; display:flex; flex-direction:column; gap:12px;"></div>
-            </div>
-          </div>
-          <div class="card" id="access_card">
-            <h4>سطح دسترسی و دیدن تیکت</h4>
-            <div class="section-card">
-              <div class="collapsible">
-                <button class="collapse-toggle" type="button" data-target="access_general">تنظیمات عمومی دسترسی</button>
-                <div class="collapse-content" id="access_general">
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_enabled" name="access_enabled">
-                    <label for="access_enabled">فعال بودن کنترل دسترسی در این استپ</label>
-                  </div>
-                  <div class="row">
-                    <label for="access_enforcement_mode">نوع رفتار سیستم در صورت عدم مجوز</label>
-                    <select id="access_enforcement_mode" name="access_enforcement_mode">
-                      <option value="block">جلوگیری کامل از مشاهده/ویرایش</option>
-                      <option value="warn_only">فقط هشدار بده ولی اجازه ادامه بده</option>
-                    </select>
-                    <div class="hint">مشخص می‌کند در صورت نبود دسترسی کافی عبور یا مشاهده بلاک شود یا فقط اخطار نمایش داده شود.</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="collapsible">
-                <button class="collapse-toggle" type="button" data-target="access_visibility">سطح دید و ویرایش</button>
-                <div class="collapse-content" id="access_visibility">
-                  <div class="grid-2 row">
-                    <div>
-                      <label for="access_view_roles">نقش‌های مجاز برای مشاهده</label>
-                      <select id="access_view_roles" name="access_view_roles" multiple>
-                        <option value="پشتیبان فنی">پشتیبان فنی</option>
-                        <option value="کارشناس شهرسازی">کارشناس شهرسازی</option>
-                        <option value="کارشناس درآمد">کارشناس درآمد</option>
-                        <option value="مدیر پروژه">مدیر پروژه</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label for="access_edit_roles">نقش‌های مجاز برای ویرایش</label>
-                      <select id="access_edit_roles" name="access_edit_roles" multiple>
-                        <option value="پشتیبان فنی">پشتیبان فنی</option>
-                        <option value="کارشناس شهرسازی">کارشناس شهرسازی</option>
-                        <option value="کارشناس درآمد">کارشناس درآمد</option>
-                        <option value="مدیر پروژه">مدیر پروژه</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <label for="access_readonly_roles">نقش‌های فقط-خواندنی</label>
-                    <select id="access_readonly_roles" name="access_readonly_roles" multiple>
-                      <option value="مهمان سازمان">مهمان سازمان</option>
-                      <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                      <option value="مدیر پروژه">مدیر پروژه</option>
-                    </select>
-                    <div class="hint">این نقش‌ها می‌توانند جزئیات را ببینند ولی امکان ویرایش ندارند.</div>
-                  </div>
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_allow_customer_view" name="access_allow_customer_view">
-                    <label for="access_allow_customer_view">نمایش تیکت برای کارفرما در این استپ مجاز باشد</label>
-                  </div>
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_restrict_internal_notes" name="access_restrict_internal_notes">
-                    <label for="access_restrict_internal_notes">نمایش یادداشت‌های داخلی فقط برای نقش‌های ویرایش محدود شود</label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="collapsible">
-                <button class="collapse-toggle" type="button" data-target="access_actions">محدودیت‌های اقدام و ویرایش</button>
-                <div class="collapse-content" id="access_actions">
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_allow_comment" name="access_allow_comment">
-                    <label for="access_allow_comment">امکان ثبت کامنت / پیام در این استپ</label>
-                  </div>
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_allow_attachment" name="access_allow_attachment">
-                    <label for="access_allow_attachment">امکان بارگذاری فایل و پیوست</label>
-                  </div>
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_allow_status_change" name="access_allow_status_change">
-                    <label for="access_allow_status_change">اجازه تغییر وضعیت تیکت در این استپ</label>
-                  </div>
-                  <div class="row">
-                    <label for="access_restricted_fields">فیلدهای محدود برای ویرایش</label>
-                    <select id="access_restricted_fields" name="access_restricted_fields" multiple>
-                      <option value="گزارش انجام کار">گزارش انجام کار</option>
-                      <option value="توضیحات داخلی">توضیحات داخلی</option>
-                      <option value="فایل‌های محرمانه">فایل‌های محرمانه</option>
-                    </select>
-                    <div class="hint">این فیلدها فقط برای نقش‌های مجاز به ویرایش فعال خواهند بود.</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="collapsible">
-                <button class="collapse-toggle" type="button" data-target="access_confidentiality">محرمانگی و ماسک‌گذاری</button>
-                <div class="collapse-content" id="access_confidentiality">
-                  <div class="row">
-                    <label for="access_sensitivity_level">سطح حساسیت اطلاعات</label>
-                    <select id="access_sensitivity_level" name="access_sensitivity_level">
-                      <option value="normal">عادی</option>
-                      <option value="confidential">محرمانه</option>
-                      <option value="secret">حساس/ویژه</option>
-                    </select>
-                  </div>
-                  <div class="row">
-                    <label for="access_mask_fields">فیلدهای ماسک‌شونده در نمای کارفرما</label>
-                    <select id="access_mask_fields" name="access_mask_fields" multiple>
-                      <option value="اطلاعات تماس کارفرما">اطلاعات تماس کارفرما</option>
-                      <option value="مبلغ قرارداد">مبلغ قرارداد</option>
-                      <option value="ضمیمه‌های مالی">ضمیمه‌های مالی</option>
-                    </select>
-                    <div class="hint">در سطح محرمانگی بالا این فیلدها مخفی یا ماسک می‌شوند (ذخیره فقط در تنظیمات).</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="collapsible">
-                <button class="collapse-toggle" type="button" data-target="access_watchers">مشاهده‌کنندگان و ناظرها</button>
-                <div class="collapse-content" id="access_watchers">
-                  <div class="grid-2 row">
-                    <div>
-                      <label for="access_watcher_roles">نقش‌های اضافه‌شونده به لیست ناظر</label>
-                      <select id="access_watcher_roles" name="access_watcher_roles" multiple>
-                        <option value="مدیر پروژه">مدیر پروژه</option>
-                        <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                        <option value="کارشناس درآمد">کارشناس درآمد</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label for="access_watcher_users">کاربران ناظر پیشنهادی</label>
-                      <select id="access_watcher_users" name="access_watcher_users" multiple>
-                        <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                        <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                        <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_allow_manual_watchers" name="access_allow_manual_watchers">
-                    <label for="access_allow_manual_watchers">اجازه افزودن دستی ناظر توسط نقش‌های ویرایش</label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="collapsible">
-                <button class="collapse-toggle" type="button" data-target="access_overrides">استثناءها و پیام</button>
-                <div class="collapse-content" id="access_overrides">
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_override_allowed" name="access_override_allowed">
-                    <label for="access_override_allowed">اجازه عبور/مشاهده با وجود نقص دسترسی برای برخی نقش‌ها</label>
-                  </div>
-                  <div class="row" id="access_override_roles_wrap">
-                    <label for="access_override_roles">نقش‌های مجاز برای عبور با وجود نقص دسترسی</label>
-                    <select id="access_override_roles" name="access_override_roles" multiple>
-                      <option value="مدیر پروژه">مدیر پروژه</option>
-                      <option value="مدیرعامل">مدیرعامل</option>
-                      <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                    </select>
-                  </div>
-                  <div class="row">
-                    <label for="access_message">متن پیام در صورت عدم دسترسی</label>
-                    <textarea id="access_message" name="access_message" rows="3" placeholder="مثال: دسترسی به ویرایش این مرحله فقط برای نقش‌های مشخص فعال است."></textarea>
-                  </div>
+                <div class="switch-row">
+                  <label for="auto_return">بازگشت خودکار در صورت تاخیر</label>
+                  <input id="auto_return" type="checkbox">
                 </div>
               </div>
             </div>
-          </div>
-          <div class="card">
-            <h4>قوانین اعلان و اطلاع‌رسانی</h4>
+          </details>
 
-            <div class="section-card">
-              <h5>تنظیمات عمومی</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="notif_enabled" name="notif_enabled">
-                <label for="notif_enabled">فعال بودن اعلان‌ها برای این استپ</label>
+          <details class="panel">
+            <summary class="panel-title">شرایط عبور مرحله <span class="chevron">⌄</span></summary>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>پیش‌نیازها</h4>
+                <div class="checkbox"><input type="checkbox" id="cond-form"><label for="cond-form">تکمیل فرم اطلاعات این مرحله</label></div>
+                <div class="checkbox"><input type="checkbox" id="cond-attachment"><label for="cond-attachment">حداقل یک فایل ضمیمه شده باشد</label></div>
+                <div class="checkbox"><input type="checkbox" id="cond-approval"><label for="cond-approval">تایید مدیر پروژه دریافت شود</label></div>
               </div>
-              <div class="row">
-                <label>کانال‌های ارسال</label>
-                <div class="checkbox"><input type="checkbox" id="notif_channel_inapp" name="notif_channel_inapp"><label for="notif_channel_inapp">اعلان درون سیستم</label></div>
-                <div class="checkbox"><input type="checkbox" id="notif_channel_sms" name="notif_channel_sms"><label for="notif_channel_sms">پیامک</label></div>
-                <div class="checkbox"><input type="checkbox" id="notif_channel_email" name="notif_channel_email"><label for="notif_channel_email">ایمیل</label></div>
-                <div class="hint">انتخاب کنید اعلان‌ها از چه کانال‌هایی ارسال شوند.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>رویدادهای محرک ارسال اعلان</h5>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_enter" name="notif_trigger_enter"><label for="notif_trigger_enter">ورود تیکت به این مرحله</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_exit" name="notif_trigger_exit"><label for="notif_trigger_exit">خروج تیکت از این مرحله</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_delay" name="notif_trigger_delay"><label for="notif_trigger_delay">وقوع تاخیر/نقض SLA در این مرحله</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_reopen" name="notif_trigger_reopen"><label for="notif_trigger_reopen">بازگشایی تیکت</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_assignment" name="notif_trigger_assignment"><label for="notif_trigger_assignment">تغییر مسئول/ارجاع</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_status" name="notif_trigger_status"><label for="notif_trigger_status">تغییر وضعیت درون این مرحله</label></div>
-            </div>
-
-            <div class="section-card">
-              <h5>دریافت‌کنندگان اعلان</h5>
-              <div class="row">
-                <label for="notif_roles">نقش‌های دریافت‌کننده</label>
-                <select id="notif_roles" name="notif_roles" multiple>
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                  <option value="کارشناس درآمد">کارشناس درآمد</option>
-                </select>
-              </div>
-              <div class="row">
-                <label for="notif_users">کاربران دریافت‌کننده</label>
-                <select id="notif_users" name="notif_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
-              </div>
-              <div class="checkbox"><input type="checkbox" id="notif_include_assignee" name="notif_include_assignee"><label for="notif_include_assignee">ارسال به مسئول فعلی تیکت</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_include_creator" name="notif_include_creator"><label for="notif_include_creator">ارسال به ایجادکننده تیکت</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_include_watchers" name="notif_include_watchers"><label for="notif_include_watchers">ارسال به ناظرها (Watchers)</label></div>
-              <div class="hint">دریافت‌کنندگان می‌توانند ترکیبی از نقش‌ها، کاربران مشخص و مسئول/ایجادکننده باشند.</div>
-            </div>
-
-            <div class="section-card">
-              <h5>متن و قالب اعلان</h5>
-              <div class="row">
-                <label for="notif_title">عنوان اعلان</label>
-                <input type="text" id="notif_title" name="notif_title" placeholder="مثال: تیکت جدید در مرحله انجام کار">
-              </div>
-              <div class="row">
-                <label for="notif_message">متن اعلان</label>
-                <textarea id="notif_message" name="notif_message" rows="3" placeholder="متن اعلان را وارد کنید"></textarea>
-                <div class="hint">می‌توانید بعداً الگوهای پویا و متغیرهای سیستمی اضافه کنید.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>محدودیت ارسال و تکرار</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="notif_throttle_enabled" name="notif_throttle_enabled">
-                <label for="notif_throttle_enabled">محدود کردن تعداد ارسال در بازه زمانی</label>
-              </div>
-              <div class="row hidden" id="notif_throttle_wrap">
-                <label>بازه زمانی تکرار</label>
-                <div class="grid-2">
-                  <input type="number" id="notif_throttle_value" name="notif_throttle_value" min="0" placeholder="مثلاً ۳۰">
-                  <select id="notif_throttle_unit" name="notif_throttle_unit">
-                    <option value="minute">دقیقه</option>
-                    <option value="hour">ساعت</option>
-                    <option value="day">روز</option>
+              <div class="section">
+                <h4>رفتار در نقض شرط‌ها</h4>
+                <div class="row">
+                  <label for="violation_action">در صورت ناقص بودن</label>
+                  <select id="violation_action">
+                    <option>جلوگیری از عبور</option>
+                    <option>فقط هشدار بده</option>
                   </select>
                 </div>
-                <div class="hint">برای جلوگیری از ارسال پشت‌سرهم، یک بازه زمانی تعیین کنید.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>تصعید/ارسال به مدیران</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="notif_escalation_enabled" name="notif_escalation_enabled">
-                <label for="notif_escalation_enabled">فعال‌سازی ارسال تصعیدی</label>
-              </div>
-              <div class="row hidden" id="notif_escalation_targets">
-                <label for="notif_escalation_roles">نقش‌های دریافت‌کننده تصعیدی</label>
-                <select id="notif_escalation_roles" name="notif_escalation_roles" multiple>
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="مدیرعامل">مدیرعامل</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                </select>
-              </div>
-              <div class="row hidden" id="notif_escalation_users_wrap">
-                <label for="notif_escalation_users">کاربران دریافت‌کننده تصعیدی</label>
-                <select id="notif_escalation_users" name="notif_escalation_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
-              </div>
-              <div class="row hidden" id="notif_escalation_message_wrap">
-                <label for="notif_escalation_message">متن پیام تصعیدی</label>
-                <textarea id="notif_escalation_message" name="notif_escalation_message" rows="2" placeholder="مثال: تیکت پس از تاخیر به مدیر اطلاع داده شود"></textarea>
-              </div>
-              <div class="hint">در صورت نیاز می‌توانید پیام و گیرندگان ویژه برای تصعید اعلان‌ها تعریف کنید.</div>
-            </div>
-          </div>
-          <div class="card">
-            <h4>اقدامات خودکار هنگام ورود/خروج استپ</h4>
-
-            <div class="section-card">
-              <h5>تنظیمات عمومی</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="auto_enabled" name="auto_enabled">
-                <label for="auto_enabled">فعال بودن اقدامات خودکار برای این استپ</label>
-              </div>
-              <div class="row">
-                <label for="auto_on_error">رفتار در صورت خطا در اجرای اقدامات</label>
-                <select id="auto_on_error" name="auto_on_error">
-                  <option value="continue">ادامه زنجیره و صرف‌نظر از خطا</option>
-                  <option value="stop_chain">توقف زنجیره اقدامات در اولین خطا</option>
-                </select>
-                <div class="hint">مشخص می‌کند اگر یکی از اقدامات خطا داد، بقیه اجرا شوند یا خیر.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>اقدامات هنگام ورود به این مرحله</h5>
-              <div class="inline-actions">
-                <div class="checkbox">
-                  <input type="checkbox" id="auto_enter_enabled" name="auto_enter_enabled">
-                  <label for="auto_enter_enabled">فعال بودن اقدامات ورود</label>
-                </div>
-                <button type="button" class="btn secondary" id="auto_enter_add">افزودن اقدام جدید</button>
-              </div>
-              <div class="hint">پس از ورود تیکت به این استپ، اقدامات زیر به ترتیب اجرا می‌شوند.</div>
-              <div id="auto_enter_list"></div>
-            </div>
-
-            <div class="section-card">
-              <h5>اقدامات هنگام خروج از این مرحله</h5>
-              <div class="inline-actions">
-                <div class="checkbox">
-                  <input type="checkbox" id="auto_exit_enabled" name="auto_exit_enabled">
-                  <label for="auto_exit_enabled">فعال بودن اقدامات خروج</label>
-                </div>
-                <button type="button" class="btn secondary" id="auto_exit_add">افزودن اقدام جدید</button>
-              </div>
-              <div class="hint">پیش از عبور تیکت به مرحله بعد، اقدامات زیر اجرا می‌شوند.</div>
-              <div id="auto_exit_list"></div>
-            </div>
-
-            <div class="section-card">
-              <h5>اقدامات هنگام تغییر وضعیت درون این مرحله</h5>
-              <div class="inline-actions">
-                <div class="checkbox">
-                  <input type="checkbox" id="auto_status_enabled" name="auto_status_enabled">
-                  <label for="auto_status_enabled">فعال بودن اقدامات تغییر وضعیت</label>
-                </div>
-                <button type="button" class="btn secondary" id="auto_status_add">افزودن اقدام جدید</button>
-              </div>
-              <div class="hint">در صورت تغییر وضعیت تیکت داخل همین استپ، اقدامات زیر اجرا می‌شوند.</div>
-              <div id="auto_status_list"></div>
-            </div>
-          </div>
-          <div class="card">
-            <h4>سیاست بازگشایی تیکت</h4>
-            <div class="section-card">
-              <h5>تنظیمات عمومی بازگشایی</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="reopen_enabled" name="reopen_enabled">
-                <label for="reopen_enabled">فعال بودن امکان بازگشایی در این استپ</label>
-              </div>
-              <div class="row">
-                <label for="reopen_routing_mode">مسیر بازگشت تیکت بعد از بازگشایی</label>
-                <select id="reopen_routing_mode" name="reopen_routing_mode">
-                  <option value="previous_step">بازگشت به مرحله قبل</option>
-                  <option value="specific_step">ارسال به یک مرحله مشخص</option>
-                  <option value="last_work_step">بازگشت به آخرین مرحله کاری</option>
-                </select>
-                <div class="hint">مشخص می‌کند تیکت بعد از بازگشایی به کدام مرحله هدایت شود.</div>
-              </div>
-              <div class="row hidden" id="reopen_target_wrap">
-                <label for="reopen_target_step">انتخاب مرحله مقصد در حالت مرحله مشخص</label>
-                <select id="reopen_target_step" name="reopen_target_step"></select>
-                <div class="hint">فقط زمانی استفاده می‌شود که مسیر «ارسال به یک مرحله مشخص» انتخاب شده باشد.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>مجوز و نقش‌های مجاز</h5>
-              <div class="checkbox"><input type="checkbox" id="reopen_allow_customer" name="reopen_allow_customer"><label for="reopen_allow_customer">امکان بازگشایی توسط کارفرما</label></div>
-              <div class="checkbox"><input type="checkbox" id="reopen_allow_internal" name="reopen_allow_internal"><label for="reopen_allow_internal">امکان بازگشایی توسط کاربران داخلی</label></div>
-              <div class="row">
-                <label for="reopen_allowed_roles">نقش‌های مجاز برای بازگشایی</label>
-                <select multiple id="reopen_allowed_roles" name="reopen_allowed_roles">
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                  <option value="کارشناس ارشد">کارشناس ارشد</option>
-                  <option value="مدیرعامل">مدیرعامل</option>
-                </select>
-                <div class="hint">در صورت نیاز می‌توان بازگشایی را فقط برای برخی نقش‌های داخلی مجاز کرد.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>محدودیت‌ها</h5>
-              <div class="grid-2">
                 <div class="row">
-                  <label for="reopen_max_reopens">حداکثر دفعات مجاز بازگشایی</label>
-                  <input type="number" id="reopen_max_reopens" name="reopen_max_reopens" min="0" placeholder="مثلاً 2">
-                  <div class="hint">عدد خالی به معنای بدون محدودیت است.</div>
+                  <label for="violation_message">پیام برای کاربر</label>
+                  <textarea id="violation_message" rows="2" placeholder="مثال: تکمیل گزارش انجام کار الزامی است."></textarea>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="panel">
+            <summary class="panel-title">وابستگی به تیکت‌ها یا مراحل دیگر <span class="chevron">⌄</span></summary>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>مدیریت وابستگی</h4>
+                <div class="row">
+                  <label for="dependency_rule">حالت کنترل</label>
+                  <select id="dependency_rule">
+                    <option>بدون وابستگی</option>
+                    <option>جلوگیری تا اتمام مراحل قبلی</option>
+                    <option>فقط هشدار در صورت ناقص بودن</option>
+                  </select>
                 </div>
                 <div class="row">
-                  <label for="reopen_min_interval_hours">حداقل فاصله زمانی بین دو بازگشایی (ساعت)</label>
-                  <input type="number" id="reopen_min_interval_hours" name="reopen_min_interval_hours" min="0" placeholder="مثلاً 24">
-                  <div class="hint">اگر مقداری وارد نشود، محدودیت فاصله زمانی اعمال نمی‌شود.</div>
+                  <label for="dependency_notes">توضیح</label>
+                  <textarea id="dependency_notes" rows="2" placeholder="مثال: پس از تایید مالی، این مرحله آغاز شود."></textarea>
                 </div>
               </div>
             </div>
+          </details>
 
-            <div class="section-card">
-              <h5>دلیل بازگشایی</h5>
-              <div class="checkbox"><input type="checkbox" id="reopen_require_reason" name="reopen_require_reason"><label for="reopen_require_reason">الزام ثبت دلیل بازگشایی</label></div>
-              <div class="row">
-                <label for="reopen_reason_types">دسته‌بندی دلایل</label>
-                <select multiple id="reopen_reason_types" name="reopen_reason_types">
-                  <option value="مشکل فنی">مشکل فنی</option>
-                  <option value="نارضایتی کارفرما">نارضایتی کارفرما</option>
-                  <option value="تغییر نیازمندی">تغییر نیازمندی</option>
-                  <option value="خطای داده">خطای داده</option>
-                  <option value="درخواست ویژگی">درخواست ویژگی</option>
-                </select>
-                <div class="hint">فهرست برچسب‌های رایج برای دلایل بازگشایی.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>اعلان‌ها هنگام بازگشایی</h5>
-              <div class="checkbox"><input type="checkbox" id="reopen_notify_creator" name="reopen_notify_creator"><label for="reopen_notify_creator">اطلاع به ایجادکننده تیکت</label></div>
-              <div class="checkbox"><input type="checkbox" id="reopen_notify_assignee" name="reopen_notify_assignee"><label for="reopen_notify_assignee">اطلاع به مسئول فعلی</label></div>
-              <div class="checkbox"><input type="checkbox" id="reopen_notify_manager" name="reopen_notify_manager"><label for="reopen_notify_manager">اطلاع به مدیر پروژه</label></div>
-              <div class="checkbox"><input type="checkbox" id="reopen_notify_customer" name="reopen_notify_customer"><label for="reopen_notify_customer">اطلاع به کارفرما</label></div>
-              <div class="row">
-                <label for="reopen_notify_roles">نقش‌های اضافی برای اطلاع‌رسانی</label>
-                <select multiple id="reopen_notify_roles" name="reopen_notify_roles">
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                  <option value="کارشناس ارشد">کارشناس ارشد</option>
-                  <option value="مسئول مالی">مسئول مالی</option>
-                </select>
-                <div class="hint">اعلان‌ها برای نقش‌های انتخاب‌شده نیز ارسال می‌شود.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>پرچم کیفیت</h5>
-              <div class="checkbox"><input type="checkbox" id="reopen_quality_enable_flag" name="reopen_quality_enable_flag"><label for="reopen_quality_enable_flag">ثبت پرچم کیفیت در صورت بازگشایی بیش از حد</label></div>
-              <div id="reopen_quality_wrap" class="grid-2 hidden">
+          <details class="panel">
+            <summary class="panel-title">دسترسی و سطح دید <span class="chevron">⌄</span></summary>
+            <div class="panel-body">
+              <div class="section">
+                <h4>مشاهده</h4>
                 <div class="row">
-                  <label for="reopen_quality_threshold">آستانه تعداد بازگشایی برای پرچم</label>
-                  <input type="number" id="reopen_quality_threshold" name="reopen_quality_threshold" min="0" placeholder="مثلاً 3">
-                </div>
-                <div class="row">
-                  <label for="reopen_quality_label">عنوان پرچم کیفیت</label>
-                  <input type="text" id="reopen_quality_label" name="reopen_quality_label" placeholder="مثلاً نیاز به ممیزی کیفیت">
+                  <label for="view_roles">نقش‌های مجاز برای مشاهده</label>
+                  <select id="view_roles" multiple>
+                    <option>همه کاربران</option>
+                    <option>مدیر پروژه</option>
+                    <option>پشتیبان فنی</option>
+                    <option>کارفرما</option>
+                  </select>
                 </div>
               </div>
-              <div class="hint">در صورت فعال‌سازی، پس از عبور از آستانه، پرچم کیفیت روی تیکت ثبت می‌شود.</div>
-            </div>
-          </div>
-          <div class="card">
-            <h4>امتیازدهی و اولویت پویا</h4>
-
-            <div class="section-card">
-              <h5>تنظیمات عمومی</h5>
-              <div class="checkbox"><input type="checkbox" id="priority_enabled" name="priority_enabled"><label for="priority_enabled">فعال بودن امتیازدهی پویا در این استپ</label></div>
-              <div class="row">
-                <label for="priority_base">اولویت پایه این استپ</label>
-                <select id="priority_base" name="priority_base">
-                  <option value="normal">عادی</option>
-                  <option value="important">مهم</option>
-                  <option value="critical">بحرانی / اضطراری</option>
-                </select>
-                <div class="hint">اولویتی که در ابتدا برای این استپ در نظر گرفته می‌شود.</div>
-              </div>
-              <div class="checkbox"><input type="checkbox" id="priority_auto_change" name="priority_auto_change"><label for="priority_auto_change">اجازه تغییر خودکار اولویت بر اساس امتیاز کل</label></div>
-            </div>
-
-            <div class="section-card">
-              <div class="action-header">
-                <h5>قوانین امتیازدهی</h5>
-                <button type="button" class="btn" id="priority_rule_add">افزودن قانون امتیازدهی</button>
-              </div>
-              <div class="hint">قوانین افزایش/کاهش امتیاز بر اساس تاخیر، ارجاع، بازگشایی، نوع مشتری و سایر شرایط.</div>
-              <div id="priority_rules_list"></div>
-            </div>
-
-            <div class="section-card">
-              <h5>نگاشت امتیاز به اولویت</h5>
-              <div class="grid-2">
+              <div class="section">
+                <h4>ویرایش</h4>
                 <div class="row">
-                  <label for="priority_normal_max">بیشترین امتیاز برای اولویت عادی</label>
-                  <input type="number" id="priority_normal_max" name="priority_normal_max" placeholder="مثلاً 10">
-                  <div class="hint">امتیاز کمتر یا مساوی این عدد عادی محسوب می‌شود (خالی = بدون سقف مشخص).</div>
+                  <label for="edit_roles">نقش‌های مجاز برای ویرایش</label>
+                  <select id="edit_roles" multiple>
+                    <option>مدیر پروژه</option>
+                    <option>سرگروه پشتیبانی</option>
+                    <option>کاربر مسئول</option>
+                  </select>
+                </div>
+                <div class="checkbox" style="margin-top:6px;"><input type="checkbox" id="lock_after_submit"><label for="lock_after_submit">بعد از ارسال، فرم فقط خواندنی شود</label></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="panel">
+            <summary class="panel-title">اعلان‌ها و اطلاع‌رسانی <span class="chevron">⌄</span></summary>
+            <div class="panel-body">
+              <div class="section">
+                <h4>رویدادها</h4>
+                <div class="checkbox"><input type="checkbox" id="notif-enter"><label for="notif-enter">هنگام ورود به مرحله</label></div>
+                <div class="checkbox"><input type="checkbox" id="notif-exit"><label for="notif-exit">هنگام خروج از مرحله</label></div>
+                <div class="checkbox"><input type="checkbox" id="notif-delay"><label for="notif-delay">در صورت تاخیر</label></div>
+              </div>
+              <div class="section">
+                <h4>کانال ارسال</h4>
+                <div class="checkbox"><input type="checkbox" id="channel-app"><label for="channel-app">نوتیف اپ</label></div>
+                <div class="checkbox"><input type="checkbox" id="channel-sms"><label for="channel-sms">پیامک</label></div>
+                <div class="checkbox"><input type="checkbox" id="channel-email"><label for="channel-email">ایمیل</label></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="panel">
+            <summary class="panel-title">اقدامات خودکار <span class="chevron">⌄</span></summary>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>Automation</h4>
+                <div class="checkbox"><input type="checkbox" id="auto-sub"><label for="auto-sub">ایجاد زیرتیکت هنگام ورود</label></div>
+                <div class="checkbox"><input type="checkbox" id="auto-webhook"><label for="auto-webhook">ارسال وب‌هوک هنگام خروج</label></div>
+                <div class="checkbox"><input type="checkbox" id="auto-status"><label for="auto-status">تغییر وضعیت تیکت به «درحال انجام»</label></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="panel">
+            <summary class="panel-title">سیاست بازگشایی تیکت <span class="chevron">⌄</span></summary>
+            <div class="panel-body">
+              <div class="section">
+                <h4>قواعد بازگشایی</h4>
+                <div class="row">
+                  <label for="reopen_target">مرحله مقصد بعد از بازگشایی</label>
+                  <select id="reopen_target">
+                    <option>انتخاب کارفرما</option>
+                    <option>انتخاب سرویس</option>
+                    <option>انجام کار</option>
+                    <option>تحویل به کارفرما</option>
+                  </select>
                 </div>
                 <div class="row">
-                  <label for="priority_important_min">حداقل امتیاز برای اولویت مهم</label>
-                  <input type="number" id="priority_important_min" name="priority_important_min" placeholder="مثلاً 11">
-                  <div class="hint">اگر امتیاز به این مقدار برسد یا بیشتر شود، اولویت حداقل «مهم» است.</div>
+                  <label for="reopen_limit">حداکثر دفعات مجاز</label>
+                  <input id="reopen_limit" type="text" placeholder="مثال: ۲">
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="panel">
+            <summary class="panel-title">امتیازدهی و اولویت پویا <span class="chevron">⌄</span></summary>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>وزن‌دهی</h4>
+                <div class="row">
+                  <label for="priority_rule">قانون تغییر اولویت</label>
+                  <select id="priority_rule">
+                    <option>بر اساس تاخیر</option>
+                    <option>بر اساس ارجاع مجدد</option>
+                    <option>ترکیبی</option>
+                  </select>
                 </div>
                 <div class="row">
-                  <label for="priority_critical_min">حداقل امتیاز برای اولویت بحرانی</label>
-                  <input type="number" id="priority_critical_min" name="priority_critical_min" placeholder="مثلاً 20">
-                  <div class="hint">امتیاز برابر یا بیشتر از این مقدار، اولویت «بحرانی / اضطراری» می‌شود.</div>
+                  <label for="priority_note">توضیح</label>
+                  <textarea id="priority_note" rows="2" placeholder="مثال: بعد از ۲۴ ساعت تاخیر، اولویت به «بحرانی» تغییر کند."></textarea>
                 </div>
               </div>
             </div>
-
-            <div class="section-card">
-              <h5>اعلان و لاگ تغییر اولویت</h5>
-              <div class="checkbox"><input type="checkbox" id="priority_notify_on_change" name="priority_notify_on_change"><label for="priority_notify_on_change">ارسال اعلان در صورت تغییر اولویت</label></div>
-              <div class="checkbox"><input type="checkbox" id="priority_notify_assignee" name="priority_notify_assignee"><label for="priority_notify_assignee">اطلاع به مسئول فعلی</label></div>
-              <div class="checkbox"><input type="checkbox" id="priority_notify_manager" name="priority_notify_manager"><label for="priority_notify_manager">اطلاع به مدیر پروژه / مدیر تیکت‌ها</label></div>
-              <div class="row">
-                <label for="priority_notify_roles">نقش‌های اضافی برای اطلاع‌رسانی</label>
-                <select multiple id="priority_notify_roles" name="priority_notify_roles">
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                  <option value="مسئول مالی">مسئول مالی</option>
-                  <option value="کارشناس ارشد">کارشناس ارشد</option>
-                </select>
-                <div class="hint">در صورت تغییر اولویت، این نقش‌ها هم مطلع می‌شوند.</div>
-              </div>
-              <div class="checkbox"><input type="checkbox" id="priority_log_history" name="priority_log_history"><label for="priority_log_history">ثبت تغییرات اولویت در تاریخچه تیکت</label></div>
-            </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>قوانین زمان‌بندی برای این استپ</h4>
-            <div>در آینده در این بخش تنظیم می‌کنیم که اگر تیکت در این مرحله باز نشود یا تعیین‌تکلیف نشود، بعد از چه مدت چه اتفاقی بیفتد (هشدار، بازگشت، ثبت تاخیر و غیره).</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>شرایط عبور مرحله</h4>
-            <div>در آینده در این بخش تعیین می‌کنیم چه فیلدها و تأییدهایی قبل از عبور به مرحله بعد حتماً باید تکمیل شده باشند.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>وابستگی به سایر تیکت‌ها یا مراحل</h4>
-            <div>در آینده در این بخش مشخص می‌کنیم که عبور به مرحله بعد وابسته به تکمیل شدن کدام مراحل یا تیکت‌های دیگر باشد.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>سطح دسترسی و دیدن تیکت</h4>
-            <div>در آینده در این بخش تعیین می‌کنیم که در این مرحله چه نقش‌هایی تیکت را ببینند، ویرایش کنند یا فقط وضعیت را ببینند.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>قوانین اعلان و اطلاع‌رسانی</h4>
-            <div>در آینده در این بخش تعریف می‌کنیم روی چه رویدادهایی (ورود، خروج، تاخیر و…) چه اعلان‌هایی برای چه کسانی و از چه کانالی (نوتیف، پیامک، ایمیل) ارسال شود.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>اقدامات خودکار</h4>
-            <div>در آینده در این بخش تعیین می‌کنیم هنگام ورود/خروج این مرحله چه کارهای خودکار انجام شود (ساخت زیرتیکت، تغییر وضعیت، وب‌هوک و غیره).</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>سیاست بازگشایی تیکت</h4>
-            <div>در آینده در این بخش مشخص می‌کنیم تیکت بعد از بازگشایی به کدام مرحله برگردد، چند بار مجاز به بازگشایی باشد و چه کسانی مجازند.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>امتیازدهی و اولویت پویا</h4>
-            <div>در آینده در این بخش قوانین امتیازدهی بر اساس تاخیر، ارجاع، بازگشایی و… و تغییر خودکار سطح اولویت را تعریف می‌کنیم.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>پرچم‌گذاری برای ممیزی و گزارش‌ها</h4>
-            <div>در آینده در این بخش تعریف می‌کنیم چه تیکت‌هایی بر اساس تاخیر، ارجاع زیاد، نارضایتی و… با پرچم‌های مختلف علامت‌گذاری شوند.</div>
-            <h4>تنظیمات SLA / زمان‌بندی</h4>
-            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>تنظیمات اعلان‌ها (Notifications)</h4>
-            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>اقدامات خودکار (Auto Actions)</h4>
-            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
-          </div>
-          <div class="card placeholder" aria-disabled="true">
-            <h4>دسترسی‌ها و سطح دید</h4>
-            <div>این بخش بعداً پیاده‌سازی می‌شود.</div>
-          </div>
+          </details>
         </div>
       </section>
-    </div>
-
-    <div class="card">
-      <h3>پیش‌نمایش تنظیمات فلو (JSON)</h3>
-      <pre class="preview" id="json_preview"></pre>
     </div>
   </div>
 
   <script>
-    const steps = [
-      { id: "step_customer", name: "انتخاب کارفرما" },
-      { id: "step_service", name: "انتخاب سرویس" },
-      { id: "step_work", name: "انجام کار" },
-      { id: "step_do", name: "انجام کار" },
-      { id: "step_delivery", name: "تحویل به کارفرما" }
-    ];
+    const steps = document.querySelectorAll('.step-item');
+    const selectedLabel = document.getElementById('selected-step');
 
-    const defaultAssignment = () => ({
-      strategy_type: "single",
-      candidate_source_type: "users",
-      candidate_users: [],
-      candidate_roles: [],
-      single_assignment_mode: "fixed_user",
-      single_fixed_user_id: "",
-      rr_pool_users: [],
-      rr_order_mode: "list_order",
-      ss_pool_users: [],
-      ss_visible_to_all: false,
-      multi_pool_users: [],
-      multi_lock_mode: "first_picker_wins",
-      allow_manual_override: false,
-      override_allowed_roles: [],
-      on_empty_pool_action: "keep_previous_assignee"
+    steps.forEach((step) => {
+      step.addEventListener('click', () => {
+        steps.forEach((s) => s.classList.remove('active'));
+        step.classList.add('active');
+        selectedLabel.textContent = step.textContent.replace(/مرحله.*/,'').trim();
+      });
     });
 
-    function createDefaultTimingConfig() {
-      return {
-        enabled: false,
-        time_mode: "calendar",
-        pause_on_hold: false,
-        unread: {
-          enabled: false,
-          threshold_value: null,
-          threshold_unit: "minute",
-          actions: {
-            notify_receiver: false,
-            notify_creator: false,
-            notify_manager: false,
-            return_to_previous_step: false,
-            log_delay: false,
-            auto_assign_next: false,
-            next_users: []
-          }
-        },
-        noDecision: {
-          enabled: false,
-          threshold_value: null,
-          threshold_unit: "hour",
-          actions: {
-            log_delay: false,
-            notify_creator: false,
-            notify_manager: false,
-            lock_other_tickets: false,
-            lock_mentions: false,
-            lock_conversation: false
-          }
-        }
-      };
-    }
-
-    function createDefaultConditions() {
-      return {
-        enabled: false,
-        enforcement_mode: "block",
-        required_fields: [],
-        checklist_items: [],
-        statuses: {
-          restrict_to_list: false,
-          allowed_statuses: [],
-          require_action_log: false,
-          require_customer_message: false
-        },
-        approvals: {
-          require_manager: false,
-          require_finance: false,
-          require_customer: false,
-          override_allowed: false,
-          override_roles: []
-        },
-        violation_message: ""
-      };
-    }
-
-    let depCounter = 1;
-    function createDefaultDependencies() {
-      return {
-        enabled: false,
-        enforcement_mode: "block",
-        items: []
-      };
-    }
-
-    function createDependencyItem() {
-      return {
-        id: `dep_${depCounter++}`,
-        type: "step",
-        target_step_id: null,
-        target_ticket_type: "",
-        required_statuses: [],
-        completion_mode: "all",
-        required_count: null
-      };
-    }
-
-    function createDefaultAccess() {
-      return {
-        enabled: false,
-        enforcement_mode: "block",
-        visibility: {
-          view_roles: [],
-          edit_roles: [],
-          readonly_roles: [],
-          allow_customer_view: false,
-          restrict_internal_notes: false
-        },
-        actions: {
-          allow_comment: true,
-          allow_attachment: true,
-          allow_status_change: true,
-          restricted_fields: []
-        },
-        confidentiality: {
-          sensitivity_level: "normal",
-          mask_fields: []
-        },
-        watchers: {
-          auto_add_roles: [],
-          auto_add_users: [],
-          allow_manual_watchers: true
-        },
-        overrides: {
-          allowed: false,
-          roles: []
-        },
-        message: ""
-      };
-    }
-
-    function createDefaultNotifications() {
-      return {
-        enabled: false,
-        channels: {
-          in_app: true,
-          sms: false,
-          email: false
-        },
-        triggers: {
-          on_enter: false,
-          on_exit: false,
-          on_delay: false,
-          on_reopen: false,
-          on_assignment_change: false,
-          on_status_change: false
-        },
-        recipients: {
-          roles: [],
-          users: [],
-          include_assignee: true,
-          include_creator: false,
-          include_watchers: true
-        },
-        template: {
-          title: "",
-          message: ""
-        },
-        throttling: {
-          enabled: false,
-          interval_value: null,
-          interval_unit: "minute"
-        },
-        escalation: {
-          enabled: false,
-          roles: [],
-          users: [],
-          message: ""
-        }
-      };
-    }
-
-    function createDefaultAutoActionTrigger() {
-      return {
-        enabled: false,
-        actions: []
-      };
-    }
-
-    let autoActionIdCounter = 1;
-
-    function createAutoAction() {
-      return {
-        id: `action_${autoActionIdCounter++}`,
-        type: "subticket",
-        title: "",
-        subticket_type: "",
-        target_step_id: null,
-        field_key: "",
-        field_value: "",
-        message_text: "",
-        webhook_url: "",
-        webhook_payload: "",
-        condition_text: ""
-      };
-    }
-
-    function createDefaultAutoActions() {
-      return {
-        enabled: false,
-        on_error: "continue",
-        triggers: {
-          on_enter_step: createDefaultAutoActionTrigger(),
-          on_exit_step: createDefaultAutoActionTrigger(),
-          on_status_change: createDefaultAutoActionTrigger()
-        }
-      };
-    }
-
-    function createDefaultReopen() {
-      return {
-        enabled: false,
-        permissions: {
-          allow_customer: false,
-          allow_internal: false,
-          allowed_roles: []
-        },
-        routing: {
-          mode: "previous_step",
-          target_step_id: null
-        },
-        limits: {
-          max_reopens: null,
-          min_interval_hours: null
-        },
-        reason: {
-          require_reason: false,
-          reason_types: []
-        },
-        notifications: {
-          notify_creator: false,
-          notify_assignee: false,
-          notify_manager: false,
-          notify_roles: [],
-          notify_customer: false
-        },
-        quality_flag: {
-          enable_flag_on_excess: false,
-          threshold: null,
-          flag_label: ""
-        }
-      };
-    }
-
-    let priorityRuleCounter = 1;
-    function createPriorityRule() {
-      return {
-        id: `pr_${priorityRuleCounter++}`,
-        title: "",
-        category: "delay",
-        description: "",
-        score_delta: 0,
-        condition_text: ""
-      };
-    }
-
-    function createDefaultPriority() {
-      return {
-        enabled: false,
-        base_priority: "normal",
-        auto_change_allowed: false,
-        scoring_rules: [],
-        score_to_priority: {
-          normal_max: null,
-          important_min: null,
-          critical_min: null
-        },
-        notifications: {
-          notify_on_change: false,
-          notify_assignee: false,
-          notify_manager: false,
-          notify_roles: []
-        },
-        logging: {
-          log_change_history: false
-        }
-      };
-    }
-
-    const flowConfig = {
-      flowName: "",
-      selectedStepId: steps[0].id,
-      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig(), conditions: createDefaultConditions(), dependencies: createDefaultDependencies(), access: createDefaultAccess(), notifications: createDefaultNotifications(), autoActions: createDefaultAutoActions(), reopen: createDefaultReopen(), priority: createDefaultPriority() }))
-    const flowConfig = {
-      flowName: "",
-      selectedStepId: steps[0].id,
-      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment(), timing: createDefaultTimingConfig() }))
-    const flowConfig = {
-      flowName: "",
-      selectedStepId: steps[0].id,
-      steps: steps.map(step => ({ id: step.id, name: step.name, assignment: defaultAssignment() }))
-    };
-
-    const elements = {
-      stepItems: document.querySelectorAll('.step-item'),
-      selectedLabel: document.getElementById('selected_step_label'),
-      strategySelect: document.getElementById('strategy_type'),
-      candidateUsers: document.getElementById('candidate_users'),
-      candidateRoles: document.getElementById('candidate_roles'),
-      candidateSourceRadios: document.querySelectorAll('input[name="candidate_source_type"]'),
-      singleAssignmentMode: document.getElementById('single_assignment_mode'),
-      singleFixedUser: document.getElementById('single_fixed_user_id'),
-      rrPoolUsers: document.getElementById('rr_pool_users'),
-      rrOrderMode: document.getElementById('rr_order_mode'),
-      ssPoolUsers: document.getElementById('ss_pool_users'),
-      ssVisibleToAll: document.getElementById('ss_visible_to_all'),
-      multiPoolUsers: document.getElementById('multi_pool_users'),
-      multiLockMode: document.getElementById('multi_lock_mode'),
-      allowManualOverride: document.getElementById('allow_manual_override'),
-      overrideAllowedRoles: document.getElementById('override_allowed_roles'),
-      onEmptyPoolAction: document.getElementById('on_empty_pool_action'),
-      strategyCards: document.querySelectorAll('[data-strategy]'),
-      jsonPreview: document.getElementById('json_preview'),
-      flowName: document.getElementById('flow_name'),
-      timingEnabled: document.getElementById('timing_enabled'),
-      timingMode: document.getElementById('timing_mode'),
-      timingPauseOnHold: document.getElementById('timing_pause_on_hold'),
-      timingUnreadEnabled: document.getElementById('timing_unread_enabled'),
-      timingUnreadThresholdValue: document.getElementById('timing_unread_threshold_value'),
-      timingUnreadThresholdUnit: document.getElementById('timing_unread_threshold_unit'),
-      timingUnreadNotifyReceiver: document.getElementById('timing_unread_notify_receiver'),
-      timingUnreadNotifyCreator: document.getElementById('timing_unread_notify_creator'),
-      timingUnreadNotifyManager: document.getElementById('timing_unread_notify_manager'),
-      timingUnreadReturnPrev: document.getElementById('timing_unread_return_prev'),
-      timingUnreadLogDelay: document.getElementById('timing_unread_log_delay'),
-      timingUnreadAutoAssignNext: document.getElementById('timing_unread_auto_assign_next'),
-      timingUnreadNextUsers: document.getElementById('timing_unread_next_users'),
-      timingUnreadNextUsersWrap: document.getElementById('timing_unread_next_users_wrap'),
-      timingNoactionEnabled: document.getElementById('timing_noaction_enabled'),
-      timingNoactionThresholdValue: document.getElementById('timing_noaction_threshold_value'),
-      timingNoactionThresholdUnit: document.getElementById('timing_noaction_threshold_unit'),
-      timingNoactionLogDelay: document.getElementById('timing_noaction_log_delay'),
-      timingNoactionNotifyCreator: document.getElementById('timing_noaction_notify_creator'),
-      timingNoactionNotifyManager: document.getElementById('timing_noaction_notify_manager'),
-      timingNoactionLockOtherTickets: document.getElementById('timing_noaction_lock_other_tickets'),
-      timingNoactionLockMentions: document.getElementById('timing_noaction_lock_mentions'),
-      timingNoactionLockConversation: document.getElementById('timing_noaction_lock_conversation'),
-
-      condEnabled: document.getElementById('cond_enabled'),
-      condEnforcementMode: document.getElementById('cond_enforcement_mode'),
-      condRequiredFields: document.getElementById('cond_required_fields'),
-      condChecklistItems: document.getElementById('cond_checklist_items'),
-      condStatusRestrict: document.getElementById('cond_status_restrict'),
-      condAllowedStatuses: document.getElementById('cond_allowed_statuses'),
-      condRequireActionLog: document.getElementById('cond_require_action_log'),
-      condRequireCustomerMessage: document.getElementById('cond_require_customer_message'),
-      condRequireManagerApproval: document.getElementById('cond_require_manager_approval'),
-      condRequireFinanceApproval: document.getElementById('cond_require_finance_approval'),
-      condRequireCustomerApproval: document.getElementById('cond_require_customer_approval'),
-      condOverrideAllowed: document.getElementById('cond_override_allowed'),
-      condOverrideRoles: document.getElementById('cond_override_roles'),
-      condOverrideRolesWrap: document.getElementById('cond_override_roles_wrap'),
-      condViolationMessage: document.getElementById('cond_violation_message'),
-
-      depsEnabled: document.getElementById('deps_enabled'),
-      depsEnforcementMode: document.getElementById('deps_enforcement_mode'),
-      depsAddBtn: document.getElementById('deps_add_btn'),
-      depsList: document.getElementById('deps_list'),
-
-      accessEnabled: document.getElementById('access_enabled'),
-      accessEnforcementMode: document.getElementById('access_enforcement_mode'),
-      accessViewRoles: document.getElementById('access_view_roles'),
-      accessEditRoles: document.getElementById('access_edit_roles'),
-      accessReadonlyRoles: document.getElementById('access_readonly_roles'),
-      accessAllowCustomerView: document.getElementById('access_allow_customer_view'),
-      accessRestrictInternalNotes: document.getElementById('access_restrict_internal_notes'),
-      accessAllowComment: document.getElementById('access_allow_comment'),
-      accessAllowAttachment: document.getElementById('access_allow_attachment'),
-      accessAllowStatusChange: document.getElementById('access_allow_status_change'),
-      accessRestrictedFields: document.getElementById('access_restricted_fields'),
-      accessSensitivityLevel: document.getElementById('access_sensitivity_level'),
-      accessMaskFields: document.getElementById('access_mask_fields'),
-      accessWatcherRoles: document.getElementById('access_watcher_roles'),
-      accessWatcherUsers: document.getElementById('access_watcher_users'),
-      accessAllowManualWatchers: document.getElementById('access_allow_manual_watchers'),
-      accessOverrideAllowed: document.getElementById('access_override_allowed'),
-      accessOverrideRoles: document.getElementById('access_override_roles'),
-      accessOverrideRolesWrap: document.getElementById('access_override_roles_wrap'),
-      accessMessage: document.getElementById('access_message'),
-      notifEnabled: document.getElementById('notif_enabled'),
-      notifChannelInapp: document.getElementById('notif_channel_inapp'),
-      notifChannelSms: document.getElementById('notif_channel_sms'),
-      notifChannelEmail: document.getElementById('notif_channel_email'),
-      notifTriggerEnter: document.getElementById('notif_trigger_enter'),
-      notifTriggerExit: document.getElementById('notif_trigger_exit'),
-      notifTriggerDelay: document.getElementById('notif_trigger_delay'),
-      notifTriggerReopen: document.getElementById('notif_trigger_reopen'),
-      notifTriggerAssignment: document.getElementById('notif_trigger_assignment'),
-      notifTriggerStatus: document.getElementById('notif_trigger_status'),
-      notifRoles: document.getElementById('notif_roles'),
-      notifUsers: document.getElementById('notif_users'),
-      notifIncludeAssignee: document.getElementById('notif_include_assignee'),
-      notifIncludeCreator: document.getElementById('notif_include_creator'),
-      notifIncludeWatchers: document.getElementById('notif_include_watchers'),
-      notifTitle: document.getElementById('notif_title'),
-      notifMessage: document.getElementById('notif_message'),
-      notifThrottleEnabled: document.getElementById('notif_throttle_enabled'),
-      notifThrottleWrap: document.getElementById('notif_throttle_wrap'),
-      notifThrottleValue: document.getElementById('notif_throttle_value'),
-      notifThrottleUnit: document.getElementById('notif_throttle_unit'),
-      notifEscalationEnabled: document.getElementById('notif_escalation_enabled'),
-      notifEscalationTargets: document.getElementById('notif_escalation_targets'),
-      notifEscalationRoles: document.getElementById('notif_escalation_roles'),
-      notifEscalationUsers: document.getElementById('notif_escalation_users'),
-      notifEscalationUsersWrap: document.getElementById('notif_escalation_users_wrap'),
-      notifEscalationMessage: document.getElementById('notif_escalation_message'),
-      notifEscalationMessageWrap: document.getElementById('notif_escalation_message_wrap'),
-
-      autoEnabled: document.getElementById('auto_enabled'),
-      autoOnError: document.getElementById('auto_on_error'),
-      autoEnterEnabled: document.getElementById('auto_enter_enabled'),
-      autoEnterAdd: document.getElementById('auto_enter_add'),
-      autoEnterList: document.getElementById('auto_enter_list'),
-      autoExitEnabled: document.getElementById('auto_exit_enabled'),
-      autoExitAdd: document.getElementById('auto_exit_add'),
-      autoExitList: document.getElementById('auto_exit_list'),
-      autoStatusEnabled: document.getElementById('auto_status_enabled'),
-      autoStatusAdd: document.getElementById('auto_status_add'),
-      autoStatusList: document.getElementById('auto_status_list'),
-
-      reopenEnabled: document.getElementById('reopen_enabled'),
-      reopenRoutingMode: document.getElementById('reopen_routing_mode'),
-      reopenTargetWrap: document.getElementById('reopen_target_wrap'),
-      reopenTargetStep: document.getElementById('reopen_target_step'),
-      reopenAllowCustomer: document.getElementById('reopen_allow_customer'),
-      reopenAllowInternal: document.getElementById('reopen_allow_internal'),
-      reopenAllowedRoles: document.getElementById('reopen_allowed_roles'),
-      reopenMaxReopens: document.getElementById('reopen_max_reopens'),
-      reopenMinIntervalHours: document.getElementById('reopen_min_interval_hours'),
-      reopenRequireReason: document.getElementById('reopen_require_reason'),
-      reopenReasonTypes: document.getElementById('reopen_reason_types'),
-      reopenNotifyCreator: document.getElementById('reopen_notify_creator'),
-      reopenNotifyAssignee: document.getElementById('reopen_notify_assignee'),
-      reopenNotifyManager: document.getElementById('reopen_notify_manager'),
-      reopenNotifyCustomer: document.getElementById('reopen_notify_customer'),
-      reopenNotifyRoles: document.getElementById('reopen_notify_roles'),
-      reopenQualityEnableFlag: document.getElementById('reopen_quality_enable_flag'),
-      reopenQualityThreshold: document.getElementById('reopen_quality_threshold'),
-      reopenQualityLabel: document.getElementById('reopen_quality_label'),
-      reopenQualityWrap: document.getElementById('reopen_quality_wrap'),
-
-      priorityEnabled: document.getElementById('priority_enabled'),
-      priorityBase: document.getElementById('priority_base'),
-      priorityAutoChange: document.getElementById('priority_auto_change'),
-      priorityRuleAdd: document.getElementById('priority_rule_add'),
-      priorityRulesList: document.getElementById('priority_rules_list'),
-      priorityNormalMax: document.getElementById('priority_normal_max'),
-      priorityImportantMin: document.getElementById('priority_important_min'),
-      priorityCriticalMin: document.getElementById('priority_critical_min'),
-      priorityNotifyOnChange: document.getElementById('priority_notify_on_change'),
-      priorityNotifyAssignee: document.getElementById('priority_notify_assignee'),
-      priorityNotifyManager: document.getElementById('priority_notify_manager'),
-      priorityNotifyRoles: document.getElementById('priority_notify_roles'),
-      priorityLogHistory: document.getElementById('priority_log_history'),
-
-      collapseToggles: document.querySelectorAll('.collapse-toggle')
-      timingNoactionLockConversation: document.getElementById('timing_noaction_lock_conversation')
-      flowName: document.getElementById('flow_name')
-    };
-
-    function getCurrentStep() {
-      return flowConfig.steps.find(s => s.id === flowConfig.selectedStepId);
-    }
-
-    function setActiveStep(stepId) {
-      flowConfig.selectedStepId = stepId;
-      elements.stepItems.forEach(item => {
-        item.classList.toggle('active', item.dataset.step === stepId);
+    // keep summary text clickable without default scroll jump
+    document.querySelectorAll('summary.panel-title').forEach((summary) => {
+      summary.addEventListener('click', (event) => {
+        event.preventDefault();
+        const details = summary.parentElement;
+        details.open = !details.open;
       });
-      const step = getCurrentStep();
-      elements.selectedLabel.textContent = `مرحله: ${step.name}`;
-      fillForm(step.assignment);
-      fillTimingForm(step.timing);
-      fillConditionsForm(step.conditions);
-      fillDependenciesForm(step.dependencies);
-      fillAccessForm(step.access);
-      fillNotificationsForm(step.notifications);
-      fillAutoActionsForm(step.autoActions);
-      fillReopenForm(step.reopen);
-      fillPriorityForm(step.priority);
-      toggleStrategyCards(step.assignment.strategy_type);
-      renderPreview();
-    }
-
-    function toggleStrategyCards(strategy) {
-      elements.strategyCards.forEach(card => {
-        card.classList.toggle('hidden', card.dataset.strategy !== strategy);
-      });
-    }
-
-    function readMultiSelect(selectEl) {
-      return Array.from(selectEl.selectedOptions).map(opt => opt.value);
-    }
-
-    function fillMultiSelect(selectEl, values) {
-      Array.from(selectEl.options).forEach(opt => {
-        opt.selected = values.includes(opt.value);
-      });
-    }
-
-    function fillForm(assign) {
-      elements.strategySelect.value = assign.strategy_type;
-      elements.candidateSourceRadios.forEach(r => { r.checked = r.value === assign.candidate_source_type; });
-      fillMultiSelect(elements.candidateUsers, assign.candidate_users);
-      fillMultiSelect(elements.candidateRoles, assign.candidate_roles);
-      elements.singleAssignmentMode.value = assign.single_assignment_mode;
-      elements.singleFixedUser.value = assign.single_fixed_user_id;
-      fillMultiSelect(elements.rrPoolUsers, assign.rr_pool_users);
-      elements.rrOrderMode.value = assign.rr_order_mode;
-      fillMultiSelect(elements.ssPoolUsers, assign.ss_pool_users);
-      elements.ssVisibleToAll.checked = assign.ss_visible_to_all;
-      fillMultiSelect(elements.multiPoolUsers, assign.multi_pool_users);
-      elements.multiLockMode.value = assign.multi_lock_mode;
-      elements.allowManualOverride.checked = assign.allow_manual_override;
-      fillMultiSelect(elements.overrideAllowedRoles, assign.override_allowed_roles);
-      elements.onEmptyPoolAction.value = assign.on_empty_pool_action;
-    }
-
-    function fillTimingForm(timing) {
-      elements.timingEnabled.checked = timing.enabled;
-      elements.timingMode.value = timing.time_mode;
-      elements.timingPauseOnHold.checked = timing.pause_on_hold;
-
-      elements.timingUnreadEnabled.checked = timing.unread.enabled;
-      elements.timingUnreadThresholdValue.value = timing.unread.threshold_value ?? "";
-      elements.timingUnreadThresholdUnit.value = timing.unread.threshold_unit;
-      elements.timingUnreadNotifyReceiver.checked = timing.unread.actions.notify_receiver;
-      elements.timingUnreadNotifyCreator.checked = timing.unread.actions.notify_creator;
-      elements.timingUnreadNotifyManager.checked = timing.unread.actions.notify_manager;
-      elements.timingUnreadReturnPrev.checked = timing.unread.actions.return_to_previous_step;
-      elements.timingUnreadLogDelay.checked = timing.unread.actions.log_delay;
-      elements.timingUnreadAutoAssignNext.checked = timing.unread.actions.auto_assign_next;
-      fillMultiSelect(elements.timingUnreadNextUsers, timing.unread.actions.next_users);
-      toggleUnreadNextUsers(timing.unread.actions.auto_assign_next);
-
-      elements.timingNoactionEnabled.checked = timing.noDecision.enabled;
-      elements.timingNoactionThresholdValue.value = timing.noDecision.threshold_value ?? "";
-      elements.timingNoactionThresholdUnit.value = timing.noDecision.threshold_unit;
-      elements.timingNoactionLogDelay.checked = timing.noDecision.actions.log_delay;
-      elements.timingNoactionNotifyCreator.checked = timing.noDecision.actions.notify_creator;
-      elements.timingNoactionNotifyManager.checked = timing.noDecision.actions.notify_manager;
-      elements.timingNoactionLockOtherTickets.checked = timing.noDecision.actions.lock_other_tickets;
-      elements.timingNoactionLockMentions.checked = timing.noDecision.actions.lock_mentions;
-      elements.timingNoactionLockConversation.checked = timing.noDecision.actions.lock_conversation;
-
-      renderPreview();
-    }
-
-    function fillConditionsForm(conditions) {
-      elements.condEnabled.checked = conditions.enabled;
-      elements.condEnforcementMode.value = conditions.enforcement_mode;
-      fillMultiSelect(elements.condRequiredFields, conditions.required_fields);
-      elements.condChecklistItems.value = conditions.checklist_items.join('\n');
-
-      elements.condStatusRestrict.checked = conditions.statuses.restrict_to_list;
-      fillMultiSelect(elements.condAllowedStatuses, conditions.statuses.allowed_statuses);
-      elements.condRequireActionLog.checked = conditions.statuses.require_action_log;
-      elements.condRequireCustomerMessage.checked = conditions.statuses.require_customer_message;
-
-      elements.condRequireManagerApproval.checked = conditions.approvals.require_manager;
-      elements.condRequireFinanceApproval.checked = conditions.approvals.require_finance;
-      elements.condRequireCustomerApproval.checked = conditions.approvals.require_customer;
-      elements.condOverrideAllowed.checked = conditions.approvals.override_allowed;
-      fillMultiSelect(elements.condOverrideRoles, conditions.approvals.override_roles);
-      toggleOverrideRoles(conditions.approvals.override_allowed);
-
-      elements.condViolationMessage.value = conditions.violation_message || "";
-
-      renderPreview();
-    }
-
-    function fillDependenciesForm(dependencies) {
-      elements.depsEnabled.checked = dependencies.enabled;
-      elements.depsEnforcementMode.value = dependencies.enforcement_mode;
-      renderDependencyItems(dependencies);
-      renderPreview();
-    }
-
-    function toggleAccessOverrideRoles(show) {
-      if (!elements.accessOverrideRolesWrap) return;
-      elements.accessOverrideRolesWrap.classList.toggle('hidden', !show);
-    }
-
-    function fillAccessForm(access) {
-      elements.accessEnabled.checked = access.enabled;
-      elements.accessEnforcementMode.value = access.enforcement_mode;
-
-      fillMultiSelect(elements.accessViewRoles, access.visibility.view_roles);
-      fillMultiSelect(elements.accessEditRoles, access.visibility.edit_roles);
-      fillMultiSelect(elements.accessReadonlyRoles, access.visibility.readonly_roles);
-      elements.accessAllowCustomerView.checked = access.visibility.allow_customer_view;
-      elements.accessRestrictInternalNotes.checked = access.visibility.restrict_internal_notes;
-
-      elements.accessAllowComment.checked = access.actions.allow_comment;
-      elements.accessAllowAttachment.checked = access.actions.allow_attachment;
-      elements.accessAllowStatusChange.checked = access.actions.allow_status_change;
-      fillMultiSelect(elements.accessRestrictedFields, access.actions.restricted_fields);
-
-      elements.accessSensitivityLevel.value = access.confidentiality.sensitivity_level;
-      fillMultiSelect(elements.accessMaskFields, access.confidentiality.mask_fields);
-
-      fillMultiSelect(elements.accessWatcherRoles, access.watchers.auto_add_roles);
-      fillMultiSelect(elements.accessWatcherUsers, access.watchers.auto_add_users);
-      elements.accessAllowManualWatchers.checked = access.watchers.allow_manual_watchers;
-
-      elements.accessOverrideAllowed.checked = access.overrides.allowed;
-      fillMultiSelect(elements.accessOverrideRoles, access.overrides.roles);
-      toggleAccessOverrideRoles(access.overrides.allowed);
-
-      elements.accessMessage.value = access.message || "";
-
-      renderPreview();
-    }
-
-    function toggleNotificationThrottle(show) {
-      if (elements.notifThrottleWrap) {
-        elements.notifThrottleWrap.classList.toggle('hidden', !show);
-      }
-    }
-
-    function toggleNotificationEscalation(show) {
-      if (elements.notifEscalationTargets) elements.notifEscalationTargets.classList.toggle('hidden', !show);
-      if (elements.notifEscalationUsersWrap) elements.notifEscalationUsersWrap.classList.toggle('hidden', !show);
-      if (elements.notifEscalationMessageWrap) elements.notifEscalationMessageWrap.classList.toggle('hidden', !show);
-    }
-
-    function fillNotificationsForm(notif) {
-      elements.notifEnabled.checked = notif.enabled;
-
-      elements.notifChannelInapp.checked = notif.channels.in_app;
-      elements.notifChannelSms.checked = notif.channels.sms;
-      elements.notifChannelEmail.checked = notif.channels.email;
-
-      elements.notifTriggerEnter.checked = notif.triggers.on_enter;
-      elements.notifTriggerExit.checked = notif.triggers.on_exit;
-      elements.notifTriggerDelay.checked = notif.triggers.on_delay;
-      elements.notifTriggerReopen.checked = notif.triggers.on_reopen;
-      elements.notifTriggerAssignment.checked = notif.triggers.on_assignment_change;
-      elements.notifTriggerStatus.checked = notif.triggers.on_status_change;
-
-      fillMultiSelect(elements.notifRoles, notif.recipients.roles);
-      fillMultiSelect(elements.notifUsers, notif.recipients.users);
-      elements.notifIncludeAssignee.checked = notif.recipients.include_assignee;
-      elements.notifIncludeCreator.checked = notif.recipients.include_creator;
-      elements.notifIncludeWatchers.checked = notif.recipients.include_watchers;
-
-      elements.notifTitle.value = notif.template.title || "";
-      elements.notifMessage.value = notif.template.message || "";
-
-      elements.notifThrottleEnabled.checked = notif.throttling.enabled;
-      elements.notifThrottleValue.value = notif.throttling.interval_value ?? "";
-      elements.notifThrottleUnit.value = notif.throttling.interval_unit;
-      toggleNotificationThrottle(notif.throttling.enabled);
-
-      elements.notifEscalationEnabled.checked = notif.escalation.enabled;
-      fillMultiSelect(elements.notifEscalationRoles, notif.escalation.roles);
-      fillMultiSelect(elements.notifEscalationUsers, notif.escalation.users);
-      elements.notifEscalationMessage.value = notif.escalation.message || "";
-      toggleNotificationEscalation(notif.escalation.enabled);
-
-      renderPreview();
-    }
-
-    function getTriggerMap(autoActions) {
-      return [
-        { key: 'on_enter_step', enabledEl: elements.autoEnterEnabled, listEl: elements.autoEnterList },
-        { key: 'on_exit_step', enabledEl: elements.autoExitEnabled, listEl: elements.autoExitList },
-        { key: 'on_status_change', enabledEl: elements.autoStatusEnabled, listEl: elements.autoStatusList }
-      ].map(item => ({ ...item, trigger: autoActions.triggers[item.key] }));
-    }
-
-    function renderAutoActionTrigger(triggerKey, listEl) {
-      if (!listEl) return;
-      const trigger = getCurrentStep().autoActions.triggers[triggerKey];
-      listEl.innerHTML = '';
-
-      trigger.actions.forEach((action, idx) => {
-        const card = document.createElement('div');
-        card.className = 'section-card';
-
-        const header = document.createElement('div');
-        header.className = 'action-header';
-        const title = document.createElement('strong');
-        title.textContent = `اقدام شماره ${idx + 1}`;
-        const removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.className = 'btn secondary';
-        removeBtn.textContent = 'حذف';
-        removeBtn.addEventListener('click', () => {
-          trigger.actions.splice(idx, 1);
-          renderAutoActionTrigger(triggerKey, listEl);
-          renderPreview();
-        });
-        header.appendChild(title);
-        header.appendChild(removeBtn);
-        card.appendChild(header);
-
-        const typeRow = document.createElement('div');
-        typeRow.className = 'row';
-        const typeLabel = document.createElement('label');
-        const typeId = `${action.id}_type`;
-        typeLabel.setAttribute('for', typeId);
-        typeLabel.textContent = 'نوع اقدام';
-        const typeSelect = document.createElement('select');
-        typeSelect.id = typeId;
-        typeSelect.innerHTML = `
-          <option value="subticket">ایجاد زیرتیکت/تیکت مرتبط</option>
-          <option value="update_field">به‌روزرسانی فیلد تیکت</option>
-          <option value="internal_message">پیام/کامنت داخلی</option>
-          <option value="customer_message">پیام به کارفرما</option>
-          <option value="invoice_draft">ایجاد پیش‌فاکتور/ثبت مالی</option>
-          <option value="webhook">فراخوانی وب‌هوک/یکپارچه‌سازی</option>
-        `;
-        typeSelect.value = action.type;
-        typeSelect.addEventListener('change', () => {
-          action.type = typeSelect.value;
-          action.subticket_type = '';
-          action.target_step_id = null;
-          action.field_key = '';
-          action.field_value = '';
-          action.message_text = '';
-          action.webhook_url = '';
-          action.webhook_payload = '';
-          renderAutoActionTrigger(triggerKey, listEl);
-          renderPreview();
-        });
-        typeRow.appendChild(typeLabel);
-        typeRow.appendChild(typeSelect);
-        card.appendChild(typeRow);
-
-        const titleRow = document.createElement('div');
-        titleRow.className = 'row';
-        const titleLabel = document.createElement('label');
-        const titleId = `${action.id}_title`;
-        titleLabel.setAttribute('for', titleId);
-        titleLabel.textContent = 'عنوان/توضیح کوتاه اقدام';
-        const titleInput = document.createElement('input');
-        titleInput.type = 'text';
-        titleInput.id = titleId;
-        titleInput.value = action.title || '';
-        titleInput.placeholder = 'مثال: ساخت زیرتیکت تحلیل یا ارسال پیام خوشامد';
-        titleInput.addEventListener('input', () => {
-          action.title = titleInput.value;
-          renderPreview();
-        });
-        titleRow.appendChild(titleLabel);
-        titleRow.appendChild(titleInput);
-        card.appendChild(titleRow);
-
-        const conditionalWrapper = document.createElement('div');
-        conditionalWrapper.className = 'row';
-        const conditionalLabel = document.createElement('label');
-        conditionalLabel.textContent = 'شرط اجرای این اقدام (اختیاری)';
-        const conditionalTextarea = document.createElement('textarea');
-        conditionalTextarea.rows = 2;
-        conditionalTextarea.value = action.condition_text || '';
-        conditionalTextarea.placeholder = 'مثال: فقط برای اولویت بالا یا مشتری VIP';
-        conditionalTextarea.addEventListener('input', () => {
-          action.condition_text = conditionalTextarea.value;
-          renderPreview();
-        });
-        conditionalWrapper.appendChild(conditionalLabel);
-        conditionalWrapper.appendChild(conditionalTextarea);
-        card.appendChild(conditionalWrapper);
-
-        if (action.type === 'subticket') {
-          const subRow = document.createElement('div');
-          subRow.className = 'row';
-          const subLabel = document.createElement('label');
-          subLabel.textContent = 'نوع زیرتیکت/تیکت مرتبط';
-          const subInput = document.createElement('input');
-          subInput.type = 'text';
-          subInput.value = action.subticket_type || '';
-          subInput.placeholder = 'مثال: تحلیل نیازمندی‌ها، آموزش کاربر';
-          subInput.addEventListener('input', () => {
-            action.subticket_type = subInput.value;
-            renderPreview();
-          });
-          subRow.appendChild(subLabel);
-          subRow.appendChild(subInput);
-          card.appendChild(subRow);
-
-          const targetRow = document.createElement('div');
-          targetRow.className = 'row';
-          const targetLabel = document.createElement('label');
-          targetLabel.textContent = 'مرحله هدف (اختیاری)';
-          const targetSelect = document.createElement('select');
-          targetSelect.innerHTML = '<option value="">انتخاب مرحله</option>';
-          steps.filter(s => s.id !== getCurrentStep().id).forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s.id;
-            opt.textContent = s.name;
-            targetSelect.appendChild(opt);
-          });
-          targetSelect.value = action.target_step_id || '';
-          targetSelect.addEventListener('change', () => {
-            action.target_step_id = targetSelect.value || null;
-            renderPreview();
-          });
-          targetRow.appendChild(targetLabel);
-          targetRow.appendChild(targetSelect);
-          card.appendChild(targetRow);
-        }
-
-        if (action.type === 'update_field') {
-          const fieldRow = document.createElement('div');
-          fieldRow.className = 'row';
-          const grid = document.createElement('div');
-          grid.className = 'grid-2';
-
-          const keyWrap = document.createElement('div');
-          const keyLabel = document.createElement('label');
-          keyLabel.textContent = 'کلید فیلد/نام فیلد';
-          const keyInput = document.createElement('input');
-          keyInput.type = 'text';
-          keyInput.value = action.field_key || '';
-          keyInput.placeholder = 'مثال: priority یا tags';
-          keyInput.addEventListener('input', () => {
-            action.field_key = keyInput.value;
-            renderPreview();
-          });
-          keyWrap.appendChild(keyLabel);
-          keyWrap.appendChild(keyInput);
-
-          const valueWrap = document.createElement('div');
-          const valueLabel = document.createElement('label');
-          valueLabel.textContent = 'مقدار جدید';
-          const valueInput = document.createElement('input');
-          valueInput.type = 'text';
-          valueInput.value = action.field_value || '';
-          valueInput.placeholder = 'مثال: high یا 50%';
-          valueInput.addEventListener('input', () => {
-            action.field_value = valueInput.value;
-            renderPreview();
-          });
-          valueWrap.appendChild(valueLabel);
-          valueWrap.appendChild(valueInput);
-
-          grid.appendChild(keyWrap);
-          grid.appendChild(valueWrap);
-          fieldRow.appendChild(grid);
-          card.appendChild(fieldRow);
-        }
-
-        if (action.type === 'internal_message' || action.type === 'customer_message' || action.type === 'invoice_draft') {
-          const msgRow = document.createElement('div');
-          msgRow.className = 'row';
-          const msgLabel = document.createElement('label');
-          msgLabel.textContent = action.type === 'invoice_draft' ? 'توضیحات پیش‌فاکتور/ثبت مالی' : 'متن پیام';
-          const msgTextarea = document.createElement('textarea');
-          msgTextarea.rows = 3;
-          msgTextarea.value = action.message_text || '';
-          msgTextarea.placeholder = action.type === 'invoice_draft' ? 'مثال: پیش‌فاکتور اولیه برای خدمات پشتیبانی' : 'متن پیام را وارد کنید';
-          msgTextarea.addEventListener('input', () => {
-            action.message_text = msgTextarea.value;
-            renderPreview();
-          });
-          msgRow.appendChild(msgLabel);
-          msgRow.appendChild(msgTextarea);
-          card.appendChild(msgRow);
-        }
-
-        if (action.type === 'webhook') {
-          const urlRow = document.createElement('div');
-          urlRow.className = 'row';
-          const urlLabel = document.createElement('label');
-          urlLabel.textContent = 'آدرس وب‌هوک';
-          const urlInput = document.createElement('input');
-          urlInput.type = 'text';
-          urlInput.value = action.webhook_url || '';
-          urlInput.placeholder = 'https://example.com/webhook';
-          urlInput.addEventListener('input', () => {
-            action.webhook_url = urlInput.value;
-            renderPreview();
-          });
-          urlRow.appendChild(urlLabel);
-          urlRow.appendChild(urlInput);
-          card.appendChild(urlRow);
-
-          const payloadRow = document.createElement('div');
-          payloadRow.className = 'row';
-          const payloadLabel = document.createElement('label');
-          payloadLabel.textContent = 'توضیح/Payload وب‌هوک';
-          const payloadTextarea = document.createElement('textarea');
-          payloadTextarea.rows = 3;
-          payloadTextarea.value = action.webhook_payload || '';
-          payloadTextarea.placeholder = 'مثال: {"ticketId":123, "status":"done"}';
-          payloadTextarea.addEventListener('input', () => {
-            action.webhook_payload = payloadTextarea.value;
-            renderPreview();
-          });
-          payloadRow.appendChild(payloadLabel);
-          payloadRow.appendChild(payloadTextarea);
-          card.appendChild(payloadRow);
-        }
-
-        listEl.appendChild(card);
-      });
-    }
-
-    function fillAutoActionsForm(autoActions) {
-      elements.autoEnabled.checked = autoActions.enabled;
-      elements.autoOnError.value = autoActions.on_error;
-
-      getTriggerMap(autoActions).forEach(({ trigger, enabledEl, listEl, key }) => {
-        if (enabledEl) enabledEl.checked = trigger.enabled;
-        renderAutoActionTrigger(key, listEl);
-      });
-
-      renderPreview();
-    }
-
-    function populateReopenTargetSteps(currentStepId, selectedValue) {
-      if (!elements.reopenTargetStep) return;
-      elements.reopenTargetStep.innerHTML = '<option value="">انتخاب مرحله</option>';
-      steps.forEach(step => {
-        if (step.id === currentStepId) return;
-        const opt = document.createElement('option');
-        opt.value = step.id;
-        opt.textContent = step.name;
-        elements.reopenTargetStep.appendChild(opt);
-      });
-      if (selectedValue) {
-        elements.reopenTargetStep.value = selectedValue;
-      }
-    }
-
-    function toggleReopenTarget(show) {
-      if (elements.reopenTargetWrap) elements.reopenTargetWrap.classList.toggle('hidden', !show);
-    }
-
-    function toggleQualityFlagFields(show) {
-      if (elements.reopenQualityWrap) elements.reopenQualityWrap.classList.toggle('hidden', !show);
-    }
-
-    function fillReopenForm(reopen) {
-      elements.reopenEnabled.checked = reopen.enabled;
-      elements.reopenRoutingMode.value = reopen.routing.mode;
-      populateReopenTargetSteps(flowConfig.selectedStepId, reopen.routing.target_step_id || "");
-      toggleReopenTarget(reopen.routing.mode === 'specific_step');
-
-      elements.reopenAllowCustomer.checked = reopen.permissions.allow_customer;
-      elements.reopenAllowInternal.checked = reopen.permissions.allow_internal;
-      fillMultiSelect(elements.reopenAllowedRoles, reopen.permissions.allowed_roles);
-
-      elements.reopenMaxReopens.value = reopen.limits.max_reopens ?? "";
-      elements.reopenMinIntervalHours.value = reopen.limits.min_interval_hours ?? "";
-
-      elements.reopenRequireReason.checked = reopen.reason.require_reason;
-      fillMultiSelect(elements.reopenReasonTypes, reopen.reason.reason_types);
-
-      elements.reopenNotifyCreator.checked = reopen.notifications.notify_creator;
-      elements.reopenNotifyAssignee.checked = reopen.notifications.notify_assignee;
-      elements.reopenNotifyManager.checked = reopen.notifications.notify_manager;
-      elements.reopenNotifyCustomer.checked = reopen.notifications.notify_customer;
-      fillMultiSelect(elements.reopenNotifyRoles, reopen.notifications.notify_roles);
-
-      elements.reopenQualityEnableFlag.checked = reopen.quality_flag.enable_flag_on_excess;
-      elements.reopenQualityThreshold.value = reopen.quality_flag.threshold ?? "";
-      elements.reopenQualityLabel.value = reopen.quality_flag.flag_label || "";
-      toggleQualityFlagFields(reopen.quality_flag.enable_flag_on_excess);
-    function fillForm(assign) {
-      elements.strategySelect.value = assign.strategy_type;
-      elements.candidateSourceRadios.forEach(r => { r.checked = r.value === assign.candidate_source_type; });
-      fillMultiSelect(elements.candidateUsers, assign.candidate_users);
-      fillMultiSelect(elements.candidateRoles, assign.candidate_roles);
-      elements.singleAssignmentMode.value = assign.single_assignment_mode;
-      elements.singleFixedUser.value = assign.single_fixed_user_id;
-      fillMultiSelect(elements.rrPoolUsers, assign.rr_pool_users);
-      elements.rrOrderMode.value = assign.rr_order_mode;
-      fillMultiSelect(elements.ssPoolUsers, assign.ss_pool_users);
-      elements.ssVisibleToAll.checked = assign.ss_visible_to_all;
-      fillMultiSelect(elements.multiPoolUsers, assign.multi_pool_users);
-      elements.multiLockMode.value = assign.multi_lock_mode;
-      elements.allowManualOverride.checked = assign.allow_manual_override;
-      fillMultiSelect(elements.overrideAllowedRoles, assign.override_allowed_roles);
-      elements.onEmptyPoolAction.value = assign.on_empty_pool_action;
-    }
-
-    function fillTimingForm(timing) {
-      elements.timingEnabled.checked = timing.enabled;
-      elements.timingMode.value = timing.time_mode;
-      elements.timingPauseOnHold.checked = timing.pause_on_hold;
-
-      elements.timingUnreadEnabled.checked = timing.unread.enabled;
-      elements.timingUnreadThresholdValue.value = timing.unread.threshold_value ?? "";
-      elements.timingUnreadThresholdUnit.value = timing.unread.threshold_unit;
-      elements.timingUnreadNotifyReceiver.checked = timing.unread.actions.notify_receiver;
-      elements.timingUnreadNotifyCreator.checked = timing.unread.actions.notify_creator;
-      elements.timingUnreadNotifyManager.checked = timing.unread.actions.notify_manager;
-      elements.timingUnreadReturnPrev.checked = timing.unread.actions.return_to_previous_step;
-      elements.timingUnreadLogDelay.checked = timing.unread.actions.log_delay;
-      elements.timingUnreadAutoAssignNext.checked = timing.unread.actions.auto_assign_next;
-      fillMultiSelect(elements.timingUnreadNextUsers, timing.unread.actions.next_users);
-      toggleUnreadNextUsers(timing.unread.actions.auto_assign_next);
-
-      elements.timingNoactionEnabled.checked = timing.noDecision.enabled;
-      elements.timingNoactionThresholdValue.value = timing.noDecision.threshold_value ?? "";
-      elements.timingNoactionThresholdUnit.value = timing.noDecision.threshold_unit;
-      elements.timingNoactionLogDelay.checked = timing.noDecision.actions.log_delay;
-      elements.timingNoactionNotifyCreator.checked = timing.noDecision.actions.notify_creator;
-      elements.timingNoactionNotifyManager.checked = timing.noDecision.actions.notify_manager;
-      elements.timingNoactionLockOtherTickets.checked = timing.noDecision.actions.lock_other_tickets;
-      elements.timingNoactionLockMentions.checked = timing.noDecision.actions.lock_mentions;
-      elements.timingNoactionLockConversation.checked = timing.noDecision.actions.lock_conversation;
-    }
-
-    function updateAssignmentFromForm() {
-      const step = getCurrentStep();
-      const a = step.assignment;
-      a.strategy_type = elements.strategySelect.value;
-      a.candidate_source_type = document.querySelector('input[name="candidate_source_type"]:checked')?.value || "users";
-      a.candidate_users = readMultiSelect(elements.candidateUsers);
-      a.candidate_roles = readMultiSelect(elements.candidateRoles);
-      a.single_assignment_mode = elements.singleAssignmentMode.value;
-      a.single_fixed_user_id = elements.singleFixedUser.value;
-      a.rr_pool_users = readMultiSelect(elements.rrPoolUsers);
-      a.rr_order_mode = elements.rrOrderMode.value;
-      a.ss_pool_users = readMultiSelect(elements.ssPoolUsers);
-      a.ss_visible_to_all = elements.ssVisibleToAll.checked;
-      a.multi_pool_users = readMultiSelect(elements.multiPoolUsers);
-      a.multi_lock_mode = elements.multiLockMode.value;
-      a.allow_manual_override = elements.allowManualOverride.checked;
-      a.override_allowed_roles = readMultiSelect(elements.overrideAllowedRoles);
-      a.on_empty_pool_action = elements.onEmptyPoolAction.value;
-      toggleStrategyCards(a.strategy_type);
-      renderPreview();
-    }
-
-    function toggleUnreadNextUsers(show) {
-      elements.timingUnreadNextUsersWrap.classList.toggle('hidden', !show);
-    }
-
-    function toNullableNumber(value) {
-      if (value === "" || value === null || value === undefined) return null;
-      const num = Number(value);
-      return Number.isNaN(num) ? null : num;
-    }
-
-    function updateTimingFromForm() {
-      const step = getCurrentStep();
-      const t = step.timing;
-      t.enabled = elements.timingEnabled.checked;
-      t.time_mode = elements.timingMode.value;
-      t.pause_on_hold = elements.timingPauseOnHold.checked;
-
-      t.unread.enabled = elements.timingUnreadEnabled.checked;
-      t.unread.threshold_value = toNullableNumber(elements.timingUnreadThresholdValue.value);
-      t.unread.threshold_unit = elements.timingUnreadThresholdUnit.value;
-      t.unread.actions.notify_receiver = elements.timingUnreadNotifyReceiver.checked;
-      t.unread.actions.notify_creator = elements.timingUnreadNotifyCreator.checked;
-      t.unread.actions.notify_manager = elements.timingUnreadNotifyManager.checked;
-      t.unread.actions.return_to_previous_step = elements.timingUnreadReturnPrev.checked;
-      t.unread.actions.log_delay = elements.timingUnreadLogDelay.checked;
-      t.unread.actions.auto_assign_next = elements.timingUnreadAutoAssignNext.checked;
-      t.unread.actions.next_users = t.unread.actions.auto_assign_next ? readMultiSelect(elements.timingUnreadNextUsers) : [];
-      toggleUnreadNextUsers(t.unread.actions.auto_assign_next);
-
-      t.noDecision.enabled = elements.timingNoactionEnabled.checked;
-      t.noDecision.threshold_value = toNullableNumber(elements.timingNoactionThresholdValue.value);
-      t.noDecision.threshold_unit = elements.timingNoactionThresholdUnit.value;
-      t.noDecision.actions.log_delay = elements.timingNoactionLogDelay.checked;
-      t.noDecision.actions.notify_creator = elements.timingNoactionNotifyCreator.checked;
-      t.noDecision.actions.notify_manager = elements.timingNoactionNotifyManager.checked;
-      t.noDecision.actions.lock_other_tickets = elements.timingNoactionLockOtherTickets.checked;
-      t.noDecision.actions.lock_mentions = elements.timingNoactionLockMentions.checked;
-      t.noDecision.actions.lock_conversation = elements.timingNoactionLockConversation.checked;
-
-      renderPreview();
-    }
-
-    function renderPriorityRules(priority) {
-      if (!elements.priorityRulesList) return;
-      elements.priorityRulesList.innerHTML = "";
-
-      if (!priority.scoring_rules.length) {
-        const empty = document.createElement('div');
-        empty.className = 'hint';
-        empty.textContent = 'هنوز قانونی تعریف نشده است.';
-        elements.priorityRulesList.appendChild(empty);
-        return;
-      }
-
-      priority.scoring_rules.forEach((rule, index) => {
-        const card = document.createElement('div');
-        card.className = 'section-card';
-
-        const header = document.createElement('div');
-        header.className = 'action-header';
-        const title = document.createElement('strong');
-        title.textContent = `قانون شماره ${index + 1}`;
-        const removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.className = 'btn secondary';
-        removeBtn.textContent = 'حذف';
-        removeBtn.addEventListener('click', () => {
-          priority.scoring_rules = priority.scoring_rules.filter(item => item.id !== rule.id);
-          renderPriorityRules(priority);
-          renderPreview();
-        });
-        header.appendChild(title);
-        header.appendChild(removeBtn);
-        card.appendChild(header);
-
-        const titleRow = document.createElement('div');
-        titleRow.className = 'row';
-        const titleLabel = document.createElement('label');
-        titleLabel.setAttribute('for', `${rule.id}_title`);
-        titleLabel.textContent = 'عنوان قانون';
-        const titleInput = document.createElement('input');
-        titleInput.type = 'text';
-        titleInput.id = `${rule.id}_title`;
-        titleInput.placeholder = 'مثال: تاخیر بیش از SLA یا تعداد ارجاع زیاد';
-        titleInput.value = rule.title || '';
-        titleInput.addEventListener('input', () => {
-          rule.title = titleInput.value;
-          renderPreview();
-        });
-        titleRow.appendChild(titleLabel);
-        titleRow.appendChild(titleInput);
-        card.appendChild(titleRow);
-
-        const metaRow = document.createElement('div');
-        metaRow.className = 'row';
-        const categoryLabel = document.createElement('label');
-        categoryLabel.textContent = 'دسته‌بندی قانون';
-        const categorySelect = document.createElement('select');
-        categorySelect.innerHTML = `
-          <option value="delay">تاخیر</option>
-          <option value="referrals">ارجاع/جابجایی مسئول</option>
-          <option value="reopen">بازگشایی</option>
-          <option value="customer_type">نوع مشتری/سرویس</option>
-          <option value="other">سایر</option>
-        `;
-        categorySelect.value = rule.category;
-        categorySelect.addEventListener('change', () => {
-          rule.category = categorySelect.value;
-          renderPreview();
-        });
-        metaRow.appendChild(categoryLabel);
-        metaRow.appendChild(categorySelect);
-        card.appendChild(metaRow);
-
-        const descRow = document.createElement('div');
-        descRow.className = 'row';
-        const descLabel = document.createElement('label');
-        descLabel.textContent = 'توضیح قانون';
-        const descTextarea = document.createElement('textarea');
-        descTextarea.rows = 2;
-        descTextarea.placeholder = 'شرح کوتاه شرط امتیازگیری';
-        descTextarea.value = rule.description || '';
-        descTextarea.addEventListener('input', () => {
-          rule.description = descTextarea.value;
-          renderPreview();
-        });
-        descRow.appendChild(descLabel);
-        descRow.appendChild(descTextarea);
-        card.appendChild(descRow);
-
-        const scoreRow = document.createElement('div');
-        scoreRow.className = 'row';
-        const scoreLabel = document.createElement('label');
-        scoreLabel.textContent = 'تغییر امتیاز (مثبت یا منفی)';
-        const scoreInput = document.createElement('input');
-        scoreInput.type = 'number';
-        scoreInput.id = `${rule.id}_score`;
-        scoreInput.value = rule.score_delta ?? 0;
-        scoreInput.addEventListener('input', () => {
-          const num = scoreInput.value === '' ? 0 : Number(scoreInput.value);
-          rule.score_delta = Number.isNaN(num) ? 0 : num;
-          renderPreview();
-        });
-        scoreRow.appendChild(scoreLabel);
-        scoreRow.appendChild(scoreInput);
-        card.appendChild(scoreRow);
-
-        const conditionRow = document.createElement('div');
-        conditionRow.className = 'row';
-        const conditionLabel = document.createElement('label');
-        conditionLabel.textContent = 'شرط اجرا (اختیاری)';
-        const conditionInput = document.createElement('textarea');
-        conditionInput.rows = 2;
-        conditionInput.placeholder = 'مثال: فقط برای مشتریان VIP یا سرویس بحرانی';
-        conditionInput.value = rule.condition_text || '';
-        conditionInput.addEventListener('input', () => {
-          rule.condition_text = conditionInput.value;
-          renderPreview();
-        });
-        conditionRow.appendChild(conditionLabel);
-        conditionRow.appendChild(conditionInput);
-        card.appendChild(conditionRow);
-
-        elements.priorityRulesList.appendChild(card);
-      });
-    }
-
-    function fillPriorityForm(priority) {
-      elements.priorityEnabled.checked = priority.enabled;
-      elements.priorityBase.value = priority.base_priority;
-      elements.priorityAutoChange.checked = priority.auto_change_allowed;
-
-      elements.priorityNormalMax.value = priority.score_to_priority.normal_max ?? "";
-      elements.priorityImportantMin.value = priority.score_to_priority.important_min ?? "";
-      elements.priorityCriticalMin.value = priority.score_to_priority.critical_min ?? "";
-
-      elements.priorityNotifyOnChange.checked = priority.notifications.notify_on_change;
-      elements.priorityNotifyAssignee.checked = priority.notifications.notify_assignee;
-      elements.priorityNotifyManager.checked = priority.notifications.notify_manager;
-      fillMultiSelect(elements.priorityNotifyRoles, priority.notifications.notify_roles);
-
-      elements.priorityLogHistory.checked = priority.logging.log_change_history;
-
-      renderPriorityRules(priority);
-      renderPreview();
-    function renderPreview() {
-      flowConfig.flowName = elements.flowName.value;
-      elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
-    }
-
-    }
-
-    function fillMultiSelect(selectEl, values) {
-      Array.from(selectEl.options).forEach(opt => {
-        opt.selected = values.includes(opt.value);
-      });
-    }
-
-    function fillForm(assign) {
-      elements.strategySelect.value = assign.strategy_type;
-      elements.candidateSourceRadios.forEach(r => { r.checked = r.value === assign.candidate_source_type; });
-      fillMultiSelect(elements.candidateUsers, assign.candidate_users);
-      fillMultiSelect(elements.candidateRoles, assign.candidate_roles);
-      elements.singleAssignmentMode.value = assign.single_assignment_mode;
-      elements.singleFixedUser.value = assign.single_fixed_user_id;
-      fillMultiSelect(elements.rrPoolUsers, assign.rr_pool_users);
-      elements.rrOrderMode.value = assign.rr_order_mode;
-      fillMultiSelect(elements.ssPoolUsers, assign.ss_pool_users);
-      elements.ssVisibleToAll.checked = assign.ss_visible_to_all;
-      fillMultiSelect(elements.multiPoolUsers, assign.multi_pool_users);
-      elements.multiLockMode.value = assign.multi_lock_mode;
-      elements.allowManualOverride.checked = assign.allow_manual_override;
-      fillMultiSelect(elements.overrideAllowedRoles, assign.override_allowed_roles);
-      elements.onEmptyPoolAction.value = assign.on_empty_pool_action;
-    }
-
-    function updateAssignmentFromForm() {
-      const step = getCurrentStep();
-      const a = step.assignment;
-      a.strategy_type = elements.strategySelect.value;
-      a.candidate_source_type = document.querySelector('input[name="candidate_source_type"]:checked')?.value || "users";
-      a.candidate_users = readMultiSelect(elements.candidateUsers);
-      a.candidate_roles = readMultiSelect(elements.candidateRoles);
-      a.single_assignment_mode = elements.singleAssignmentMode.value;
-      a.single_fixed_user_id = elements.singleFixedUser.value;
-      a.rr_pool_users = readMultiSelect(elements.rrPoolUsers);
-      a.rr_order_mode = elements.rrOrderMode.value;
-      a.ss_pool_users = readMultiSelect(elements.ssPoolUsers);
-      a.ss_visible_to_all = elements.ssVisibleToAll.checked;
-      a.multi_pool_users = readMultiSelect(elements.multiPoolUsers);
-      a.multi_lock_mode = elements.multiLockMode.value;
-      a.allow_manual_override = elements.allowManualOverride.checked;
-      a.override_allowed_roles = readMultiSelect(elements.overrideAllowedRoles);
-      a.on_empty_pool_action = elements.onEmptyPoolAction.value;
-      toggleStrategyCards(a.strategy_type);
-      renderPreview();
-    }
-
-    function toggleUnreadNextUsers(show) {
-      elements.timingUnreadNextUsersWrap.classList.toggle('hidden', !show);
-    }
-
-    function toggleOverrideRoles(show) {
-      if (!elements.condOverrideRolesWrap) return;
-      elements.condOverrideRolesWrap.classList.toggle('hidden', !show);
-    }
-
-    function renderDependencyItems(dependencies) {
-      elements.depsList.innerHTML = "";
-      const currentStepId = flowConfig.selectedStepId;
-      dependencies.items.forEach((dep, index) => {
-        const card = document.createElement('div');
-        card.className = 'section-card';
-
-        const header = document.createElement('div');
-        header.style.display = 'flex';
-        header.style.justifyContent = 'space-between';
-        header.style.alignItems = 'center';
-        header.style.gap = '8px';
-        const title = document.createElement('strong');
-        title.textContent = `وابستگی شماره ${index + 1}`;
-        const removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.textContent = 'حذف';
-        removeBtn.style.padding = '6px 10px';
-        removeBtn.style.border = '1px solid #ef4444';
-        removeBtn.style.background = '#fee2e2';
-        removeBtn.style.color = '#b91c1c';
-        removeBtn.style.borderRadius = '8px';
-        removeBtn.style.cursor = 'pointer';
-        removeBtn.addEventListener('click', () => {
-          dependencies.items = dependencies.items.filter(item => item.id !== dep.id);
-          renderDependencyItems(dependencies);
-          renderPreview();
-        });
-        header.appendChild(title);
-        header.appendChild(removeBtn);
-        card.appendChild(header);
-
-        const typeRow = document.createElement('div');
-        typeRow.className = 'row';
-        const typeLabel = document.createElement('label');
-        typeLabel.textContent = 'نوع وابستگی';
-        const typeSelect = document.createElement('select');
-        typeSelect.innerHTML = `
-          <option value="step">مرحله‌ای دیگر در همین فلو</option>
-          <option value="ticket_type">تیکت‌های دیگر از نوع مشخص</option>
-          <option value="subtickets">زیرتیکت‌های همین تیکت</option>
-        `;
-        typeSelect.value = dep.type;
-        typeSelect.addEventListener('change', () => {
-          dep.type = typeSelect.value;
-          if (dep.type !== 'step') dep.target_step_id = null;
-          if (dep.type !== 'ticket_type') dep.target_ticket_type = '';
-          renderDependencyItems(dependencies);
-          renderPreview();
-        });
-        typeRow.appendChild(typeLabel);
-        typeRow.appendChild(typeSelect);
-        card.appendChild(typeRow);
-
-        const targetRow = document.createElement('div');
-        targetRow.className = 'row';
-        const targetLabel = document.createElement('label');
-        if (dep.type === 'step') {
-          targetLabel.textContent = 'مرحله هدف';
-          const targetSelect = document.createElement('select');
-          const options = steps.filter(s => s.id !== currentStepId);
-          targetSelect.innerHTML = '<option value="">انتخاب کنید</option>' + options.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-          targetSelect.value = dep.target_step_id || "";
-          targetSelect.addEventListener('change', () => {
-            dep.target_step_id = targetSelect.value || null;
-            renderPreview();
-          });
-          targetRow.appendChild(targetLabel);
-          targetRow.appendChild(targetSelect);
-        } else if (dep.type === 'ticket_type') {
-          targetLabel.textContent = 'نوع تیکت وابسته';
-          const targetInput = document.createElement('input');
-          targetInput.type = 'text';
-          targetInput.value = dep.target_ticket_type || '';
-          targetInput.placeholder = 'مثال: finance_contract';
-          targetInput.addEventListener('input', () => {
-            dep.target_ticket_type = targetInput.value;
-            renderPreview();
-          });
-          targetRow.appendChild(targetLabel);
-          targetRow.appendChild(targetInput);
-        } else {
-          targetLabel.textContent = 'هدف وابستگی';
-          const desc = document.createElement('div');
-          desc.className = 'hint';
-          desc.textContent = 'تمام زیرتیکت‌های این تیکت (تحلیل، توسعه، تست و ...)';
-          targetRow.appendChild(targetLabel);
-          targetRow.appendChild(desc);
-        }
-        card.appendChild(targetRow);
-
-        const statusRow = document.createElement('div');
-        statusRow.className = 'row';
-        const statusLabel = document.createElement('label');
-        statusLabel.textContent = 'وضعیت‌های قابل قبول برای تکمیل وابستگی';
-        const statusSelect = document.createElement('select');
-        statusSelect.multiple = true;
-        ['انجام شد', 'تایید شد', 'بسته شد'].forEach(st => {
-          const opt = document.createElement('option');
-          opt.value = st;
-          opt.textContent = st;
-          statusSelect.appendChild(opt);
-        });
-        fillMultiSelect(statusSelect, dep.required_statuses);
-        statusSelect.addEventListener('change', () => {
-          dep.required_statuses = readMultiSelect(statusSelect);
-          renderPreview();
-        });
-        const statusHint = document.createElement('div');
-        statusHint.className = 'hint';
-        statusHint.textContent = 'مثال: وابستگی فقط وقتی کامل محسوب می‌شود که تیکت/مرحله در یکی از این وضعیت‌ها باشد.';
-        statusRow.appendChild(statusLabel);
-        statusRow.appendChild(statusSelect);
-        statusRow.appendChild(statusHint);
-        card.appendChild(statusRow);
-
-        const completionRow = document.createElement('div');
-        completionRow.className = 'row';
-        const compLabel = document.createElement('label');
-        compLabel.textContent = 'شرط تکمیل وابستگی';
-        const compSelect = document.createElement('select');
-        compSelect.innerHTML = `
-          <option value="all">همه باید تکمیل شده باشند</option>
-          <option value="any">حداقل یکی کافی است</option>
-          <option value="min_count">حداقل تعداد مشخص</option>
-        `;
-        compSelect.value = dep.completion_mode;
-        compSelect.addEventListener('change', () => {
-          dep.completion_mode = compSelect.value;
-          if (dep.completion_mode !== 'min_count') dep.required_count = null;
-          renderDependencyItems(dependencies);
-          renderPreview();
-        });
-        completionRow.appendChild(compLabel);
-        completionRow.appendChild(compSelect);
-        card.appendChild(completionRow);
-
-        if (dep.completion_mode === 'min_count') {
-          const countRow = document.createElement('div');
-          countRow.className = 'row';
-          const countLabel = document.createElement('label');
-          countLabel.textContent = 'حداقل تعداد مورد نیاز';
-          const countInput = document.createElement('input');
-          countInput.type = 'number';
-          countInput.min = '0';
-          countInput.value = dep.required_count ?? '';
-          countInput.placeholder = 'مثلاً 1';
-          countInput.addEventListener('input', () => {
-            dep.required_count = toNullableNumber(countInput.value);
-            renderPreview();
-          });
-          const countHint = document.createElement('div');
-          countHint.className = 'hint';
-          countHint.textContent = 'مثال: حداقل ۱ تیکت از نوع "قرارداد مالی" باید بسته شده باشد.';
-          countRow.appendChild(countLabel);
-          countRow.appendChild(countInput);
-          countRow.appendChild(countHint);
-          card.appendChild(countRow);
-        }
-
-        elements.depsList.appendChild(card);
-      });
-    }
-
-    function toNullableNumber(value) {
-      if (value === "" || value === null || value === undefined) return null;
-      const num = Number(value);
-      return Number.isNaN(num) ? null : num;
-    }
-
-    function updateTimingFromForm() {
-      const step = getCurrentStep();
-      const t = step.timing;
-      t.enabled = elements.timingEnabled.checked;
-      t.time_mode = elements.timingMode.value;
-      t.pause_on_hold = elements.timingPauseOnHold.checked;
-
-      t.unread.enabled = elements.timingUnreadEnabled.checked;
-      t.unread.threshold_value = toNullableNumber(elements.timingUnreadThresholdValue.value);
-      t.unread.threshold_unit = elements.timingUnreadThresholdUnit.value;
-      t.unread.actions.notify_receiver = elements.timingUnreadNotifyReceiver.checked;
-      t.unread.actions.notify_creator = elements.timingUnreadNotifyCreator.checked;
-      t.unread.actions.notify_manager = elements.timingUnreadNotifyManager.checked;
-      t.unread.actions.return_to_previous_step = elements.timingUnreadReturnPrev.checked;
-      t.unread.actions.log_delay = elements.timingUnreadLogDelay.checked;
-      t.unread.actions.auto_assign_next = elements.timingUnreadAutoAssignNext.checked;
-      t.unread.actions.next_users = t.unread.actions.auto_assign_next ? readMultiSelect(elements.timingUnreadNextUsers) : [];
-      toggleUnreadNextUsers(t.unread.actions.auto_assign_next);
-
-      t.noDecision.enabled = elements.timingNoactionEnabled.checked;
-      t.noDecision.threshold_value = toNullableNumber(elements.timingNoactionThresholdValue.value);
-      t.noDecision.threshold_unit = elements.timingNoactionThresholdUnit.value;
-      t.noDecision.actions.log_delay = elements.timingNoactionLogDelay.checked;
-      t.noDecision.actions.notify_creator = elements.timingNoactionNotifyCreator.checked;
-      t.noDecision.actions.notify_manager = elements.timingNoactionNotifyManager.checked;
-      t.noDecision.actions.lock_other_tickets = elements.timingNoactionLockOtherTickets.checked;
-      t.noDecision.actions.lock_mentions = elements.timingNoactionLockMentions.checked;
-      t.noDecision.actions.lock_conversation = elements.timingNoactionLockConversation.checked;
-
-      renderPreview();
-    }
-
-    function parseChecklist(text) {
-      return text
-        .split(/\r?\n/)
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
-    }
-
-    function updateConditionsFromForm() {
-      const step = getCurrentStep();
-      const c = step.conditions;
-
-      c.enabled = elements.condEnabled.checked;
-      c.enforcement_mode = elements.condEnforcementMode.value;
-      c.required_fields = readMultiSelect(elements.condRequiredFields);
-      c.checklist_items = parseChecklist(elements.condChecklistItems.value || "");
-
-      c.statuses.restrict_to_list = elements.condStatusRestrict.checked;
-      c.statuses.allowed_statuses = readMultiSelect(elements.condAllowedStatuses);
-      c.statuses.require_action_log = elements.condRequireActionLog.checked;
-      c.statuses.require_customer_message = elements.condRequireCustomerMessage.checked;
-
-      c.approvals.require_manager = elements.condRequireManagerApproval.checked;
-      c.approvals.require_finance = elements.condRequireFinanceApproval.checked;
-      c.approvals.require_customer = elements.condRequireCustomerApproval.checked;
-      c.approvals.override_allowed = elements.condOverrideAllowed.checked;
-      c.approvals.override_roles = elements.condOverrideAllowed.checked ? readMultiSelect(elements.condOverrideRoles) : [];
-      toggleOverrideRoles(c.approvals.override_allowed);
-
-      c.violation_message = elements.condViolationMessage.value || "";
-
-      renderPreview();
-    }
-
-    function updateDependenciesGeneral() {
-      const step = getCurrentStep();
-      const d = step.dependencies;
-      d.enabled = elements.depsEnabled.checked;
-      d.enforcement_mode = elements.depsEnforcementMode.value;
-      renderPreview();
-    }
-
-    function updateAccessFromForm() {
-      const step = getCurrentStep();
-      const a = step.access;
-
-      a.enabled = elements.accessEnabled.checked;
-      a.enforcement_mode = elements.accessEnforcementMode.value;
-
-      a.visibility.view_roles = readMultiSelect(elements.accessViewRoles);
-      a.visibility.edit_roles = readMultiSelect(elements.accessEditRoles);
-      a.visibility.readonly_roles = readMultiSelect(elements.accessReadonlyRoles);
-      a.visibility.allow_customer_view = elements.accessAllowCustomerView.checked;
-      a.visibility.restrict_internal_notes = elements.accessRestrictInternalNotes.checked;
-
-      a.actions.allow_comment = elements.accessAllowComment.checked;
-      a.actions.allow_attachment = elements.accessAllowAttachment.checked;
-      a.actions.allow_status_change = elements.accessAllowStatusChange.checked;
-      a.actions.restricted_fields = readMultiSelect(elements.accessRestrictedFields);
-
-      a.confidentiality.sensitivity_level = elements.accessSensitivityLevel.value;
-      a.confidentiality.mask_fields = readMultiSelect(elements.accessMaskFields);
-
-      a.watchers.auto_add_roles = readMultiSelect(elements.accessWatcherRoles);
-      a.watchers.auto_add_users = readMultiSelect(elements.accessWatcherUsers);
-      a.watchers.allow_manual_watchers = elements.accessAllowManualWatchers.checked;
-
-      a.overrides.allowed = elements.accessOverrideAllowed.checked;
-      a.overrides.roles = a.overrides.allowed ? readMultiSelect(elements.accessOverrideRoles) : [];
-      toggleAccessOverrideRoles(a.overrides.allowed);
-
-      a.message = elements.accessMessage.value || "";
-
-      renderPreview();
-    }
-
-    function updateNotificationsFromForm() {
-      const step = getCurrentStep();
-      const n = step.notifications;
-
-      n.enabled = elements.notifEnabled.checked;
-
-      n.channels.in_app = elements.notifChannelInapp.checked;
-      n.channels.sms = elements.notifChannelSms.checked;
-      n.channels.email = elements.notifChannelEmail.checked;
-
-      n.triggers.on_enter = elements.notifTriggerEnter.checked;
-      n.triggers.on_exit = elements.notifTriggerExit.checked;
-      n.triggers.on_delay = elements.notifTriggerDelay.checked;
-      n.triggers.on_reopen = elements.notifTriggerReopen.checked;
-      n.triggers.on_assignment_change = elements.notifTriggerAssignment.checked;
-      n.triggers.on_status_change = elements.notifTriggerStatus.checked;
-
-      n.recipients.roles = readMultiSelect(elements.notifRoles);
-      n.recipients.users = readMultiSelect(elements.notifUsers);
-      n.recipients.include_assignee = elements.notifIncludeAssignee.checked;
-      n.recipients.include_creator = elements.notifIncludeCreator.checked;
-      n.recipients.include_watchers = elements.notifIncludeWatchers.checked;
-
-      n.template.title = elements.notifTitle.value;
-      n.template.message = elements.notifMessage.value;
-
-      n.throttling.enabled = elements.notifThrottleEnabled.checked;
-      n.throttling.interval_value = n.throttling.enabled ? toNullableNumber(elements.notifThrottleValue.value) : null;
-      n.throttling.interval_unit = elements.notifThrottleUnit.value;
-      toggleNotificationThrottle(n.throttling.enabled);
-
-      n.escalation.enabled = elements.notifEscalationEnabled.checked;
-      n.escalation.roles = n.escalation.enabled ? readMultiSelect(elements.notifEscalationRoles) : [];
-      n.escalation.users = n.escalation.enabled ? readMultiSelect(elements.notifEscalationUsers) : [];
-      n.escalation.message = n.escalation.enabled ? elements.notifEscalationMessage.value : "";
-      toggleNotificationEscalation(n.escalation.enabled);
-
-      renderPreview();
-    }
-
-    function updateAutoActionsGeneral() {
-      const step = getCurrentStep();
-      const a = step.autoActions;
-
-      a.enabled = elements.autoEnabled.checked;
-      a.on_error = elements.autoOnError.value;
-      a.triggers.on_enter_step.enabled = elements.autoEnterEnabled.checked;
-      a.triggers.on_exit_step.enabled = elements.autoExitEnabled.checked;
-      a.triggers.on_status_change.enabled = elements.autoStatusEnabled.checked;
-
-      renderPreview();
-    }
-
-    function updateReopenFromForm() {
-      const step = getCurrentStep();
-      const r = step.reopen;
-
-      r.enabled = elements.reopenEnabled.checked;
-      r.routing.mode = elements.reopenRoutingMode.value;
-      populateReopenTargetSteps(flowConfig.selectedStepId, r.routing.target_step_id || "");
-      if (r.routing.mode === 'specific_step') {
-        r.routing.target_step_id = elements.reopenTargetStep.value || null;
-      } else {
-        r.routing.target_step_id = null;
-      }
-      toggleReopenTarget(r.routing.mode === 'specific_step');
-
-      r.permissions.allow_customer = elements.reopenAllowCustomer.checked;
-      r.permissions.allow_internal = elements.reopenAllowInternal.checked;
-      r.permissions.allowed_roles = readMultiSelect(elements.reopenAllowedRoles);
-
-      r.limits.max_reopens = toNullableNumber(elements.reopenMaxReopens.value);
-      r.limits.min_interval_hours = toNullableNumber(elements.reopenMinIntervalHours.value);
-
-      r.reason.require_reason = elements.reopenRequireReason.checked;
-      r.reason.reason_types = readMultiSelect(elements.reopenReasonTypes);
-
-      r.notifications.notify_creator = elements.reopenNotifyCreator.checked;
-      r.notifications.notify_assignee = elements.reopenNotifyAssignee.checked;
-      r.notifications.notify_manager = elements.reopenNotifyManager.checked;
-      r.notifications.notify_customer = elements.reopenNotifyCustomer.checked;
-      r.notifications.notify_roles = readMultiSelect(elements.reopenNotifyRoles);
-
-      r.quality_flag.enable_flag_on_excess = elements.reopenQualityEnableFlag.checked;
-      if (r.quality_flag.enable_flag_on_excess) {
-        r.quality_flag.threshold = toNullableNumber(elements.reopenQualityThreshold.value);
-        r.quality_flag.flag_label = elements.reopenQualityLabel.value;
-      } else {
-        r.quality_flag.threshold = null;
-        r.quality_flag.flag_label = "";
-      }
-      toggleQualityFlagFields(r.quality_flag.enable_flag_on_excess);
-
-      renderPreview();
-    }
-
-    function updatePriorityFromForm() {
-      const step = getCurrentStep();
-      const p = step.priority;
-
-      p.enabled = elements.priorityEnabled.checked;
-      p.base_priority = elements.priorityBase.value;
-      p.auto_change_allowed = elements.priorityAutoChange.checked;
-
-      p.score_to_priority.normal_max = toNullableNumber(elements.priorityNormalMax.value);
-      p.score_to_priority.important_min = toNullableNumber(elements.priorityImportantMin.value);
-      p.score_to_priority.critical_min = toNullableNumber(elements.priorityCriticalMin.value);
-
-      p.notifications.notify_on_change = elements.priorityNotifyOnChange.checked;
-      p.notifications.notify_assignee = elements.priorityNotifyAssignee.checked;
-      p.notifications.notify_manager = elements.priorityNotifyManager.checked;
-      p.notifications.notify_roles = readMultiSelect(elements.priorityNotifyRoles);
-
-      p.logging.log_change_history = elements.priorityLogHistory.checked;
-
-      renderPreview();
-    }
-
-
-    function renderPreview() {
-      flowConfig.flowName = elements.flowName.value;
-      elements.jsonPreview.textContent = JSON.stringify(flowConfig, null, 2);
-    }
-
-    function setupCollapsibles() {
-      elements.collapseToggles.forEach(btn => {
-        const targetId = btn.dataset.target;
-        const content = document.getElementById(targetId);
-        if (!content) return;
-        btn.addEventListener('click', () => {
-          const nowHidden = content.classList.toggle('hidden');
-          btn.classList.toggle('collapsed', nowHidden);
-        });
-      });
-    }
-
-    function attachListeners() {
-      setupCollapsibles();
-    function attachListeners() {
-      elements.stepItems.forEach(item => {
-        item.addEventListener('click', () => setActiveStep(item.dataset.step));
-      });
-
-      elements.strategySelect.addEventListener('change', updateAssignmentFromForm);
-      elements.candidateSourceRadios.forEach(r => r.addEventListener('change', updateAssignmentFromForm));
-      [elements.candidateUsers, elements.candidateRoles, elements.rrPoolUsers, elements.ssPoolUsers, elements.multiPoolUsers, elements.overrideAllowedRoles].forEach(sel => {
-        sel.addEventListener('change', updateAssignmentFromForm);
-      });
-      [elements.singleAssignmentMode, elements.singleFixedUser, elements.rrOrderMode, elements.multiLockMode, elements.onEmptyPoolAction].forEach(sel => sel.addEventListener('change', updateAssignmentFromForm));
-      [elements.ssVisibleToAll, elements.allowManualOverride].forEach(chk => chk.addEventListener('change', updateAssignmentFromForm));
-      elements.flowName.addEventListener('input', renderPreview);
-
-      [
-        elements.timingEnabled,
-        elements.timingMode,
-        elements.timingPauseOnHold,
-        elements.timingUnreadEnabled,
-        elements.timingUnreadThresholdValue,
-        elements.timingUnreadThresholdUnit,
-        elements.timingUnreadNotifyReceiver,
-        elements.timingUnreadNotifyCreator,
-        elements.timingUnreadNotifyManager,
-        elements.timingUnreadReturnPrev,
-        elements.timingUnreadLogDelay,
-        elements.timingUnreadAutoAssignNext,
-        elements.timingUnreadNextUsers,
-        elements.timingNoactionEnabled,
-        elements.timingNoactionThresholdValue,
-        elements.timingNoactionThresholdUnit,
-        elements.timingNoactionLogDelay,
-        elements.timingNoactionNotifyCreator,
-        elements.timingNoactionNotifyManager,
-        elements.timingNoactionLockOtherTickets,
-        elements.timingNoactionLockMentions,
-        elements.timingNoactionLockConversation,
-
-        elements.condEnabled,
-        elements.condEnforcementMode,
-        elements.condRequiredFields,
-        elements.condChecklistItems,
-        elements.condStatusRestrict,
-        elements.condAllowedStatuses,
-        elements.condRequireActionLog,
-        elements.condRequireCustomerMessage,
-        elements.condRequireManagerApproval,
-        elements.condRequireFinanceApproval,
-        elements.condRequireCustomerApproval,
-        elements.condOverrideAllowed,
-        elements.condOverrideRoles,
-        elements.condViolationMessage
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'change';
-        const handler = [
-          elements.condEnabled,
-          elements.condEnforcementMode,
-          elements.condRequiredFields,
-          elements.condChecklistItems,
-          elements.condStatusRestrict,
-          elements.condAllowedStatuses,
-          elements.condRequireActionLog,
-          elements.condRequireCustomerMessage,
-          elements.condRequireManagerApproval,
-          elements.condRequireFinanceApproval,
-          elements.condRequireCustomerApproval,
-          elements.condOverrideAllowed,
-          elements.condOverrideRoles,
-          elements.condViolationMessage
-        ].includes(el) ? updateConditionsFromForm : updateTimingFromForm;
-        el.addEventListener(evt, handler);
-      });
-
-      [
-        elements.accessEnabled,
-        elements.accessEnforcementMode,
-        elements.accessViewRoles,
-        elements.accessEditRoles,
-        elements.accessReadonlyRoles,
-        elements.accessAllowCustomerView,
-        elements.accessRestrictInternalNotes,
-        elements.accessAllowComment,
-        elements.accessAllowAttachment,
-        elements.accessAllowStatusChange,
-        elements.accessRestrictedFields,
-        elements.accessSensitivityLevel,
-        elements.accessMaskFields,
-        elements.accessWatcherRoles,
-        elements.accessWatcherUsers,
-        elements.accessAllowManualWatchers,
-        elements.accessOverrideAllowed,
-        elements.accessOverrideRoles,
-        elements.accessMessage
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
-        el.addEventListener(evt, updateAccessFromForm);
-      });
-
-      [
-        elements.notifEnabled,
-        elements.notifChannelInapp,
-        elements.notifChannelSms,
-        elements.notifChannelEmail,
-        elements.notifTriggerEnter,
-        elements.notifTriggerExit,
-        elements.notifTriggerDelay,
-        elements.notifTriggerReopen,
-        elements.notifTriggerAssignment,
-        elements.notifTriggerStatus,
-        elements.notifRoles,
-        elements.notifUsers,
-        elements.notifIncludeAssignee,
-        elements.notifIncludeCreator,
-        elements.notifIncludeWatchers,
-        elements.notifTitle,
-        elements.notifMessage,
-        elements.notifThrottleEnabled,
-        elements.notifThrottleValue,
-        elements.notifThrottleUnit,
-        elements.notifEscalationEnabled,
-        elements.notifEscalationRoles,
-        elements.notifEscalationUsers,
-        elements.notifEscalationMessage
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
-        el.addEventListener(evt, updateNotificationsFromForm);
-      });
-
-      if (elements.depsEnabled) {
-        elements.depsEnabled.addEventListener('change', updateDependenciesGeneral);
-      }
-      if (elements.depsEnforcementMode) {
-        elements.depsEnforcementMode.addEventListener('change', updateDependenciesGeneral);
-      }
-      if (elements.depsAddBtn) {
-        elements.depsAddBtn.addEventListener('click', () => {
-          const step = getCurrentStep();
-          step.dependencies.items.push(createDependencyItem());
-          renderDependencyItems(step.dependencies);
-          renderPreview();
-        });
-      }
-
-      [
-        elements.autoEnabled,
-        elements.autoOnError,
-        elements.autoEnterEnabled,
-        elements.autoExitEnabled,
-        elements.autoStatusEnabled
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' ? 'change' : 'change';
-        el.addEventListener(evt, updateAutoActionsGeneral);
-      });
-
-      [
-        elements.reopenEnabled,
-        elements.reopenRoutingMode,
-        elements.reopenTargetStep,
-        elements.reopenAllowCustomer,
-        elements.reopenAllowInternal,
-        elements.reopenAllowedRoles,
-        elements.reopenMaxReopens,
-        elements.reopenMinIntervalHours,
-        elements.reopenRequireReason,
-        elements.reopenReasonTypes,
-        elements.reopenNotifyCreator,
-        elements.reopenNotifyAssignee,
-        elements.reopenNotifyManager,
-        elements.reopenNotifyCustomer,
-        elements.reopenNotifyRoles,
-        elements.reopenQualityEnableFlag,
-        elements.reopenQualityThreshold,
-        elements.reopenQualityLabel
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
-        el.addEventListener(evt, updateReopenFromForm);
-      });
-
-      [
-        elements.priorityEnabled,
-        elements.priorityBase,
-        elements.priorityAutoChange,
-        elements.priorityNormalMax,
-        elements.priorityImportantMin,
-        elements.priorityCriticalMin,
-        elements.priorityNotifyOnChange,
-        elements.priorityNotifyAssignee,
-        elements.priorityNotifyManager,
-        elements.priorityNotifyRoles,
-        elements.priorityLogHistory
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'change';
-        el.addEventListener(evt, updatePriorityFromForm);
-      });
-
-      if (elements.priorityRuleAdd) {
-        elements.priorityRuleAdd.addEventListener('click', () => {
-          const priority = getCurrentStep().priority;
-          priority.scoring_rules.push(createPriorityRule());
-          renderPriorityRules(priority);
-          renderPreview();
-        });
-      }
-
-      if (elements.autoEnterAdd) {
-        elements.autoEnterAdd.addEventListener('click', () => {
-          const trigger = getCurrentStep().autoActions.triggers.on_enter_step;
-          trigger.actions.push(createAutoAction());
-          renderAutoActionTrigger('on_enter_step', elements.autoEnterList);
-          renderPreview();
-        });
-      }
-
-      if (elements.autoExitAdd) {
-        elements.autoExitAdd.addEventListener('click', () => {
-          const trigger = getCurrentStep().autoActions.triggers.on_exit_step;
-          trigger.actions.push(createAutoAction());
-          renderAutoActionTrigger('on_exit_step', elements.autoExitList);
-          renderPreview();
-        });
-      }
-
-      if (elements.autoStatusAdd) {
-        elements.autoStatusAdd.addEventListener('click', () => {
-          const trigger = getCurrentStep().autoActions.triggers.on_status_change;
-          trigger.actions.push(createAutoAction());
-          renderAutoActionTrigger('on_status_change', elements.autoStatusList);
-          renderPreview();
-        });
-      }
-        elements.timingNoactionLockConversation
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'change';
-        el.addEventListener(evt, updateTimingFromForm);
-      });
-      [elements.singleAssignmentMode, elements.singleFixedUser, elements.rrOrderMode, elements.multiLockMode, elements.onEmptyPoolAction].forEach(sel => sel.addEventListener('change', updateAssignmentFromForm));
-      [elements.ssVisibleToAll, elements.allowManualOverride].forEach(chk => chk.addEventListener('change', updateAssignmentFromForm));
-      elements.flowName.addEventListener('input', renderPreview);
-    }
-
-    attachListeners();
-    setActiveStep(flowConfig.selectedStepId);
-    renderPreview();
+    });
   </script>
 </body>
 </html>
