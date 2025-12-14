@@ -402,22 +402,16 @@
                 <label for="timing_pause_on_hold">توقف زمان‌سنجی در حالت «تیکت متوقف / در انتظار»</label>
               </div>
             </div>
-
-            <div class="section-card">
-              <h5>سناریو ۱: تیکت باز نشده (Unread)</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="timing_unread_enabled" name="timing_unread_enabled">
-                <label for="timing_unread_enabled">فعال بودن این سناریو</label>
-              </div>
-
-              <div class="row">
-                <label>حداکثر زمان مجاز برای باز نکردن تیکت</label>
-                <div class="grid-2">
-                  <input type="number" id="timing_unread_threshold_value" name="timing_unread_threshold_value" min="0" placeholder="مثلاً ۳۰">
-                  <select id="timing_unread_threshold_unit" name="timing_unread_threshold_unit">
-                    <option value="minute">دقیقه</option>
-                    <option value="hour">ساعت</option>
-                    <option value="day">روز</option>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>روش توزیع</h4>
+                <div class="row">
+                  <label for="strategy_type">انتخاب الگوریتم</label>
+                  <select id="strategy_type">
+                    <option value="single">کارتابل واحد</option>
+                    <option value="round">چرخشی (Round Robin)</option>
+                    <option value="self">سلف‌سرویس</option>
+                    <option value="multi">ارسال همزمان</option>
                   </select>
                 </div>
                 <div class="row">
@@ -431,17 +425,26 @@
                   </select>
                   <div class="muted" style="margin-top:6px;">می‌توانید نقش‌ها یا کاربران مشخص را به عنوان دریافت‌کننده‌های این مرحله تعیین کنید.</div>
                 </div>
-                <div class="hint">مثال: ۴ ساعت یا ۱ روز بعد از اولین باز کردن.</div>
               </div>
-
-              <div class="row">
-                <label>اقدامات در صورت عبور از زمان</label>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_log_delay" name="timing_noaction_log_delay"><label for="timing_noaction_log_delay">ثبت در گزارش تاخیر</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_notify_creator" name="timing_noaction_notify_creator"><label for="timing_noaction_notify_creator">ارسال پیامک/اعلان به ایجادکننده تیکت</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_notify_manager" name="timing_noaction_notify_manager"><label for="timing_noaction_notify_manager">ارسال پیامک/اعلان به مدیر تیکت‌ها / مدیر پروژه</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_other_tickets" name="timing_noaction_lock_other_tickets"><label for="timing_noaction_lock_other_tickets">قفل کردن دسترسی به سایر تیکت‌ها برای این کاربر (تا تعیین‌تکلیف)</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_mentions" name="timing_noaction_lock_mentions"><label for="timing_noaction_lock_mentions">محدودیت در منشن‌گذاری روی تیکت‌ها</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_noaction_lock_conversation" name="timing_noaction_lock_conversation"><label for="timing_noaction_lock_conversation">محدودیت در ارسال پیام در گفتگوی تیکت</label></div>
+              <div class="section">
+                <h4>قوانین زمان‌بندی</h4>
+                <div class="row">
+                  <label for="due_hours">مهلت انجام (ساعت)</label>
+                  <input id="due_hours" type="text" placeholder="مثال: 48">
+                </div>
+                <div class="row">
+                  <label for="reminder">اعلان هشدار</label>
+                  <select id="reminder">
+                    <option>بدون هشدار</option>
+                    <option>۴ ساعت قبل از مهلت</option>
+                    <option>۱۲ ساعت قبل از مهلت</option>
+                    <option>۲۴ ساعت قبل از مهلت</option>
+                  </select>
+                </div>
+                <div class="switch-row">
+                  <label for="auto_return">بازگشت خودکار در صورت تاخیر</label>
+                  <input id="auto_return" type="checkbox">
+                </div>
               </div>
             </div>
           </div>
@@ -488,49 +491,31 @@
               </div>
             </div>
 
-            <div class="section-card">
-              <h5>الزامات وضعیت و اقدام قبل از عبور</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="cond_status_restrict" name="cond_status_restrict">
-                <label for="cond_status_restrict">محدود کردن عبور به وضعیت‌های مشخص</label>
-              </div>
-              <div class="row">
-                <label for="cond_allowed_statuses">وضعیت‌های مجاز برای عبور</label>
-                <select id="cond_allowed_statuses" name="cond_allowed_statuses" multiple>
-                  <option value="در حال انجام">در حال انجام</option>
-                  <option value="بررسی شد">بررسی شد</option>
-                  <option value="تایید شد">تایید شد</option>
-                  <option value="تکمیل شد">تکمیل شد</option>
-                </select>
-                <div class="hint">اگر این گزینه فعال باشد، تیکت فقط در این وضعیت‌ها اجازه عبور دارد.</div>
-              </div>
-              <div class="checkbox"><input type="checkbox" id="cond_require_action_log" name="cond_require_action_log"><label for="cond_require_action_log">حداقل یک اقدام (لاگ) در این مرحله ثبت شده باشد</label></div>
-              <div class="checkbox"><input type="checkbox" id="cond_require_customer_message" name="cond_require_customer_message"><label for="cond_require_customer_message">حداقل یک پیام برای کارفرما ثبت شده باشد</label></div>
+          <div class="panel">
+            <div class="panel-header">
+              <h3>شرایط عبور مرحله</h3>
+              <span class="panel-sub">پیش‌نیازها و کنترل</span>
             </div>
-
-            <div class="section-card">
-              <h5>تاییدها و استثناء‌ها</h5>
-              <div class="checkbox"><input type="checkbox" id="cond_require_manager_approval" name="cond_require_manager_approval"><label for="cond_require_manager_approval">نیاز به تایید مدیر پروژه</label></div>
-              <div class="checkbox"><input type="checkbox" id="cond_require_finance_approval" name="cond_require_finance_approval"><label for="cond_require_finance_approval">نیاز به تایید واحد مالی</label></div>
-              <div class="checkbox"><input type="checkbox" id="cond_require_customer_approval" name="cond_require_customer_approval"><label for="cond_require_customer_approval">نیاز به تایید کارفرما</label></div>
-
-              <div class="checkbox" style="margin-top:8px;">
-                <input type="checkbox" id="cond_override_allowed" name="cond_override_allowed">
-                <label for="cond_override_allowed">امکان عبور با وجود نقص شرط‌ها برای برخی نقش‌ها</label>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>پیش‌نیازها</h4>
+                <div class="checkbox"><input type="checkbox" id="cond-form"><label for="cond-form">تکمیل فرم اطلاعات این مرحله</label></div>
+                <div class="checkbox"><input type="checkbox" id="cond-attachment"><label for="cond-attachment">حداقل یک فایل ضمیمه شده باشد</label></div>
+                <div class="checkbox"><input type="checkbox" id="cond-approval"><label for="cond-approval">تایید مدیر پروژه دریافت شود</label></div>
               </div>
-              <div class="hint" style="margin-top:-4px; margin-bottom:6px;">اگر فعال باشد، نقش‌های مشخص می‌توانند با وجود هشدار/خطا تیکت را عبور دهند.</div>
-              <div class="row" id="cond_override_roles_wrap">
-                <label for="cond_override_roles">نقش‌های مجاز برای عبور با وجود نقص شرط‌ها</label>
-                <select id="cond_override_roles" name="cond_override_roles" multiple>
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="مدیرعامل">مدیرعامل</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                </select>
-              </div>
-              <div class="row">
-                <label for="cond_violation_message">متن پیام برای کاربر در صورت برآورده نشدن شرط‌ها</label>
-                <textarea id="cond_violation_message" name="cond_violation_message" rows="3" placeholder="مثال: قبل از عبور به مرحله بعد، تکمیل فیلد گزارش انجام کار و تایید مدیر پروژه الزامی است."></textarea>
-                <div class="hint">مثال: "قبل از عبور به مرحله بعد، تکمیل فیلد گزارش انجام کار و تایید مدیر پروژه الزامی است."</div>
+              <div class="section">
+                <h4>رفتار در نقض شرط‌ها</h4>
+                <div class="row">
+                  <label for="violation_action">در صورت ناقص بودن</label>
+                  <select id="violation_action">
+                    <option>جلوگیری از عبور</option>
+                    <option>فقط هشدار بده</option>
+                  </select>
+                </div>
+                <div class="row">
+                  <label for="violation_message">پیام برای کاربر</label>
+                  <textarea id="violation_message" rows="2" placeholder="مثال: تکمیل گزارش انجام کار الزامی است."></textarea>
+                </div>
               </div>
             </div>
           </div>
@@ -559,13 +544,10 @@
               </div>
             </div>
 
-            <div class="section-card">
-              <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-                <h5 style="margin:0;">لیست وابستگی‌ها</h5>
-                <button id="deps_add_btn" type="button" style="padding:8px 12px; border:1px solid var(--accent); background:var(--accent-soft); color:var(--accent); border-radius:8px; cursor:pointer;">افزودن وابستگی جدید</button>
-              </div>
-              <div class="hint" style="margin-top:6px;">برای هر وابستگی مشخص کنید هدف وابستگی چیست و در چه شرایطی کامل محسوب می‌شود.</div>
-              <div id="deps_list" style="margin-top:12px; display:flex; flex-direction:column; gap:12px;"></div>
+          <div class="panel">
+            <div class="panel-header">
+              <h3>وابستگی به تیکت‌ها یا مراحل دیگر</h3>
+              <span class="panel-sub">هم‌ترازی فرآیند</span>
             </div>
           </div>
         </div>
@@ -683,6 +665,7 @@
                   <label for="auto_return">بازگشت خودکار در صورت تاخیر</label>
                   <input id="auto_return" type="checkbox">
                 </div>
+                <div class="checkbox" style="margin-top:6px;"><input type="checkbox" id="lock_after_submit"><label for="lock_after_submit">بعد از ارسال، فرم فقط خواندنی شود</label></div>
               </div>
             </div>
           </div>
@@ -696,29 +679,31 @@
 
           <div class="collapse-content hidden" id="notifications_content">
 
-            <div class="section-card">
-              <h5>تنظیمات عمومی</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="notif_enabled" name="notif_enabled">
-                <label for="notif_enabled">فعال بودن اعلان‌ها برای این استپ</label>
+          <div class="panel">
+            <div class="panel-header">
+              <h3>اعلان‌ها و اطلاع‌رسانی</h3>
+              <span class="panel-sub">رویدادها و کانال‌ها</span>
+            </div>
+            <div class="panel-body">
+              <div class="section">
+                <h4>رویدادها</h4>
+                <div class="checkbox"><input type="checkbox" id="notif-enter"><label for="notif-enter">هنگام ورود به مرحله</label></div>
+                <div class="checkbox"><input type="checkbox" id="notif-exit"><label for="notif-exit">هنگام خروج از مرحله</label></div>
+                <div class="checkbox"><input type="checkbox" id="notif-delay"><label for="notif-delay">در صورت تاخیر</label></div>
               </div>
-              <div class="row">
-                <label>کانال‌های ارسال</label>
-                <div class="checkbox"><input type="checkbox" id="notif_channel_inapp" name="notif_channel_inapp"><label for="notif_channel_inapp">اعلان درون سیستم</label></div>
-                <div class="checkbox"><input type="checkbox" id="notif_channel_sms" name="notif_channel_sms"><label for="notif_channel_sms">پیامک</label></div>
-                <div class="checkbox"><input type="checkbox" id="notif_channel_email" name="notif_channel_email"><label for="notif_channel_email">ایمیل</label></div>
-                <div class="hint">انتخاب کنید اعلان‌ها از چه کانال‌هایی ارسال شوند.</div>
+              <div class="section">
+                <h4>کانال ارسال</h4>
+                <div class="checkbox"><input type="checkbox" id="channel-app"><label for="channel-app">نوتیف اپ</label></div>
+                <div class="checkbox"><input type="checkbox" id="channel-sms"><label for="channel-sms">پیامک</label></div>
+                <div class="checkbox"><input type="checkbox" id="channel-email"><label for="channel-email">ایمیل</label></div>
               </div>
             </div>
+          </div>
 
-            <div class="section-card">
-              <h5>رویدادهای محرک ارسال اعلان</h5>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_enter" name="notif_trigger_enter"><label for="notif_trigger_enter">ورود تیکت به این مرحله</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_exit" name="notif_trigger_exit"><label for="notif_trigger_exit">خروج تیکت از این مرحله</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_delay" name="notif_trigger_delay"><label for="notif_trigger_delay">وقوع تاخیر/نقض SLA در این مرحله</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_reopen" name="notif_trigger_reopen"><label for="notif_trigger_reopen">بازگشایی تیکت</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_assignment" name="notif_trigger_assignment"><label for="notif_trigger_assignment">تغییر مسئول/ارجاع</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_trigger_status" name="notif_trigger_status"><label for="notif_trigger_status">تغییر وضعیت درون این مرحله</label></div>
+          <div class="panel">
+            <div class="panel-header">
+              <h3>اقدامات خودکار</h3>
+              <span class="panel-sub">Automation</span>
             </div>
 
           <details class="panel">
@@ -890,10 +875,7 @@
                   <input type="checkbox" id="auto_status_enabled" name="auto_status_enabled">
                   <label for="auto_status_enabled">فعال بودن اقدامات تغییر وضعیت</label>
                 </div>
-                <button type="button" class="btn secondary" id="auto_status_add">افزودن اقدام جدید</button>
               </div>
-              <div class="hint">در صورت تغییر وضعیت تیکت داخل همین استپ، اقدامات زیر اجرا می‌شوند.</div>
-              <div id="auto_status_list"></div>
             </div>
           </div>
         </div>
