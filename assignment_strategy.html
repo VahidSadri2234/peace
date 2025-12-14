@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>طراحی فلو تیکت در سا۲</title>
+  <title>طراحی فلو تیکت</title>
   <style>
     :root {
-      --bg: #f4f6f9;
+      --bg: #f5f7fb;
       --card: #ffffff;
+      --ink: #0f172a;
       --muted: #6b7280;
       --border: #e5e7eb;
       --accent: #2563eb;
-      --accent-soft: #e0ebff;
-      --disabled: #f1f5f9;
+      --accent-ink: #1d4ed8;
+      --accent-soft: #e7edff;
+      --shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+      --radius: 14px;
     }
 
     * { box-sizing: border-box; }
@@ -21,38 +24,26 @@
       margin: 0;
       padding: 32px;
       background: var(--bg);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-family: "Vazirmatn", "Segoe UI", sans-serif;
-      color: #0f172a;
+      color: var(--ink);
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
       background: var(--card);
-      border-radius: 16px;
-      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.08);
-      padding: 28px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 26px 28px;
       display: flex;
       flex-direction: column;
       gap: 24px;
     }
 
-    .header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+    .header h1 { margin: 0; font-size: 24px; }
+    .header p { margin: 8px 0 0; color: var(--muted); line-height: 1.6; }
 
-    .header p {
-      margin: 6px 0 0;
-      color: var(--muted);
-    }
-
-    .main {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 18px;
-    }
+    .main { display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
 
     .card {
       background: var(--card);
@@ -109,239 +100,92 @@
       box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
     }
 
+    .card h3 { margin: 0 0 10px; font-size: 16px; }
     .muted { color: var(--muted); font-size: 13px; }
-
-    label { font-weight: 600; display: block; margin-bottom: 6px; }
+    label { display: block; font-weight: 700; margin-bottom: 6px; }
 
     input[type="text"], select, textarea {
       width: 100%;
       padding: 10px 12px;
-      border-radius: 8px;
       border: 1px solid var(--border);
+      border-radius: 10px;
       font-family: inherit;
       font-size: 14px;
+      background: #f9fafb;
     }
 
-    select[multiple] { min-height: 120px; }
+    textarea { resize: vertical; }
 
     .row { margin-bottom: 14px; }
 
-    .hint { color: var(--muted); font-size: 13px; margin-top: 6px; }
-
-    .radio-group { display: flex; gap: 16px; flex-wrap: wrap; }
-
-    .radio-item { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-
-    .section-card {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      margin-top: 10px;
-      background: #f8fafc;
-    }
-
-    .strategy-card { margin-top: 12px; }
-
-    .hidden { display: none; }
-
-    .checkbox { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-
-    .placeholder {
-      background: var(--disabled);
-      border: 1px dashed var(--border);
-      color: var(--muted);
-    }
-
-    .collapsible {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin-top: 10px;
-      overflow: hidden;
-    }
-
-    .collapse-toggle {
-      width: 100%;
-      text-align: right;
-      background: #f8fafc;
-      border: none;
-      padding: 10px 12px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      color: #0f172a;
-    }
-
-    .collapse-toggle::after {
-      content: '⌄';
-      transition: transform 0.2s ease;
-    }
-
-    .collapse-toggle.collapsed::after {
-      transform: rotate(180deg);
-    }
-
-    .collapse-content {
-      padding: 12px;
-      background: #fff;
-      border-top: 1px solid var(--border);
-    }
-
-    .preview {
-      background: #0f172a;
-      color: #e2e8f0;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 13px;
-      overflow: auto;
-    }
-
-    .btn {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: background 0.2s ease;
-    }
-
-    .btn:hover {
-      background: #1d4ed8;
-    }
-
-    .btn.secondary {
-      background: #e2e8f0;
-      color: #0f172a;
-      border: 1px solid var(--border);
-    }
-
-    .action-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .inline-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .main {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 18px;
-    }
-
-    }
-
-    .main {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 18px;
-    }
-
-    .card {
-      background: var(--card);
+    .step-item {
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
-    }
-
-    .card h3 {
-      margin: 0 0 12px;
-      font-size: 16px;
-    }
-
-    .step-list .step-item {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
+      background: #f9fafb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
     }
 
-    .step-list .step-item.active {
+    .step-item small { color: var(--muted); font-weight: 500; }
+
+    .step-item.active {
       border-color: var(--accent);
       background: var(--accent-soft);
-      color: #1d4ed8;
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+      color: var(--accent-ink);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
     }
 
-    }
-
-    .step-list .step-item.active {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-      color: #1d4ed8;
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
-    }
-
-    .muted { color: var(--muted); font-size: 13px; }
-
-    label { font-weight: 600; display: block; margin-bottom: 6px; }
-
-    input[type="text"], select, textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
+    details.panel {
       border: 1px solid var(--border);
-      font-family: inherit;
-      font-size: 14px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #fafbff;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    select[multiple] { min-height: 120px; }
+    details.panel[open] { border-color: var(--accent); box-shadow: 0 10px 26px rgba(37, 99, 235, 0.12); }
 
-    .row { margin-bottom: 14px; }
-
-    .hint { color: var(--muted); font-size: 13px; margin-top: 6px; }
-
-    .radio-group { display: flex; gap: 16px; flex-wrap: wrap; }
-
-    .radio-item { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-
-    .section-card {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      margin-top: 10px;
-      background: #f8fafc;
+    summary.panel-title {
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      position: relative;
     }
 
-    .strategy-card { margin-top: 12px; }
+    summary.panel-title::-webkit-details-marker { display: none; }
 
-    .hidden { display: none; }
+    .chevron { transition: transform 0.2s ease; font-size: 18px; }
+    details[open] .chevron { transform: rotate(180deg); }
+
+    .panel-body { padding: 0 16px 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .panel-body.full { grid-template-columns: 1fr; }
+
+    .section { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+    .section h4 { margin: 0 0 8px; font-size: 15px; }
+
+    .inline { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .pill { background: #eef2ff; color: #4338ca; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+
+    .switch-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .switch-row label { margin: 0; }
 
     .checkbox { display: flex; align-items: center; gap: 8px; font-weight: 600; }
 
-    .placeholder {
-      background: var(--disabled);
-      border: 1px dashed var(--border);
-      color: var(--muted);
-    }
-
-    .preview {
-      background: #0f172a;
-      color: #e2e8f0;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 13px;
-      overflow: auto;
-    }
-
-    @media (max-width: 1000px) {
+    @media (max-width: 1080px) {
+      body { padding: 18px; }
       .main { grid-template-columns: 1fr; }
     }
   </style>
@@ -349,27 +193,29 @@
 <body>
   <div class="container">
     <header class="header">
-      <h1>طراحی فلو تیکت در سا۲</h1>
-      <p>در این صفحه می‌توانید مرحله‌های یک فلو را تعریف و تنظیمات هر مرحله را مدیریت کنید.</p>
+      <h1>طراحی فلو تیکت</h1>
+      <p>یک رابط مینیمال برای تعریف فلو، مدیریت مراحل و تنظیمات هر مرحله. روی هر عنوان کلیک کنید تا بخش باز یا بسته شود.</p>
     </header>
 
     <div class="main">
       <aside>
         <div class="card">
-          <h3>تنظیمات کلی فلو</h3>
+          <h3>اطلاعات کلی فلو</h3>
           <div class="row">
             <label for="flow_name">نام فلو</label>
-            <input type="text" id="flow_name" name="flow_name" placeholder="مثال: فلو پیش‌فرض تیکت‌های شهرداری">
-            <div class="hint">سایر تنظیمات کلی فلو (SLA پیش‌فرض، سیاست بازگشایی، قوانین امتیازدهی کلی و غیره) بعداً اضافه می‌شوند.</div>
+            <input id="flow_name" type="text" placeholder="مثال: رسیدگی به درخواست شهروندان">
+            <div class="muted" style="margin-top:6px;">در ادامه می‌توانید SLA، اعلان‌ها و سیاست بازگشایی را برای هر مرحله تنظیم کنید.</div>
           </div>
         </div>
 
-        <div class="card step-list">
-          <h3>مرحله‌ها (Steps)</h3>
-          <div class="step-item" data-step="step_customer">انتخاب کارفرما</div>
-          <div class="step-item" data-step="step_service">انتخاب سرویس</div>
-          <div class="step-item" data-step="step_work">انجام کار</div>
-          <div class="step-item" data-step="step_delivery">تحویل به کارفرما</div>
+        <div class="card">
+          <h3>مرحله‌ها</h3>
+          <div id="steps">
+            <div class="step-item active" data-step="customer">انتخاب کارفرما <small>مرحله ۱</small></div>
+            <div class="step-item" data-step="service">انتخاب سرویس <small>مرحله ۲</small></div>
+            <div class="step-item" data-step="work">انجام کار <small>مرحله ۳</small></div>
+            <div class="step-item" data-step="delivery">تحویل به کارفرما <small>مرحله ۴</small></div>
+          </div>
         </div>
       </aside>
 
@@ -526,6 +372,7 @@
                 <div class="hint">اگر به هر دلیل کاندیدایی برای ارجاع پیدا نشود، سیستم چه کاری انجام دهد.</div>
               </div>
             </div>
+            <span class="pill">قابل تنظیم</span>
           </div>
         </div>
 
@@ -573,45 +420,16 @@
                     <option value="day">روز</option>
                   </select>
                 </div>
-                <div class="hint">مثال: ۳۰ دقیقه یا ۲ ساعت.</div>
-              </div>
-
-              <div class="row">
-                <label>اقدامات در صورت عبور از زمان</label>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_notify_receiver" name="timing_unread_notify_receiver"><label for="timing_unread_notify_receiver">ارسال پیامک/اعلان به دریافت‌کننده تیکت</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_notify_creator" name="timing_unread_notify_creator"><label for="timing_unread_notify_creator">ارسال پیامک/اعلان به ایجادکننده تیکت</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_notify_manager" name="timing_unread_notify_manager"><label for="timing_unread_notify_manager">ارسال پیامک/اعلان به مدیر تیکت‌ها / مدیر پروژه</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_return_prev" name="timing_unread_return_prev"><label for="timing_unread_return_prev">بازگشت خودکار تیکت به مرحله قبل</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_log_delay" name="timing_unread_log_delay"><label for="timing_unread_log_delay">ثبت این مورد در گزارش تاخیر</label></div>
-                <div class="checkbox"><input type="checkbox" id="timing_unread_auto_assign_next" name="timing_unread_auto_assign_next"><label for="timing_unread_auto_assign_next">ارسال خودکار به نفر بعدی</label></div>
-              </div>
-
-              <div class="row hidden" id="timing_unread_next_users_wrap">
-                <label for="timing_unread_next_users">لیست نفرات بعدی برای ارجاع</label>
-                <select id="timing_unread_next_users" name="timing_unread_next_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
-                <div class="hint">ترتیب لیست نشان‌دهنده ترتیب پیشنهاد ارجاع است (در آینده می‌توان رفتار دقیق را پیاده کرد).</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>سناریو ۲: تیکت باز شده ولی تعیین‌تکلیف نشده</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="timing_noaction_enabled" name="timing_noaction_enabled">
-                <label for="timing_noaction_enabled">فعال بودن این سناریو</label>
-              </div>
-
-              <div class="row">
-                <label>حداکثر زمان بدون تعیین‌تکلیف بعد از اولین باز شدن</label>
-                <div class="grid-2">
-                  <input type="number" id="timing_noaction_threshold_value" name="timing_noaction_threshold_value" min="0" placeholder="مثلاً ۴">
-                  <select id="timing_noaction_threshold_unit" name="timing_noaction_threshold_unit">
-                    <option value="hour">ساعت</option>
-                    <option value="day">روز</option>
+                <div class="row">
+                  <label for="candidates">کاندیداها</label>
+                  <select id="candidates" multiple>
+                    <option>کاربر نمونه ۱</option>
+                    <option>کاربر نمونه ۲</option>
+                    <option>کاربر نمونه ۳</option>
+                    <option>کارشناس شهرسازی</option>
+                    <option>پشتیبان فنی</option>
                   </select>
+                  <div class="muted" style="margin-top:6px;">می‌توانید نقش‌ها یا کاربران مشخص را به عنوان دریافت‌کننده‌های این مرحله تعیین کنید.</div>
                 </div>
                 <div class="hint">مثال: ۴ ساعت یا ۱ روز بعد از اولین باز کردن.</div>
               </div>
@@ -846,77 +664,24 @@
                   </div>
                 </div>
               </div>
-
-              <div class="collapsible">
-                <button class="collapse-toggle" type="button" data-target="access_confidentiality">محرمانگی و ماسک‌گذاری</button>
-                <div class="collapse-content" id="access_confidentiality">
-                  <div class="row">
-                    <label for="access_sensitivity_level">سطح حساسیت اطلاعات</label>
-                    <select id="access_sensitivity_level" name="access_sensitivity_level">
-                      <option value="normal">عادی</option>
-                      <option value="confidential">محرمانه</option>
-                      <option value="secret">حساس/ویژه</option>
-                    </select>
-                  </div>
-                  <div class="row">
-                    <label for="access_mask_fields">فیلدهای ماسک‌شونده در نمای کارفرما</label>
-                    <select id="access_mask_fields" name="access_mask_fields" multiple>
-                      <option value="اطلاعات تماس کارفرما">اطلاعات تماس کارفرما</option>
-                      <option value="مبلغ قرارداد">مبلغ قرارداد</option>
-                      <option value="ضمیمه‌های مالی">ضمیمه‌های مالی</option>
-                    </select>
-                    <div class="hint">در سطح محرمانگی بالا این فیلدها مخفی یا ماسک می‌شوند (ذخیره فقط در تنظیمات).</div>
-                  </div>
+              <div class="section">
+                <h4>قوانین زمان‌بندی</h4>
+                <div class="row">
+                  <label for="due_hours">مهلت انجام (ساعت)</label>
+                  <input id="due_hours" type="text" placeholder="مثال: 48">
                 </div>
-              </div>
-
-              <div class="collapsible">
-                <button class="collapse-toggle" type="button" data-target="access_watchers">مشاهده‌کنندگان و ناظرها</button>
-                <div class="collapse-content" id="access_watchers">
-                  <div class="grid-2 row">
-                    <div>
-                      <label for="access_watcher_roles">نقش‌های اضافه‌شونده به لیست ناظر</label>
-                      <select id="access_watcher_roles" name="access_watcher_roles" multiple>
-                        <option value="مدیر پروژه">مدیر پروژه</option>
-                        <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                        <option value="کارشناس درآمد">کارشناس درآمد</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label for="access_watcher_users">کاربران ناظر پیشنهادی</label>
-                      <select id="access_watcher_users" name="access_watcher_users" multiple>
-                        <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                        <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                        <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_allow_manual_watchers" name="access_allow_manual_watchers">
-                    <label for="access_allow_manual_watchers">اجازه افزودن دستی ناظر توسط نقش‌های ویرایش</label>
-                  </div>
+                <div class="row">
+                  <label for="reminder">اعلان هشدار</label>
+                  <select id="reminder">
+                    <option>بدون هشدار</option>
+                    <option>۴ ساعت قبل از مهلت</option>
+                    <option>۱۲ ساعت قبل از مهلت</option>
+                    <option>۲۴ ساعت قبل از مهلت</option>
+                  </select>
                 </div>
-              </div>
-
-              <div class="collapsible">
-                <button class="collapse-toggle" type="button" data-target="access_overrides">استثناءها و پیام</button>
-                <div class="collapse-content" id="access_overrides">
-                  <div class="checkbox">
-                    <input type="checkbox" id="access_override_allowed" name="access_override_allowed">
-                    <label for="access_override_allowed">اجازه عبور/مشاهده با وجود نقص دسترسی برای برخی نقش‌ها</label>
-                  </div>
-                  <div class="row" id="access_override_roles_wrap">
-                    <label for="access_override_roles">نقش‌های مجاز برای عبور با وجود نقص دسترسی</label>
-                    <select id="access_override_roles" name="access_override_roles" multiple>
-                      <option value="مدیر پروژه">مدیر پروژه</option>
-                      <option value="مدیرعامل">مدیرعامل</option>
-                      <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                    </select>
-                  </div>
-                  <div class="row">
-                    <label for="access_message">متن پیام در صورت عدم دسترسی</label>
-                    <textarea id="access_message" name="access_message" rows="3" placeholder="مثال: دسترسی به ویرایش این مرحله فقط برای نقش‌های مشخص فعال است."></textarea>
-                  </div>
+                <div class="switch-row">
+                  <label for="auto_return">بازگشت خودکار در صورت تاخیر</label>
+                  <input id="auto_return" type="checkbox">
                 </div>
               </div>
             </div>
@@ -956,90 +721,98 @@
               <div class="checkbox"><input type="checkbox" id="notif_trigger_status" name="notif_trigger_status"><label for="notif_trigger_status">تغییر وضعیت درون این مرحله</label></div>
             </div>
 
-            <div class="section-card">
-              <h5>دریافت‌کنندگان اعلان</h5>
-              <div class="row">
-                <label for="notif_roles">نقش‌های دریافت‌کننده</label>
-                <select id="notif_roles" name="notif_roles" multiple>
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                  <option value="کارشناس درآمد">کارشناس درآمد</option>
-                </select>
+          <details class="panel">
+            <summary class="panel-title">شرایط عبور مرحله <span class="chevron">⌄</span></summary>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>پیش‌نیازها</h4>
+                <div class="checkbox"><input type="checkbox" id="cond-form"><label for="cond-form">تکمیل فرم اطلاعات این مرحله</label></div>
+                <div class="checkbox"><input type="checkbox" id="cond-attachment"><label for="cond-attachment">حداقل یک فایل ضمیمه شده باشد</label></div>
+                <div class="checkbox"><input type="checkbox" id="cond-approval"><label for="cond-approval">تایید مدیر پروژه دریافت شود</label></div>
               </div>
-              <div class="row">
-                <label for="notif_users">کاربران دریافت‌کننده</label>
-                <select id="notif_users" name="notif_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
-              </div>
-              <div class="checkbox"><input type="checkbox" id="notif_include_assignee" name="notif_include_assignee"><label for="notif_include_assignee">ارسال به مسئول فعلی تیکت</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_include_creator" name="notif_include_creator"><label for="notif_include_creator">ارسال به ایجادکننده تیکت</label></div>
-              <div class="checkbox"><input type="checkbox" id="notif_include_watchers" name="notif_include_watchers"><label for="notif_include_watchers">ارسال به ناظرها (Watchers)</label></div>
-              <div class="hint">دریافت‌کنندگان می‌توانند ترکیبی از نقش‌ها، کاربران مشخص و مسئول/ایجادکننده باشند.</div>
-            </div>
-
-            <div class="section-card">
-              <h5>متن و قالب اعلان</h5>
-              <div class="row">
-                <label for="notif_title">عنوان اعلان</label>
-                <input type="text" id="notif_title" name="notif_title" placeholder="مثال: تیکت جدید در مرحله انجام کار">
-              </div>
-              <div class="row">
-                <label for="notif_message">متن اعلان</label>
-                <textarea id="notif_message" name="notif_message" rows="3" placeholder="متن اعلان را وارد کنید"></textarea>
-                <div class="hint">می‌توانید بعداً الگوهای پویا و متغیرهای سیستمی اضافه کنید.</div>
-              </div>
-            </div>
-
-            <div class="section-card">
-              <h5>محدودیت ارسال و تکرار</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="notif_throttle_enabled" name="notif_throttle_enabled">
-                <label for="notif_throttle_enabled">محدود کردن تعداد ارسال در بازه زمانی</label>
-              </div>
-              <div class="row hidden" id="notif_throttle_wrap">
-                <label>بازه زمانی تکرار</label>
-                <div class="grid-2">
-                  <input type="number" id="notif_throttle_value" name="notif_throttle_value" min="0" placeholder="مثلاً ۳۰">
-                  <select id="notif_throttle_unit" name="notif_throttle_unit">
-                    <option value="minute">دقیقه</option>
-                    <option value="hour">ساعت</option>
-                    <option value="day">روز</option>
+              <div class="section">
+                <h4>رفتار در نقض شرط‌ها</h4>
+                <div class="row">
+                  <label for="violation_action">در صورت ناقص بودن</label>
+                  <select id="violation_action">
+                    <option>جلوگیری از عبور</option>
+                    <option>فقط هشدار بده</option>
                   </select>
                 </div>
-                <div class="hint">برای جلوگیری از ارسال پشت‌سرهم، یک بازه زمانی تعیین کنید.</div>
+                <div class="row">
+                  <label for="violation_message">پیام برای کاربر</label>
+                  <textarea id="violation_message" rows="2" placeholder="مثال: تکمیل گزارش انجام کار الزامی است."></textarea>
+                </div>
               </div>
             </div>
+          </details>
 
-            <div class="section-card">
-              <h5>تصعید/ارسال به مدیران</h5>
-              <div class="checkbox">
-                <input type="checkbox" id="notif_escalation_enabled" name="notif_escalation_enabled">
-                <label for="notif_escalation_enabled">فعال‌سازی ارسال تصعیدی</label>
+          <details class="panel">
+            <summary class="panel-title">وابستگی به تیکت‌ها یا مراحل دیگر <span class="chevron">⌄</span></summary>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>مدیریت وابستگی</h4>
+                <div class="row">
+                  <label for="dependency_rule">حالت کنترل</label>
+                  <select id="dependency_rule">
+                    <option>بدون وابستگی</option>
+                    <option>جلوگیری تا اتمام مراحل قبلی</option>
+                    <option>فقط هشدار در صورت ناقص بودن</option>
+                  </select>
+                </div>
+                <div class="row">
+                  <label for="dependency_notes">توضیح</label>
+                  <textarea id="dependency_notes" rows="2" placeholder="مثال: پس از تایید مالی، این مرحله آغاز شود."></textarea>
+                </div>
               </div>
-              <div class="row hidden" id="notif_escalation_targets">
-                <label for="notif_escalation_roles">نقش‌های دریافت‌کننده تصعیدی</label>
-                <select id="notif_escalation_roles" name="notif_escalation_roles" multiple>
-                  <option value="مدیر پروژه">مدیر پروژه</option>
-                  <option value="مدیرعامل">مدیرعامل</option>
-                  <option value="سرگروه پشتیبانی">سرگروه پشتیبانی</option>
-                </select>
+            </div>
+          </details>
+
+          <details class="panel">
+            <summary class="panel-title">دسترسی و سطح دید <span class="chevron">⌄</span></summary>
+            <div class="panel-body">
+              <div class="section">
+                <h4>مشاهده</h4>
+                <div class="row">
+                  <label for="view_roles">نقش‌های مجاز برای مشاهده</label>
+                  <select id="view_roles" multiple>
+                    <option>همه کاربران</option>
+                    <option>مدیر پروژه</option>
+                    <option>پشتیبان فنی</option>
+                    <option>کارفرما</option>
+                  </select>
+                </div>
               </div>
-              <div class="row hidden" id="notif_escalation_users_wrap">
-                <label for="notif_escalation_users">کاربران دریافت‌کننده تصعیدی</label>
-                <select id="notif_escalation_users" name="notif_escalation_users" multiple>
-                  <option value="کاربر نمونه ۱">کاربر نمونه ۱</option>
-                  <option value="کاربر نمونه ۲">کاربر نمونه ۲</option>
-                  <option value="کاربر نمونه ۳">کاربر نمونه ۳</option>
-                </select>
+              <div class="section">
+                <h4>ویرایش</h4>
+                <div class="row">
+                  <label for="edit_roles">نقش‌های مجاز برای ویرایش</label>
+                  <select id="edit_roles" multiple>
+                    <option>مدیر پروژه</option>
+                    <option>سرگروه پشتیبانی</option>
+                    <option>کاربر مسئول</option>
+                  </select>
+                </div>
+                <div class="checkbox" style="margin-top:6px;"><input type="checkbox" id="lock_after_submit"><label for="lock_after_submit">بعد از ارسال، فرم فقط خواندنی شود</label></div>
               </div>
-              <div class="row hidden" id="notif_escalation_message_wrap">
-                <label for="notif_escalation_message">متن پیام تصعیدی</label>
-                <textarea id="notif_escalation_message" name="notif_escalation_message" rows="2" placeholder="مثال: تیکت پس از تاخیر به مدیر اطلاع داده شود"></textarea>
+            </div>
+          </details>
+
+          <details class="panel">
+            <summary class="panel-title">اعلان‌ها و اطلاع‌رسانی <span class="chevron">⌄</span></summary>
+            <div class="panel-body">
+              <div class="section">
+                <h4>رویدادها</h4>
+                <div class="checkbox"><input type="checkbox" id="notif-enter"><label for="notif-enter">هنگام ورود به مرحله</label></div>
+                <div class="checkbox"><input type="checkbox" id="notif-exit"><label for="notif-exit">هنگام خروج از مرحله</label></div>
+                <div class="checkbox"><input type="checkbox" id="notif-delay"><label for="notif-delay">در صورت تاخیر</label></div>
               </div>
-              <div class="hint">در صورت نیاز می‌توانید پیام و گیرندگان ویژه برای تصعید اعلان‌ها تعریف کنید.</div>
+              <div class="section">
+                <h4>کانال ارسال</h4>
+                <div class="checkbox"><input type="checkbox" id="channel-app"><label for="channel-app">نوتیف اپ</label></div>
+                <div class="checkbox"><input type="checkbox" id="channel-sms"><label for="channel-sms">پیامک</label></div>
+                <div class="checkbox"><input type="checkbox" id="channel-email"><label for="channel-email">ایمیل</label></div>
+              </div>
             </div>
           </div>
         </div>
@@ -1066,31 +839,48 @@
                 <div class="hint">مشخص می‌کند اگر یکی از اقدامات خطا داد، بقیه اجرا شوند یا خیر.</div>
               </div>
             </div>
+          </details>
 
-            <div class="section-card">
-              <h5>اقدامات هنگام ورود به این مرحله</h5>
-              <div class="inline-actions">
-                <div class="checkbox">
-                  <input type="checkbox" id="auto_enter_enabled" name="auto_enter_enabled">
-                  <label for="auto_enter_enabled">فعال بودن اقدامات ورود</label>
+          <details class="panel">
+            <summary class="panel-title">سیاست بازگشایی تیکت <span class="chevron">⌄</span></summary>
+            <div class="panel-body">
+              <div class="section">
+                <h4>قواعد بازگشایی</h4>
+                <div class="row">
+                  <label for="reopen_target">مرحله مقصد بعد از بازگشایی</label>
+                  <select id="reopen_target">
+                    <option>انتخاب کارفرما</option>
+                    <option>انتخاب سرویس</option>
+                    <option>انجام کار</option>
+                    <option>تحویل به کارفرما</option>
+                  </select>
                 </div>
-                <button type="button" class="btn secondary" id="auto_enter_add">افزودن اقدام جدید</button>
+                <div class="row">
+                  <label for="reopen_limit">حداکثر دفعات مجاز</label>
+                  <input id="reopen_limit" type="text" placeholder="مثال: ۲">
+                </div>
               </div>
-              <div class="hint">پس از ورود تیکت به این استپ، اقدامات زیر به ترتیب اجرا می‌شوند.</div>
-              <div id="auto_enter_list"></div>
             </div>
+          </details>
 
-            <div class="section-card">
-              <h5>اقدامات هنگام خروج از این مرحله</h5>
-              <div class="inline-actions">
-                <div class="checkbox">
-                  <input type="checkbox" id="auto_exit_enabled" name="auto_exit_enabled">
-                  <label for="auto_exit_enabled">فعال بودن اقدامات خروج</label>
+          <details class="panel">
+            <summary class="panel-title">امتیازدهی و اولویت پویا <span class="chevron">⌄</span></summary>
+            <div class="panel-body full">
+              <div class="section">
+                <h4>وزن‌دهی</h4>
+                <div class="row">
+                  <label for="priority_rule">قانون تغییر اولویت</label>
+                  <select id="priority_rule">
+                    <option>بر اساس تاخیر</option>
+                    <option>بر اساس ارجاع مجدد</option>
+                    <option>ترکیبی</option>
+                  </select>
                 </div>
-                <button type="button" class="btn secondary" id="auto_exit_add">افزودن اقدام جدید</button>
+                <div class="row">
+                  <label for="priority_note">توضیح</label>
+                  <textarea id="priority_note" rows="2" placeholder="مثال: بعد از ۲۴ ساعت تاخیر، اولویت به «بحرانی» تغییر کند."></textarea>
+                </div>
               </div>
-              <div class="hint">پیش از عبور تیکت به مرحله بعد، اقدامات زیر اجرا می‌شوند.</div>
-              <div id="auto_exit_list"></div>
             </div>
 
             <div class="section-card">
@@ -1292,11 +1082,6 @@
           </div>
         </div>
       </section>
-    </div>
-
-    <div class="card">
-      <h3>پیش‌نمایش تنظیمات فلو (JSON)</h3>
-      <pre class="preview" id="json_preview"></pre>
     </div>
   </div>
 
@@ -3009,223 +2794,7 @@
       [elements.candidateUsers, elements.candidateRoles, elements.rrPoolUsers, elements.ssPoolUsers, elements.multiPoolUsers, elements.overrideAllowedRoles].forEach(sel => {
         sel.addEventListener('change', updateAssignmentFromForm);
       });
-      [elements.singleAssignmentMode, elements.singleFixedUser, elements.rrOrderMode, elements.multiLockMode, elements.onEmptyPoolAction].forEach(sel => sel.addEventListener('change', updateAssignmentFromForm));
-      [elements.ssVisibleToAll, elements.allowManualOverride].forEach(chk => chk.addEventListener('change', updateAssignmentFromForm));
-      elements.flowName.addEventListener('input', renderPreview);
-
-      [
-        elements.timingEnabled,
-        elements.timingMode,
-        elements.timingPauseOnHold,
-        elements.timingUnreadEnabled,
-        elements.timingUnreadThresholdValue,
-        elements.timingUnreadThresholdUnit,
-        elements.timingUnreadNotifyReceiver,
-        elements.timingUnreadNotifyCreator,
-        elements.timingUnreadNotifyManager,
-        elements.timingUnreadReturnPrev,
-        elements.timingUnreadLogDelay,
-        elements.timingUnreadAutoAssignNext,
-        elements.timingUnreadNextUsers,
-        elements.timingNoactionEnabled,
-        elements.timingNoactionThresholdValue,
-        elements.timingNoactionThresholdUnit,
-        elements.timingNoactionLogDelay,
-        elements.timingNoactionNotifyCreator,
-        elements.timingNoactionNotifyManager,
-        elements.timingNoactionLockOtherTickets,
-        elements.timingNoactionLockMentions,
-        elements.timingNoactionLockConversation,
-
-        elements.condEnabled,
-        elements.condEnforcementMode,
-        elements.condRequiredFields,
-        elements.condChecklistItems,
-        elements.condStatusRestrict,
-        elements.condAllowedStatuses,
-        elements.condRequireActionLog,
-        elements.condRequireCustomerMessage,
-        elements.condRequireManagerApproval,
-        elements.condRequireFinanceApproval,
-        elements.condRequireCustomerApproval,
-        elements.condOverrideAllowed,
-        elements.condOverrideRoles,
-        elements.condViolationMessage
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'change';
-        const handler = [
-          elements.condEnabled,
-          elements.condEnforcementMode,
-          elements.condRequiredFields,
-          elements.condChecklistItems,
-          elements.condStatusRestrict,
-          elements.condAllowedStatuses,
-          elements.condRequireActionLog,
-          elements.condRequireCustomerMessage,
-          elements.condRequireManagerApproval,
-          elements.condRequireFinanceApproval,
-          elements.condRequireCustomerApproval,
-          elements.condOverrideAllowed,
-          elements.condOverrideRoles,
-          elements.condViolationMessage
-        ].includes(el) ? updateConditionsFromForm : updateTimingFromForm;
-        el.addEventListener(evt, handler);
-      });
-
-      [
-        elements.accessEnabled,
-        elements.accessEnforcementMode,
-        elements.accessViewRoles,
-        elements.accessEditRoles,
-        elements.accessReadonlyRoles,
-        elements.accessAllowCustomerView,
-        elements.accessRestrictInternalNotes,
-        elements.accessAllowComment,
-        elements.accessAllowAttachment,
-        elements.accessAllowStatusChange,
-        elements.accessRestrictedFields,
-        elements.accessSensitivityLevel,
-        elements.accessMaskFields,
-        elements.accessWatcherRoles,
-        elements.accessWatcherUsers,
-        elements.accessAllowManualWatchers,
-        elements.accessOverrideAllowed,
-        elements.accessOverrideRoles,
-        elements.accessMessage
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
-        el.addEventListener(evt, updateAccessFromForm);
-      });
-
-      [
-        elements.notifEnabled,
-        elements.notifChannelInapp,
-        elements.notifChannelSms,
-        elements.notifChannelEmail,
-        elements.notifTriggerEnter,
-        elements.notifTriggerExit,
-        elements.notifTriggerDelay,
-        elements.notifTriggerReopen,
-        elements.notifTriggerAssignment,
-        elements.notifTriggerStatus,
-        elements.notifRoles,
-        elements.notifUsers,
-        elements.notifIncludeAssignee,
-        elements.notifIncludeCreator,
-        elements.notifIncludeWatchers,
-        elements.notifTitle,
-        elements.notifMessage,
-        elements.notifThrottleEnabled,
-        elements.notifThrottleValue,
-        elements.notifThrottleUnit,
-        elements.notifEscalationEnabled,
-        elements.notifEscalationRoles,
-        elements.notifEscalationUsers,
-        elements.notifEscalationMessage
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
-        el.addEventListener(evt, updateNotificationsFromForm);
-      });
-
-      if (elements.depsEnabled) {
-        elements.depsEnabled.addEventListener('change', updateDependenciesGeneral);
-      }
-      if (elements.depsEnforcementMode) {
-        elements.depsEnforcementMode.addEventListener('change', updateDependenciesGeneral);
-      }
-      if (elements.depsAddBtn) {
-        elements.depsAddBtn.addEventListener('click', () => {
-          const step = getCurrentStep();
-          step.dependencies.items.push(createDependencyItem());
-          renderDependencyItems(step.dependencies);
-          renderPreview();
-        });
-      }
-
-      [
-        elements.autoEnabled,
-        elements.autoOnError,
-        elements.autoEnterEnabled,
-        elements.autoExitEnabled,
-        elements.autoStatusEnabled
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' ? 'change' : 'change';
-        el.addEventListener(evt, updateAutoActionsGeneral);
-      });
-
-      [
-        elements.reopenEnabled,
-        elements.reopenRoutingMode,
-        elements.reopenTargetStep,
-        elements.reopenAllowCustomer,
-        elements.reopenAllowInternal,
-        elements.reopenAllowedRoles,
-        elements.reopenMaxReopens,
-        elements.reopenMinIntervalHours,
-        elements.reopenRequireReason,
-        elements.reopenReasonTypes,
-        elements.reopenNotifyCreator,
-        elements.reopenNotifyAssignee,
-        elements.reopenNotifyManager,
-        elements.reopenNotifyCustomer,
-        elements.reopenNotifyRoles,
-        elements.reopenQualityEnableFlag,
-        elements.reopenQualityThreshold,
-        elements.reopenQualityLabel
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'input';
-        el.addEventListener(evt, updateReopenFromForm);
-      });
-
-      [
-        elements.priorityEnabled,
-        elements.priorityBase,
-        elements.priorityAutoChange,
-        elements.priorityNormalMax,
-        elements.priorityImportantMin,
-        elements.priorityCriticalMin,
-        elements.priorityNotifyOnChange,
-        elements.priorityNotifyAssignee,
-        elements.priorityNotifyManager,
-        elements.priorityNotifyRoles,
-        elements.priorityLogHistory
-      ].forEach(el => {
-        if (!el) return;
-        const evt = el.tagName === 'SELECT' || el.tagName === 'INPUT' ? (el.type === 'text' || el.type === 'number' ? 'input' : 'change') : 'change';
-        el.addEventListener(evt, updatePriorityFromForm);
-      });
-
-      if (elements.priorityRuleAdd) {
-        elements.priorityRuleAdd.addEventListener('click', () => {
-          const priority = getCurrentStep().priority;
-          priority.scoring_rules.push(createPriorityRule());
-          renderPriorityRules(priority);
-          renderPreview();
-        });
-      }
-
-      if (elements.autoEnterAdd) {
-        elements.autoEnterAdd.addEventListener('click', () => {
-          const trigger = getCurrentStep().autoActions.triggers.on_enter_step;
-          trigger.actions.push(createAutoAction());
-          renderAutoActionTrigger('on_enter_step', elements.autoEnterList);
-          renderPreview();
-        });
-      }
-
-      if (elements.autoExitAdd) {
-        elements.autoExitAdd.addEventListener('click', () => {
-          const trigger = getCurrentStep().autoActions.triggers.on_exit_step;
-          trigger.actions.push(createAutoAction());
-          renderAutoActionTrigger('on_exit_step', elements.autoExitList);
-          renderPreview();
-        });
-      }
+    });
 
       if (elements.autoStatusAdd) {
         elements.autoStatusAdd.addEventListener('click', () => {
